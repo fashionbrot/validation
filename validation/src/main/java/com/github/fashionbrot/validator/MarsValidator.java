@@ -7,10 +7,6 @@ import java.lang.reflect.Method;
 
 public interface MarsValidator {
 
-    default String getFileName(){
-        return ValidatedConst.FILE_NAME_PREFIX;
-    }
-
     default String getLanguage(){
         return ValidatedConst.DEFAULT_LANGUAGE;
     }

@@ -346,7 +346,7 @@ public class MarsValidatorImpl implements MarsValidator {
 
     private String parseMsg(Map<String, Object> annotationAttributes) {
         if (annotationAttributes.containsKey(ValidatedConst.MSG)) {
-            String filterMsg = ValidatorUtil.filterMsg((String) annotationAttributes.get(ValidatedConst.MSG),getFileName(),getLanguage());
+            String filterMsg = ValidatorUtil.filterMsg((String) annotationAttributes.get(ValidatedConst.MSG),getLanguage());
             return GenericTokenUtil.parse(filterMsg, annotationAttributes);
         }
         return "";

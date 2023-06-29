@@ -16,29 +16,26 @@ public class ValidatorUtil{
     private static Map<String,ResourceBundle> MSG_MAP=new ConcurrentHashMap<>();
 
 
-    public static String filterMsg(String msg,String fileName,String language) {
+    public static String filterMsg(String msg,String language) {
         if (ObjectUtil.isEmpty(msg)){
             return "";
         }
         boolean isDefaultMsg = msg.startsWith("validated.");
         if (isDefaultMsg) {
-            msg = getMsg(msg,fileName,language);
+            msg = getMsg(msg,language);
         }
         return msg;
     }
 
-    private static String getMsg(String msg,String fileName,String language) {
-        String currentFileName = fileName;
-        if (ObjectUtil.isEmpty(currentFileName)){
-            currentFileName = ValidatedConst.FILE_NAME_PREFIX;
-        }
+    private static String getMsg(String msg,String language) {
+
         String currentLanguage = language;
         if (ObjectUtil.isEmpty(language)){
             currentLanguage = ValidatedConst.DEFAULT_LANGUAGE;
         }
-        ResourceBundle resourceBundle = getResourceBundle(currentFileName+"_"+currentLanguage);
+        ResourceBundle resourceBundle = getResourceBundle(ValidatedConst.FILE_NAME_PREFIX+currentLanguage);
         if (resourceBundle==null){
-            throw new MissingResourceException(fileName+"_"+language+" does not exist", "EnableValidatedConfig","language");
+            throw new MissingResourceException(ValidatedConst.FILE_NAME_PREFIX+currentLanguage+" does not exist", "EnableValidatedConfig","language");
         }
         if (resourceBundle.containsKey(msg)){
             msg = resourceBundle.getString(msg);

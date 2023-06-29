@@ -6,7 +6,7 @@ package com.github.fashionbrot.consts;
 public class ValidatedConst {
 
 
-    public static final String FILE_NAME_PREFIX="valid";
+    public static final String FILE_NAME_PREFIX="valid_";
     public static final String DEFAULT_LANGUAGE = "zh_CN";
 
     public static final String METHOD_NAME_MODIFY = "modify";
