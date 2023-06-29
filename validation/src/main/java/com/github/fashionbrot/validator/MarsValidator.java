@@ -1,9 +1,19 @@
 package com.github.fashionbrot.validator;
 
 import com.github.fashionbrot.annotation.Validated;
+import com.github.fashionbrot.consts.ValidatedConst;
+
 import java.lang.reflect.Method;
 
 public interface MarsValidator {
+
+    default String getFileName(){
+        return ValidatedConst.FILE_NAME_PREFIX;
+    }
+
+    default String getLanguage(){
+        return ValidatedConst.DEFAULT_LANGUAGE;
+    }
 
     /**
      * 入口
@@ -20,6 +30,7 @@ public interface MarsValidator {
      * @param object validated
      */
     void returnValueAnnotationValid(Validated validated,Object object);
+
 
     /**
      * 验证 entity fields 是否包含注解

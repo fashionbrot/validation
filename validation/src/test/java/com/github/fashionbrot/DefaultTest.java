@@ -19,9 +19,9 @@ import java.util.List;
 
 public class DefaultTest {
 
-
+    @Validated
     public class TestController{
-        @Validated
+
         private void test1(@Default(value = "abc") String string){
         }
     }

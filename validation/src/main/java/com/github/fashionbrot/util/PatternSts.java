@@ -22,6 +22,7 @@ public class PatternSts {
     public static final Pattern EMAIL_PATTERN = Pattern.compile(PatternSts.EMAIL_REGEXP);
 
     public static final Pattern PHONE_PATTERN = Pattern.compile(PatternSts.PHONE_REGEXP);
+
     public static final Pattern ID_CARD_PATTERN = Pattern.compile(PatternSts.IDCARD_REGEXP);
 
 }

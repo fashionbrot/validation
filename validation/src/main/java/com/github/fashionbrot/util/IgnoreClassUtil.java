@@ -29,10 +29,4 @@ public class IgnoreClassUtil {
         return false;
     }
 
-    public static void main(String[] args) {
-        long start=System.currentTimeMillis();
-        System.out.println((checkIgnorePackage("javax.servlet")));
-        System.out.println(System.currentTimeMillis()-start);
-    }
-
 }

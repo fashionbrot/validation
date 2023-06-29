@@ -4,18 +4,13 @@ import com.github.fashionbrot.constraint.Constraint;
 import com.github.fashionbrot.constraint.ConstraintHelper;
 import com.github.fashionbrot.constraint.ConstraintValidator;
 import com.github.fashionbrot.constraint.MarsViolation;
+import com.github.fashionbrot.consts.ValidatedConst;
 import com.github.fashionbrot.exception.ValidatedException;
 import com.github.fashionbrot.groups.DefaultGroup;
 import com.github.fashionbrot.util.*;
 import com.github.fashionbrot.annotation.Valid;
 import com.github.fashionbrot.annotation.Validated;
-import com.github.fashionbrot.validated.constraint.*;
-import com.github.fashionbrot.validated.util.*;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.BeansException;
-import org.springframework.beans.factory.BeanFactory;
-import org.springframework.beans.factory.BeanFactoryAware;
-import org.springframework.core.annotation.AnnotationUtils;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.*;
@@ -24,19 +19,12 @@ import java.util.stream.Collectors;
 
 
 @Slf4j
-public class MarsValidatorImpl implements MarsValidator , BeanFactoryAware {
+public class MarsValidatorImpl implements MarsValidator {
 
-    private BeanFactory beanFactory;
 
-    @Override
-    public void setBeanFactory(BeanFactory beanFactory) throws BeansException {
-        this.beanFactory = beanFactory;
-    }
 
     public static final String BEAN_NAME = "defaultMarsValidatorImpl";
-    private static final String METHOD_NAME_MODIFY = "modify";
-    private static final String MSG = "msg";
-    private static final String GROUPS = "groups";
+
 
 
     public void entityFieldsAnnotationValid(Validated validated, String valueTypeName, Class<?> clazz, Object[] params,Integer paramIndex) {
@@ -119,13 +107,24 @@ public class MarsValidatorImpl implements MarsValidator , BeanFactoryAware {
         }
     }
 
+    private Validated getValidated(Method method){
+        Validated validated = method.getDeclaredAnnotation(Validated.class);
+        if (validated==null){
+            validated = method.getDeclaringClass().getDeclaredAnnotation(Validated.class);
+        }
+        return validated;
+    }
+
 
     @Override
     public void parameterAnnotationValid(Method method, Object[] params) {
-        Parameter[] parameters = method.getParameters();
-        Validated validated = method.getDeclaredAnnotation(Validated.class);
-        try {
+        Validated validated = getValidated(method);
+        if (validated==null){
+            return;
+        }
 
+        try {
+            Parameter[] parameters = method.getParameters();
             if (ObjectUtil.isNotEmpty(parameters)) {
                 for (int j = 0; j < parameters.length; j++) {
 
@@ -264,7 +263,8 @@ public class MarsValidatorImpl implements MarsValidator , BeanFactoryAware {
         boolean failFast = validated != null ? validated.failFast() : true;
         Class<?>[] vGroupClass = validated != null ? validated.groups() : null;
 
-        Map<String, Object> annotationAttributes = AnnotationUtils.getAnnotationAttributes(annotation);
+
+        Map<String, Object> annotationAttributes = MethodUtil.getAnnotationAttributes(annotation);//AnnotationUtils.getAnnotationAttributes(annotation);//TODO
         if (checkGroup(vGroupClass, annotationAttributes)) {
             return;
         }
@@ -277,7 +277,7 @@ public class MarsValidatorImpl implements MarsValidator , BeanFactoryAware {
                 if (ObjectUtil.isEmpty(classes)) {
                     return;
                 }
-                ConstraintHelper.putConstraintValidator(beanFactory,annotation.annotationType(), classes);
+                ConstraintHelper.putConstraintValidator(annotation.annotationType(), classes);
                 constraintValidatorList = ConstraintHelper.getConstraint(annotation.annotationType());
             }
         }
@@ -317,7 +317,7 @@ public class MarsValidatorImpl implements MarsValidator , BeanFactoryAware {
                 }
 
                 Class validConstraintClass = constraintValidator.getClass();
-                if (MethodUtil.checkDeclaredMethod(validConstraintClass, METHOD_NAME_MODIFY)) {
+                if (MethodUtil.checkDeclaredMethod(validConstraintClass, ValidatedConst.METHOD_NAME_MODIFY)) {
                     Object reValue = constraintValidator.modify(annotation, value, valueType);
                     if (reValue != null) {
                         if (field != null) {
@@ -345,8 +345,8 @@ public class MarsValidatorImpl implements MarsValidator , BeanFactoryAware {
 
 
     private String parseMsg(Map<String, Object> annotationAttributes) {
-        if (annotationAttributes.containsKey(MSG)) {
-            String filterMsg = ValidatorUtil.filterMsg((String) annotationAttributes.get(MSG));
+        if (annotationAttributes.containsKey(ValidatedConst.MSG)) {
+            String filterMsg = ValidatorUtil.filterMsg((String) annotationAttributes.get(ValidatedConst.MSG),getFileName(),getLanguage());
             return GenericTokenUtil.parse(filterMsg, annotationAttributes);
         }
         return "";
@@ -388,7 +388,7 @@ public class MarsValidatorImpl implements MarsValidator , BeanFactoryAware {
         if (checkGroup(DefaultGroup.class,validatedGroupClass)) {
             return false;
         }
-        Class[] groups = (Class[]) attributes.get(GROUPS);
+        Class[] groups = (Class[]) attributes.get(ValidatedConst.GROUPS);
         if (checkGroup(validatedGroupClass, groups)) {
             return false;
         }

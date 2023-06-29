@@ -4,8 +4,6 @@ package com.github.fashionbrot.util;
 
 import com.github.fashionbrot.enums.ClassTypeEnum;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.util.ObjectUtils;
-
 import java.math.BigDecimal;
 import java.nio.charset.Charset;
 import java.util.Arrays;
@@ -646,41 +644,6 @@ public class ObjectUtil {
     }
 
 
-    /**
-     * Convenience method to return a String array as a CSV String.
-     * E.g. useful for {@code toString()} implementations.
-     * @param arr the array to display
-     * @return the delimited String
-     */
-    public static String arrayToCommaDelimitedString(Object[] arr) {
-        return arrayToDelimitedString(arr, ",");
-    }
-
-    /**
-     * Convenience method to return a String array as a delimited (e.g. CSV)
-     * String. E.g. useful for {@code toString()} implementations.
-     * @param arr the array to display
-     * @param delim the delimiter to use (probably a ",")
-     * @return the delimited String
-     */
-    public static String arrayToDelimitedString(Object[] arr, String delim) {
-        if (ObjectUtils.isEmpty(arr)) {
-            return "";
-        }
-        if (arr.length == 1) {
-            return ObjectUtils.nullSafeToString(arr[0]);
-        }
-        StringBuilder sb = new StringBuilder();
-        for (int i = 0; i < arr.length; i++) {
-            if (i > 0) {
-                sb.append(delim);
-            }
-            sb.append(arr[i]);
-        }
-        return sb.toString();
-    }
-
-
 
     public static int getIntValue(Object object){
         if (object==null){
@@ -764,11 +727,5 @@ public class ObjectUtil {
         }
     }
 
-
-
-//    public static void main(String[] args) {
-//        Charset us_ascii = Charset.forName("UTF-8");
-//        System.out.println(us_ascii.displayName());
-//    }
 
 }

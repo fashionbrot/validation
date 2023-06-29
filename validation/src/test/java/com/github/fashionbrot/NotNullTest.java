@@ -34,7 +34,7 @@ public class NotNullTest {
         Method[] methods = NotNullTest.TestController.class.getDeclaredMethods();
         Method method  = Arrays.stream(methods).filter(m -> m.getName().equals("test1")).findFirst().get();
 
-        String result="ValidatedException(fieldName=arg0, msg=string 不能为空, annotationName=com.github.fashionbrot.validated.annotation.NotNull, value=null, valueIndex=0, violations=null)";
+        String result="ValidatedException(fieldName=arg0, msg=string 不能为空, annotationName=com.github.fashionbrot.annotation.NotNull, value=null, valueIndex=0, violations=null)";
         String returnResult="";
         try {
             MarsValidator marsValidator = new MarsValidatorImpl();
@@ -65,7 +65,7 @@ public class NotNullTest {
         Method[] methods = NotNullTest.TestController2.class.getDeclaredMethods();
         Method method  = Arrays.stream(methods).filter(m -> m.getName().equals("test2")).findFirst().get();
 
-        String result="ValidatedException(fieldName=abc, msg=abc不能为null, annotationName=com.github.fashionbrot.validated.annotation.NotNull, value=null, valueIndex=0, violations=null)";
+        String result="ValidatedException(fieldName=abc, msg=abc不能为null, annotationName=com.github.fashionbrot.annotation.NotNull, value=null, valueIndex=0, violations=null)";
         String returnResult="";
         try {
             Test2Req test2Req =new Test2Req();
@@ -93,7 +93,7 @@ public class NotNullTest {
         Method[] methods = NotNullTest.TestController3.class.getDeclaredMethods();
         Method method  = Arrays.stream(methods).filter(m -> m.getName().equals("test3")).findFirst().get();
 
-        String result="ValidatedException(fieldName=abc, msg=abc不能为null, annotationName=com.github.fashionbrot.validated.annotation.NotNull, value=null, valueIndex=1, violations=null)";
+        String result="ValidatedException(fieldName=abc, msg=abc不能为null, annotationName=com.github.fashionbrot.annotation.NotNull, value=null, valueIndex=1, violations=null)";
         String returnResult="";
         try {
             Test2Req test2Req =new Test2Req();
@@ -123,7 +123,7 @@ public class NotNullTest {
         Method[] methods = NotNullTest.TestController4.class.getDeclaredMethods();
         Method method  = Arrays.stream(methods).filter(m -> m.getName().equals("test4")).findFirst().get();
 
-        String result="ValidatedException(fieldName=abc, msg=abc不能为null, annotationName=com.github.fashionbrot.validated.annotation.NotNull, value=null, valueIndex=1, violations=null)";
+        String result="ValidatedException(fieldName=abc, msg=abc不能为null, annotationName=com.github.fashionbrot.annotation.NotNull, value=null, valueIndex=1, violations=null)";
         String returnResult="";
         try {
             Test2Req test2Req =new Test2Req();
@@ -161,7 +161,7 @@ public class NotNullTest {
         Method[] methods = NotNullTest.TestController5.class.getDeclaredMethods();
         Method method  = Arrays.stream(methods).filter(m -> m.getName().equals("test5")).findFirst().get();
 
-        String result="ValidatedException(fieldName=abc, msg=abc不能为null, annotationName=com.github.fashionbrot.validated.annotation.NotNull, value=null, valueIndex=1, violations=null)";
+        String result="ValidatedException(fieldName=abc, msg=abc不能为null, annotationName=com.github.fashionbrot.annotation.NotNull, value=null, valueIndex=1, violations=null)";
         String returnResult="";
         try {
             Test2Req test2Req =new Test2Req();
@@ -202,7 +202,7 @@ public class NotNullTest {
         Method[] methods = NotNullTest.TestController6.class.getDeclaredMethods();
         Method method  = Arrays.stream(methods).filter(m -> m.getName().equals("test6")).findFirst().get();
 
-        String result="ValidatedException(fieldName=abc, msg=abc不能为null, annotationName=com.github.fashionbrot.validated.annotation.NotNull, value=null, valueIndex=1, violations=null)";
+        String result="ValidatedException(fieldName=abc, msg=abc不能为null, annotationName=com.github.fashionbrot.annotation.NotNull, value=null, valueIndex=1, violations=null)";
         String returnResult="";
         try {
             Test2Req test2Req =new Test2Req();

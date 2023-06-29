@@ -37,7 +37,7 @@ allprojects {
         options.encoding = 'UTF-8'
         options.warnings = false
         options.deprecation = true
-//    options.compilerArgs += ["-parameters"]
+//        options.compilerArgs += ["-parameters"]
     }
 
     repositories {
