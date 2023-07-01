@@ -17,6 +17,4 @@ public class ValidatedConst {
     public static final String CLOSE_TOKEN="}";
 
 
-    public static final String VALIDATOR_IMPL_CLASS_NAME = "defaultValidatorImpl";
-
 }

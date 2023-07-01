@@ -125,51 +125,5 @@ public class MethodUtil {
     }
 
 
-    /**
-     * Determine whether the given method is an "equals" method.
-     * @see java.lang.Object#equals(Object)
-     */
-    public static boolean isEqualsMethod( Method method) {
-        if (method == null) {
-            return false;
-        }
-        if (method.getParameterCount() != 1) {
-            return false;
-        }
-        if (!"equals".equals(method.getName())) {
-            return false;
-        }
-        return method.getParameterTypes()[0] == Object.class;
-    }
-
-    /**
-     * Determine whether the given method is a "hashCode" method.
-     * @see java.lang.Object#hashCode()
-     */
-    public static boolean isHashCodeMethod( Method method) {
-        return method != null && method.getParameterCount() == 0 && "hashCode".equals(method.getName());
-    }
-
-    /**
-     * Determine whether the given method is a "toString" method.
-     * @see java.lang.Object#toString()
-     */
-    public static boolean isToStringMethod( Method method) {
-        return (method != null && method.getParameterCount() == 0 && "toString".equals(method.getName()));
-    }
-
-    /**
-     * Determine whether the given method is originally declared by {@link java.lang.Object}.
-     */
-    public static boolean isObjectMethod( Method method) {
-        return (method != null && (method.getDeclaringClass() == Object.class ||
-            isEqualsMethod(method) || isHashCodeMethod(method) || isToStringMethod(method)));
-    }
-
-
-    public static boolean isAnnotationType(Method method){
-        return (method != null && method.getParameterCount() == 0 && "annotationType".equals(method.getName()));
-    }
-
 
 }

@@ -4,15 +4,14 @@ plugins {
     id 'java'
     id 'maven-publish'
     id 'signing'
+    id 'java-library'
 }
-
-
 
 apply plugin: 'java'
 apply plugin: 'idea'
 apply plugin: 'maven-publish'
 apply plugin: 'signing'
-
+apply plugin: "java-library"
 
 java {
     withJavadocJar()
@@ -125,9 +124,16 @@ configurations {
 
 dependencies {
 
+    api project(":validation")
+
     compileOnly 'org.projectlombok:lombok:1.18.20'
     annotationProcessor 'org.projectlombok:lombok:1.18.20'
     implementation 'org.slf4j:slf4j-api:1.7.10'
+
+    compileOnly 'javax.servlet:javax.servlet-api:3.0.1'
+    compileOnly 'org.springframework:spring-web:4.0.0.RELEASE'
+    compileOnly 'org.springframework:spring-aop:4.0.0.RELEASE'
+    compileOnly 'org.springframework:spring-context:4.0.0.RELEASE'
 
     testCompileOnly 'org.projectlombok:lombok:1.18.20'
     testAnnotationProcessor 'org.projectlombok:lombok:1.18.20'
@@ -139,5 +145,6 @@ dependencies {
 compileJava.options.encoding = "UTF-8"
 compileTestJava.options.encoding = "UTF-8"
 [compileJava, compileTestJava]*.options*.encoding = 'UTF-8'
+sourceSets.main.resources.srcDirs = ["src/main/resources"]
 
 

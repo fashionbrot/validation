@@ -72,13 +72,13 @@ jdk1.8    及以上
         <!-- springboot 依赖-->
         <dependency>
                <groupId>com.github.fashionbrot</groupId>
-               <artifactId>validated-springboot-starter</artifactId>
-               <version>2.0.9</version>
+               <artifactId>spring-boot-starter-validation</artifactId>
+               <version>2.1.0</version>
         </dependency>
 ```
 #### gradle 依赖
 ```bash
-implementation 'com.github.fashionbrot:validated-springboot-starter:2.0.9'
+implementation 'com.github.fashionbrot:spring-boot-starter-validation:2.1.0'
 ```
 
 ### 1.2、参数验证
@@ -104,13 +104,13 @@ public class NotEmptyController {
         <!-- springmvc 依赖-->
         <dependency>
             <groupId>com.github.fashionbrot</groupId>
-            <artifactId>mars-validated</artifactId>
-            <version>2.0.9</version>
+            <artifactId>validation-spring</artifactId>
+            <version>2.1.0</version>
         </dependency>
 ```
 #### gradle 依赖
 ```bash
-implementation 'com.github.fashionbrot:mars-validated:2.0.9'
+implementation 'com.github.fashionbrot:validation-spring:2.1.0'
 ```
 
 ### 2.2、配置扫描类
@@ -157,15 +157,12 @@ public class GlobalExceptionHandler {
     @ResponseStatus(HttpStatus.OK)
     public Object ValidatedException(ValidatedException e) {
         List<MarsViolation> violations = e.getViolations();
-        String msg = e.getMsg();
-        if (ObjectUtil.isNotEmpty(violations)) {
-            if (violations.size() == 1) {
-                msg = violations.get(0).getMsg();
-            } else {
-                msg =  violations.stream().map(m -> m.getMsg()).collect(Collectors.joining(","));
-            }
+        if (ObjectUtil.isEmpty(violations)){
+            return e.getMsg();
+        }else {
+            String msg = String.join(",", violations.stream().map(m -> m.getMsg()).collect(Collectors.toList()));
+            return msg;
         }
-        return msg;
     }
 
 }
@@ -175,26 +172,23 @@ public class GlobalExceptionHandler {
 
 # 以下是介绍各种配置
 
-| 配置项                      | 默认值   | 说明                                                                                      |
-|--------------------------|-------|-----------------------------------------------------------------------------------------|
-| mars.validated.file-name | valid | 代表resources下面的配置文件  valid_zh_CN.properties 的文件名                                         |
-|mars.validated.language|zh_CN| 代表resources下面配置文件 valid_zh_CN.properties   语言                                           |
-|mars.validated.locale-param-name|""| 浏览器参数配置 lang=zh_CN`  `mars.validated.file-name=valid 则读取的配置文件为valid_zh_CN.properties语言包 |
+| 配置项                      | 默认值   | 说明                                                                                     |
+|--------------------------|-------|----------------------------------------------------------------------------------------|
+|validated.locale-param-name|""| 浏览器参数配置 lang=zh_CN`  ` 则读取的配置文件为valid_zh_CN.properties语言包 |
 
 
 #### springboot配置方式
 ```properties
-mars.validated.file-name=valid
-mars.validated.language=zh_CN
-mars.validated.locale-param-name=lang
+validated.locale-param-name=lang
 ```
 
 #### springmvc 配置方式
 ```java
 @Component
 @Configuration
-@EnableValidatedConfig(fileName = "valid",language="zh_CN",localeParamName="lang")
+@EnableValidatedConfig(localeParamName="lang")
 public class ValidConfig {
+
 }
 ```
 
@@ -214,33 +208,6 @@ public class BaseModel {
 
 
 
-####  通过aop 自定义拦截
-```java
-@Component
-@Aspect
-public class ValidAspect {
-
-    @Pointcut("execution(* com.github.fashion.test.service.*.*(..))")
-    private void pointcut() {}
-
-    @Autowired
-    private MarsValidator marsValidator;
-
-    @Around(value = "pointcut()")
-    public Object around(ProceedingJoinPoint joinPoint) throws Throwable {
-        //打印方法的信息
-        Object[] args = joinPoint.getArgs();
-        Signature signature = joinPoint.getSignature();
-        MethodSignature methodSignature = (MethodSignature)signature;
-        //自定义参数验证
-        marsValidator.parameterAnnotationValid(methodSignature.getMethod(),args);
-
-        return joinPoint.proceed();
-    }
-
-}
-
-```
 
 
 ## ** 通过 group 来分组验证参数  **
@@ -302,12 +269,6 @@ public class GroupModel {
 }
 
 ```
-
-
-
-
-
-
 
 
 
@@ -414,6 +375,7 @@ public class CustomBeanConstraintValidatorBean implements ConstraintValidator<Cu
 
 
 ## 支持 国际化消息提示（现支持中英文两种）其他语言，请按照 mars-validated  resources 下面的 valid_zh_CN.properties 添加其他语言
+## 在自己项目下面增加 valid_语言.properties 并且设置读取语言参数 localeParamName=lang  lang=语言  即可访问对应的 valid_语言.properties错误信息
 ```html
 请求：http://localhost:8080/l18n/test?lang=en_us
 提示：must not be empty

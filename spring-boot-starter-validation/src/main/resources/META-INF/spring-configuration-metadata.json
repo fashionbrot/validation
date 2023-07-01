@@ -1,0 +1,19 @@
+{
+  "groups": [
+    {
+      "name": "validated",
+      "type": "com.github.fashionbrot.ValidatedConfigurationProperties",
+      "sourceType": "com.github.fashionbrot.ValidatedConfigurationProperties"
+    }
+  ],
+  "properties": [
+    {
+      "name": "validated.locale-param-name",
+      "type": "java.lang.String",
+      "description": "request locale param name 如 lang=zh_CN 对应读取是valid_zh_CN.properties",
+      "sourceType": "com.github.fashionbrot.config.ValidatedConfigurationProperties",
+      "defaultValue": ""
+    }
+  ],
+  "hints": []
+}

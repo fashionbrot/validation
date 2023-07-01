@@ -22,6 +22,8 @@ import java.util.stream.Collectors;
 public class ValidatorImpl implements Validator {
 
 
+    public static final String BEAN_NAME = "defaultValidatorImpl";
+
     public void entityFieldsAnnotationValid(Validated validated, Class<?> clazz, Object[] params,Integer paramIndex,String language) {
 
 

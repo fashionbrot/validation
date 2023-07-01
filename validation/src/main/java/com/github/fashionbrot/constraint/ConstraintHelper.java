@@ -19,13 +19,7 @@ public class ConstraintHelper {
 
     static {
 
-        ServiceLoader<ValidatorContainer> load = ServiceLoader.load(ValidatorContainer.class);
-        if (load!=null){
-            Iterator<ValidatorContainer> iterator = load.iterator();
-            if (iterator!=null && iterator.hasNext()){
-                validatorContainer = iterator.next();
-            }
-        }
+
 
         Map<Class<? extends Annotation>, List<ConstraintValidator>> builtinConstraints = new HashMap<>();
         putTemp(builtinConstraints, NotNull.class, NotNullConstraint.class);
@@ -91,6 +85,12 @@ public class ConstraintHelper {
             return MethodUtil.newInstance(constraintValidator);
         }
         return injectConstraintValidator;
+    }
+
+    public static void setValidatorContainer(ValidatorContainer validatorContainer){
+        if (validatorContainer!=null){
+            ConstraintHelper.validatorContainer = validatorContainer;
+        }
     }
 
 }
