@@ -29,7 +29,7 @@ public class SizeTest {
         Method[] methods = SizeTest.TestController.class.getDeclaredMethods();
         Method method  = Arrays.stream(methods).filter(m -> m.getName().equals("test1")).findFirst().get();
 
-        String result="ValidatedException(fieldName=arg0, msg=1~3之间, annotationName=com.github.fashionbrot.annotation.Size, value=null, valueIndex=0, violations=null)";
+        String result="ValidatedException(fieldName=arg0, msg=1~3之间, annotationName=Size, value=null, valueIndex=0, violations=null)";
         String returnResult="";
         try {
             Validator marsValidator = new ValidatorImpl();
@@ -56,7 +56,7 @@ public class SizeTest {
         Method[] methods = SizeTest.TestController2.class.getDeclaredMethods();
         Method method  = Arrays.stream(methods).filter(m -> m.getName().equals("test2")).findFirst().get();
         Integer integer1=Integer.getInteger("1");
-        String result="ValidatedException(fieldName=null, msg=null, annotationName=null, value=null, valueIndex=null, violations=[MarsViolation(fieldName=arg0, msg=abc1 必须2~3, annotationName=com.github.fashionbrot.annotation.Size, value=[Ljava.lang.Integer;@1c37fc4b, valueIndex=0), MarsViolation(fieldName=arg1, msg=abc2 必须2~3, annotationName=com.github.fashionbrot.annotation.Size, value=[2], valueIndex=1)])";
+        String result="ValidatedException(fieldName=null, msg=null, annotationName=null, value=null, valueIndex=null, violations=[MarsViolation(fieldName=arg0, msg=abc1 必须2~3, annotationName=Size, value=[Ljava.lang.Integer;@1c37fc4b, valueIndex=0), MarsViolation(fieldName=arg1, msg=abc2 必须2~3, annotationName=Size, value=[2], valueIndex=1)])";
         String returnResult="";
         try {
 

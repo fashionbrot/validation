@@ -343,7 +343,7 @@ public class ValidatorImpl implements Validator {
                 if (!isValid) {
                     String msg  = getAnnotationMsg(annotation,language); //issue#8
                     if (validated.failFast()) {
-                        ValidatedException.throwMsg(paramName, msg, annotation.annotationType().getName(), value,index);
+                        ValidatedException.throwMsg(paramName, msg, annotation.annotationType().getSimpleName(), value,index);
                     } else {
                         addMarsViolations(value, paramName, annotation, msg,index);
                     }
@@ -379,7 +379,7 @@ public class ValidatorImpl implements Validator {
         String annotationMsg = MethodUtil.getAnnotationMsg(annotation);
         String filterMsg = ValidatorUtil.filterMsg(annotationMsg, language);
         if (GenericTokenUtil.isOpenToken(filterMsg, ValidatedConst.OPEN_TOKEN)) {
-            Map<String, Object> annotationAttributes = MethodUtil.getAnnotationAttributes(annotation);
+            Map<String, Object> annotationAttributes = MethodUtil.getAnnotationMapExcludeMsgAndGroups(annotation);
             return GenericTokenUtil.parse(filterMsg, annotationAttributes);
         }
         return filterMsg;
@@ -388,9 +388,10 @@ public class ValidatorImpl implements Validator {
 
 
 
-    private void addMarsViolations(Object value, String paramName, Annotation annotation, String msg,Integer valueIndex) {
+    private void
+    addMarsViolations(Object value, String paramName, Annotation annotation, String msg,Integer valueIndex) {
         ExceptionUtil.addMarsViolation(MarsViolation.builder()
-                .annotationName(annotation.annotationType().getName())
+                .annotationName(annotation.annotationType().getSimpleName())
                 .fieldName(paramName)
                 .msg(msg)
                 .value(value)
