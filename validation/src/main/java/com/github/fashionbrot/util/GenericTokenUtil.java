@@ -14,6 +14,18 @@ public class GenericTokenUtil {
         return parse(text,OPEN_TOKEN,CLOSE_TOKEN,map);
     }
 
+    public static boolean isOpenToken(String text,String openToken){
+        if (ObjectUtil.isEmpty(text)) {
+            return false;
+        }
+        // search open token
+        int start = text.indexOf(openToken);
+        if (start == -1) {
+            return false;
+        }
+        return true;
+    }
+
 
     public static String parse(String text, String openToken, String closeToken, Map<String,Object> map) {
         if (ObjectUtil.isEmpty(text)) {

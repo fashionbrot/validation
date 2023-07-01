@@ -5,8 +5,8 @@ import com.github.fashionbrot.annotation.NotEmpty;
 import com.github.fashionbrot.annotation.Valid;
 import com.github.fashionbrot.annotation.Validated;
 import com.github.fashionbrot.exception.ValidatedException;
-import com.github.fashionbrot.validator.MarsValidator;
-import com.github.fashionbrot.validator.MarsValidatorImpl;
+import com.github.fashionbrot.validator.Validator;
+import com.github.fashionbrot.validator.ValidatorImpl;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -35,8 +35,8 @@ public class NotEmptyTest {
         String result="ValidatedException(fieldName=arg0, msg=string 不能为空, annotationName=com.github.fashionbrot.annotation.NotEmpty, value=null, valueIndex=0, violations=null)";
         String returnResult="";
         try {
-            MarsValidator marsValidator = new MarsValidatorImpl();
-            marsValidator.parameterAnnotationValid(method,new Object[]{null});
+            Validator marsValidator = new ValidatorImpl();
+            marsValidator.validParameter(method,new Object[]{null},null);
         }catch (ValidatedException e){
             returnResult = e.toString();
         }
@@ -69,8 +69,8 @@ public class NotEmptyTest {
             Test2Req test2Req =new Test2Req();
             test2Req.setAbc(null);
 
-            MarsValidator marsValidator = new MarsValidatorImpl();
-            marsValidator.parameterAnnotationValid(method,new Object[]{test2Req});
+            Validator marsValidator = new ValidatorImpl();
+            marsValidator.validParameter(method,new Object[]{test2Req},null);
         }catch (ValidatedException e){
             returnResult = e.toString();
         }
@@ -100,8 +100,8 @@ public class NotEmptyTest {
             Test2Req test22Req =new Test2Req();
             test22Req.setAbc(null);
 
-            MarsValidator marsValidator = new MarsValidatorImpl();
-            marsValidator.parameterAnnotationValid(method,new Object[]{Arrays.asList(test2Req,test22Req)});
+            Validator marsValidator = new ValidatorImpl();
+            marsValidator.validParameter(method,new Object[]{Arrays.asList(test2Req,test22Req)},null);
         }catch (ValidatedException e){
             returnResult = e.toString();
         }
@@ -130,8 +130,8 @@ public class NotEmptyTest {
             Test2Req test22Req =new Test2Req();
             test22Req.setAbc(null);
 
-            MarsValidator marsValidator = new MarsValidatorImpl();
-            marsValidator.parameterAnnotationValid(method,new Object[]{new Object[]{test2Req,test22Req}});
+            Validator marsValidator = new ValidatorImpl();
+            marsValidator.validParameter(method,new Object[]{new Object[]{test2Req,test22Req}},null);
         }catch (ValidatedException e){
             returnResult = e.toString();
         }

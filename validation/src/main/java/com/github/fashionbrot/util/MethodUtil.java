@@ -1,6 +1,7 @@
 package com.github.fashionbrot.util;
 
 import com.github.fashionbrot.constraint.ConstraintValidator;
+import com.github.fashionbrot.consts.ValidatedConst;
 import lombok.extern.slf4j.Slf4j;
 
 import java.lang.annotation.Annotation;
@@ -10,7 +11,6 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 
 @Slf4j
 public class MethodUtil {
@@ -56,33 +56,59 @@ public class MethodUtil {
         return false;
     }
 
+    public static Class[] getAnnotationGroups(Annotation annotation){
+        if (annotation==null){
+            return null;
+        }
+        Method[] methods = annotation.annotationType().getDeclaredMethods();
+        if (ObjectUtil.isEmpty(methods)){
+            return null;
+        }
+        Class[] groups = null;
+        for (int i = 0; i < methods.length; i++) {
+            Method method = methods[i];
+            if (ValidatedConst.GROUPS.equals(method.getName())){
+                groups = (Class[]) getReturnValue(method,annotation);
+            }
+        }
+        return groups;
+    }
 
+    public static String getAnnotationMsg(Annotation annotation){
+        if (annotation==null){
+            return null;
+        }
+        Method[] methods = annotation.annotationType().getDeclaredMethods();
+        if (ObjectUtil.isEmpty(methods)){
+            return null;
+        }
+        String msg = null;
+        for (int i = 0; i < methods.length; i++) {
+            Method method = methods[i];
+            if (ValidatedConst.MSG.equals(method.getName())){
+                msg = (String) getReturnValue(method,annotation);
+            }
+        }
+        return msg;
+    }
 
-    private static Map<Annotation, Map<String,Object>> TEMP = new ConcurrentHashMap<>();
 
     public static Map<String,Object> getAnnotationAttributes(Annotation annotation){
-        Map<String, Object> tempMap = TEMP.get(annotation);
-        if (ObjectUtil.isNotEmpty(tempMap)){
-            return tempMap;
+        if (annotation==null){
+            return null;
         }
-        Class<? extends Annotation> annotationClass = annotation.getClass();
-        Method[] methods = annotationClass.getDeclaredMethods();
-        if (ObjectUtil.isNotEmpty(methods)){
-            Map<String,Object> methodMap = new HashMap<>(methods.length);
-            for (int i = 0; i < methods.length; i++) {
-                Method method = methods[i];
-                if (isObjectMethod(method) || isAnnotationType(method)){
-                    continue;
-                }
-                if (method.getParameterTypes().length == 0 && method.getReturnType() != void.class) {
-                    methodMap.put(method.getName(),getReturnValue(method,annotation));
-                }
+        Method[] methods = annotation.annotationType().getDeclaredMethods();
+        if (ObjectUtil.isEmpty(methods)){
+            return null;
+        }
+        Map<String,Object> methodMap = new HashMap<>(methods.length);
+        for (int i = 0; i < methods.length; i++) {
+            Method method = methods[i];
+            if (method.getParameterTypes().length == 0 && method.getReturnType() != void.class) {
+                methodMap.put(method.getName(),getReturnValue(method,annotation));
             }
-            TEMP.put(annotation,methodMap);
-
-            return methodMap;
         }
-        return null;
+        return methodMap;
     }
 
     public static Object getReturnValue(Method method,Annotation annotation){

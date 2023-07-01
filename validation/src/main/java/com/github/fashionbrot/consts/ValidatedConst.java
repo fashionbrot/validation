@@ -13,4 +13,10 @@ public class ValidatedConst {
     public static final String MSG = "msg";
     public static final String GROUPS = "groups";
 
+    public static final String OPEN_TOKEN="${";
+    public static final String CLOSE_TOKEN="}";
+
+
+    public static final String VALIDATOR_IMPL_CLASS_NAME = "defaultValidatorImpl";
+
 }

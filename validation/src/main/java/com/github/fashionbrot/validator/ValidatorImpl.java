@@ -19,26 +19,20 @@ import java.util.stream.Collectors;
 
 
 @Slf4j
-public class MarsValidatorImpl implements MarsValidator {
+public class ValidatorImpl implements Validator {
 
 
-
-    public static final String BEAN_NAME = "defaultMarsValidatorImpl";
-
-
-
-    public void entityFieldsAnnotationValid(Validated validated, String valueTypeName, Class<?> clazz, Object[] params,Integer paramIndex) {
+    public void entityFieldsAnnotationValid(Validated validated, Class<?> clazz, Object[] params,Integer paramIndex,String language) {
 
 
         // 判断是否 有继承类
-        checkClassSuper(validated, clazz, params,paramIndex);
+        checkClassSuper(validated, clazz, params,paramIndex,language);
 
         //如果填写 validClass
         Class<?>[] validClass = validated != null ? validated.validClass() : null;
         if (!isValidClass(validClass, clazz)) {
             return;
         }
-
 
         Field[] fields = clazz.getDeclaredFields();
         if (ObjectUtil.isEmpty(fields)) {
@@ -53,28 +47,33 @@ public class MarsValidatorImpl implements MarsValidator {
             String fieldName = field.getName();
 
 
-            List<Annotation> validAnnotation = getValidAnnotation(field.getDeclaredAnnotations());
-            if (ObjectUtil.isNotEmpty(validAnnotation)) {
-                for (Annotation annotation : validAnnotation) {
-                    validated(validated, params,paramIndex, fieldClassType, fieldName, annotation, field);
+            List<Annotation> fieldAnnotations = getValidAnnotation(field.getDeclaredAnnotations());
+            if (ObjectUtil.isNotEmpty(fieldAnnotations)) {
+
+                for (Annotation annotation : fieldAnnotations) {
+
+                    validated(validated, params,paramIndex, fieldClassType, fieldName, annotation, field , language);
                 }
+
             }else{
+
                 Valid valid = field.getDeclaredAnnotation(Valid.class);
                 String typeName = fieldClassType.getTypeName();
                 if (JavaUtil.isArray(typeName)) {
                     if (valid==null){
                         continue;
                     }
-                    validArrayObject(validated,field,params,paramIndex);
+                    validArrayObject(validated,field,params,paramIndex,language);
                 } else if (JavaUtil.isCollection(typeName)) {
                     if (valid==null){
                         continue;
                     }
-                    validListObject(validated,field, params,paramIndex);
+                    validListObject(validated,field, params,paramIndex,language);
                 } else {
                     //验证参数属性
-                    entityFieldsAnnotationValid(validated, typeName, fieldClassType, params, paramIndex);
+                    entityFieldsAnnotationValid(validated , fieldClassType, params, paramIndex ,language);
                 }
+
             }
         }
 
@@ -82,20 +81,28 @@ public class MarsValidatorImpl implements MarsValidator {
 
 
 
-    private void checkClassSuper(Validated validated, Class clazz, Object[] params,Integer valueIndex) {
+    private void checkClassSuper(Validated validated, Class clazz, Object[] params,Integer valueIndex,String language) {
         Class superclass = clazz.getSuperclass();
         if (superclass != null && JavaUtil.isNotObject(superclass)) {
             //如果不是定义的类型，则把 class 当做bean 进行校验 field
-            entityFieldsAnnotationValid(validated, superclass.getName(), superclass, params,valueIndex);
+            entityFieldsAnnotationValid(validated , superclass, params,valueIndex ,language);
         }
     }
 
     @Override
-    public void returnValueAnnotationValid(Validated validated, Object object) {
+    public void validReturnValue(Method method, Object argument,String language) {
+        Validated validated = getValidated(method);
+        if (validated==null){
+            return;
+        }
+        if (!validated.validReturnValue()){
+            return;
+        }
+
         try {
-            if (JavaUtil.isNotPrimitive(object.getClass().getName())) {
+            if (JavaUtil.isNotPrimitive(argument.getClass().getName())) {
                 //验证参数属性
-                entityFieldsAnnotationValid(validated, object.getClass().getTypeName(), object.getClass(), new Object[]{object},0);
+                entityFieldsAnnotationValid(validated, argument.getClass(), new Object[]{argument}, 0, language);
             }
             if (!validated.failFast()) {
                 ExceptionUtil.throwException();
@@ -116,56 +123,61 @@ public class MarsValidatorImpl implements MarsValidator {
     }
 
 
+
     @Override
-    public void parameterAnnotationValid(Method method, Object[] params) {
+    public void validParameter(Method method, Object[] arguments,String language) {
         Validated validated = getValidated(method);
         if (validated==null){
             return;
         }
 
+        Parameter[] parameters = method.getParameters();
+        if (ObjectUtil.isEmpty(parameters)) {
+            return;
+        }
+
         try {
-            Parameter[] parameters = method.getParameters();
-            if (ObjectUtil.isNotEmpty(parameters)) {
-                for (int j = 0; j < parameters.length; j++) {
+            for (int j = 0; j < parameters.length; j++) {
 
-                    Parameter parameter = parameters[j];
-                    Class<?> classType = parameter.getType();
-                    String parameterTypeName = classType.getTypeName();
-                    if (JavaUtil.isMvcIgnoreParams(parameterTypeName)) {
-                        continue;
+                Parameter parameter = parameters[j];
+                Class<?> classType = parameter.getType();
+                String parameterTypeName = classType.getTypeName();
+                if (JavaUtil.isMvcIgnoreParams(parameterTypeName)) {
+                    continue;
+                }
+
+                List<Annotation> annotationList = getValidAnnotation(parameter.getDeclaredAnnotations());
+                if (ObjectUtil.isNotEmpty(annotationList)){
+
+                    for (Annotation parameterAnnotation : annotationList) {
+
+                        validated(validated, arguments, j, parameter.getType(), parameter.getName(), parameterAnnotation, null,language);
                     }
-                    Annotation[] declaredAnnotations = parameter.getDeclaredAnnotations();
 
-                    List<Annotation> validAnnotation = getValidAnnotation(declaredAnnotations);
-                    if (ObjectUtil.isNotEmpty(validAnnotation)) {
+                }else{
 
-                        for (int i = 0; i < validAnnotation.size(); i++) {
-                            validated(validated, params,j, parameter.getType(), parameter.getName(), validAnnotation.get(i), null);
+                    Valid valid = parameter.getDeclaredAnnotation(Valid.class);
+                    if (JavaUtil.isArray(parameterTypeName)) {
+                        if (valid == null) {
+                            continue;
                         }
-
+                        validArrayObject(validated, parameter.getType(), arguments, j, parameter.getName());
+                    } else if (JavaUtil.isCollection(parameterTypeName)) {
+                        if (valid == null) {
+                            continue;
+                        }
+                        validListObject(validated, parameter, arguments, j, language);
                     } else {
-                        Valid valid = parameter.getDeclaredAnnotation(Valid.class);
-                        if (JavaUtil.isArray(parameterTypeName) ) {
-                            if (valid==null){
-                                continue;
-                            }
-                            validArrayObject(validated,parameter.getType(),params,j,parameter.getName());
-                        } else if (JavaUtil.isCollection(parameterTypeName)) {
-                            if (valid==null){
-                                continue;
-                            }
-                            validListObject(validated,parameter,params,j);
-                        } else {
-                            //验证参数属性
-                            entityFieldsAnnotationValid(validated, parameterTypeName, classType, params, j);
-                        }
+                        //验证参数属性
+                        entityFieldsAnnotationValid(validated, classType, arguments, j , language);
                     }
+
                 }
             }
+
             if (!validated.failFast()) {
                 ExceptionUtil.throwException();
             }
-
         } finally {
             if (!validated.failFast()) {
                 ExceptionUtil.reset();
@@ -174,32 +186,32 @@ public class MarsValidatorImpl implements MarsValidator {
     }
 
 
-    public void validArrayObject(Validated validated, Class objectClass,Object[] params,Integer paramIndex, String paramName) {
+    public void validArrayObject(Validated validated, Class objectClass,Object[] params,Integer paramIndex, String language) {
         Class convertClass = objectClass.getComponentType();
         if (JavaUtil.isNotPrimitive(convertClass.getTypeName())) {
             Object[] array = (Object[]) params[paramIndex];
             if (ObjectUtil.isNotEmpty(array)) {
                 for (int objIndex = 0; objIndex < array.length; objIndex++) {
-                    entityFieldsAnnotationValid(validated, paramName, convertClass, array , objIndex);
+                    entityFieldsAnnotationValid(validated, convertClass, array , objIndex,language);
                 }
             }
         }
     }
 
-    public void validArrayObject(Validated validated, Field field,Object[] params,Integer paramIndex) {
+    public void validArrayObject(Validated validated, Field field,Object[] params,Integer paramIndex,String language) {
         Class convertClass = field.getType().getComponentType();
         if (JavaUtil.isNotPrimitive(convertClass.getTypeName())) {
             Object[] array = (Object[]) MethodUtil.getFieldValue(field, params[paramIndex]);
             if (ObjectUtil.isNotEmpty(array)) {
                 for (int objIndex = 0; objIndex < array.length; objIndex++) {
-                    entityFieldsAnnotationValid(validated, field.getName(), convertClass, array , objIndex);
+                    entityFieldsAnnotationValid(validated,  convertClass, array , objIndex,language);
                 }
             }
         }
     }
 
 
-    public void validListObject(Validated validated,Parameter parameter,Object[] params ,Integer paramIndex ){
+    public void validListObject(Validated validated,Parameter parameter,Object[] params ,Integer paramIndex,String language ){
         Type[] actualTypeArguments = TypeUtil.getActualTypeArguments(parameter);
         if (ObjectUtil.isNotEmpty(actualTypeArguments) &&
             actualTypeArguments[0] instanceof Class &&
@@ -212,14 +224,14 @@ public class MarsValidatorImpl implements MarsValidator {
                 if (ObjectUtil.isNotEmpty(param)) {
                     for (int listIndex = 0; listIndex < param.size(); listIndex++) {
 
-                        entityFieldsAnnotationValid(validated, parameter.getName(), typeConvertClass, param.toArray(),listIndex);
+                        entityFieldsAnnotationValid(validated,  typeConvertClass, param.toArray(),listIndex ,language);
                     }
                 }
             }
         }
     }
 
-    public void validListObject(Validated validated,Field field,Object[] params ,Integer paramIndex  ){
+    public void validListObject(Validated validated,Field field,Object[] params ,Integer paramIndex,String language ){
         Type[] actualTypeArguments = TypeUtil.getActualTypeArguments(field);
         if (ObjectUtil.isNotEmpty(actualTypeArguments) &&
             actualTypeArguments[0] instanceof Class &&
@@ -231,7 +243,7 @@ public class MarsValidatorImpl implements MarsValidator {
                 if (ObjectUtil.isNotEmpty(param)) {
                     for (int listIndex = 0; listIndex < param.size(); listIndex++) {
 
-                        entityFieldsAnnotationValid(validated, field.getName(), typeConvertClass, param.toArray(),listIndex);
+                        entityFieldsAnnotationValid(validated,  typeConvertClass, param.toArray(),listIndex,language);
                     }
                 }
             }
@@ -241,13 +253,13 @@ public class MarsValidatorImpl implements MarsValidator {
     private List<Annotation> getValidAnnotation(Annotation[] annotations) {
         if (ObjectUtil.isNotEmpty(annotations)) {
             return Arrays.stream(annotations)
-                .filter(annotation -> isMarsValidAnnotation(annotation))
+                .filter(annotation -> isValidAnnotation(annotation))
                 .collect(Collectors.toList());
         }
         return null;
     }
 
-    private boolean isMarsValidAnnotation(Annotation annotation){
+    private boolean isValidAnnotation(Annotation annotation){
         return annotation!=null && (ConstraintHelper.containsKey(annotation.annotationType()) || annotation.annotationType().isAnnotationPresent(Constraint.class));
     }
 
@@ -258,44 +270,64 @@ public class MarsValidatorImpl implements MarsValidator {
                            Class<?> valueType,
                            String paramName,
                            Annotation annotation,
-                           Field field) {
-
-        boolean failFast = validated != null ? validated.failFast() : true;
-        Class<?>[] vGroupClass = validated != null ? validated.groups() : null;
+                           Field field,String language) {
 
 
-        Map<String, Object> annotationAttributes = MethodUtil.getAnnotationAttributes(annotation);//AnnotationUtils.getAnnotationAttributes(annotation);//TODO
-        if (checkGroup(vGroupClass, annotationAttributes)) {
+        if (checkValidatedGroups(validated,annotation)) {
             return;
         }
 
+        List<ConstraintValidator> constraintValidatorList = getAnnotationConstraintValidator(annotation);
+        if (ObjectUtil.isEmpty(constraintValidatorList)){
+            return;
+        }
+
+        validatedConstrain(validated,annotation,constraintValidatorList, params,paramIndex, paramName, valueType, field,language);
+    }
+
+    private boolean checkValidatedGroups(Validated validated,Annotation annotation){
+        Class<?>[] validatedGroups = validated.groups();
+        if (ObjectUtil.isEmpty(validatedGroups)) {
+            return false;
+        }
+        //issue#6 如果注解 groups 为空，则默认 annotation 注解 groups=DefaultGroup.class
+        if (checkGroup(DefaultGroup.class,validatedGroups)) {
+            return false;
+        }
+        Class[] annotationGroups = MethodUtil.getAnnotationGroups(annotation);
+        if (ObjectUtil.isEmpty(annotationGroups)){
+            return false;
+        }
+        return !checkGroup(validatedGroups, annotationGroups);
+    }
+
+    private List<ConstraintValidator> getAnnotationConstraintValidator(Annotation annotation){
         List<ConstraintValidator> constraintValidatorList = ConstraintHelper.getConstraint(annotation.annotationType());
-        if (ObjectUtil.isEmpty(constraintValidatorList)) {
-            Constraint constraint = annotation.annotationType().getDeclaredAnnotation(Constraint.class);
-            if (constraint != null) {
-                Class<? extends ConstraintValidator<? extends Annotation, ?>>[] classes = constraint.validatedBy();
-                if (ObjectUtil.isEmpty(classes)) {
-                    return;
-                }
-                ConstraintHelper.putConstraintValidator(annotation.annotationType(), classes);
-                constraintValidatorList = ConstraintHelper.getConstraint(annotation.annotationType());
-            }
+        if (ObjectUtil.isNotEmpty(constraintValidatorList)){
+            return constraintValidatorList;
         }
-        if (ObjectUtil.isNotEmpty(constraintValidatorList)) {
-            validatedConstrain(constraintValidatorList, annotationAttributes, failFast, annotation, params,paramIndex, paramName, valueType, field);
+        Constraint constraint = annotation.annotationType().getDeclaredAnnotation(Constraint.class);
+        if (constraint==null){
+            return null;
         }
+        Class<? extends ConstraintValidator<? extends Annotation, ?>>[] classes = constraint.validatedBy();
+        if (ObjectUtil.isEmpty(classes)) {
+            return null;
+        }
+        ConstraintHelper.putConstraintValidator(annotation.annotationType(), classes);
+        return ConstraintHelper.getConstraint(annotation.annotationType());
     }
 
 
-    private void validatedConstrain(List<ConstraintValidator> constraintValidatorList,
-                                    Map<String, Object> annotationAttributes,
-                                    boolean failFast,
+    private void validatedConstrain(Validated validated,
                                     Annotation annotation,
+                                    List<ConstraintValidator> constraintValidatorList,
                                     Object[] params,
                                     Integer index,
                                     String paramName,
                                     Class valueType,
-                                    Field field) {
+                                    Field field,
+                                    String language) {
 
         if (ObjectUtil.isNotEmpty(constraintValidatorList)) {
             Object value = params[index];
@@ -307,11 +339,10 @@ public class MarsValidatorImpl implements MarsValidator {
                 ConstraintValidator constraintValidator = constraintValidatorList.get(i);
                 boolean isValid = constraintValidator.isValid(annotation, value, valueType);
                 if (!isValid) {
-                    if (failFast) {
-                        String msg  = parseMsg(annotationAttributes); //issue#8
+                    String msg  = getAnnotationMsg(annotation,language); //issue#8
+                    if (validated.failFast()) {
                         ValidatedException.throwMsg(paramName, msg, annotation.annotationType().getName(), value,index);
                     } else {
-                        String msg  = parseMsg(annotationAttributes);//issue#8
                         addMarsViolations(value, paramName, annotation, msg,index);
                     }
                 }
@@ -333,9 +364,7 @@ public class MarsValidatorImpl implements MarsValidator {
                                 log.error("mars valid error setField fieldName:{} annotation:{} oldType:{} newType:{} ", field.getName(), annotation.annotationType().getName(), field.getType(), reValue.getClass());
                             }
                         } else {
-                            if (reValue != null) {
-                                params[index] = ObjectUtil.formatObject(reValue, valueType);
-                            }
+                            params[index] = ObjectUtil.formatObject(reValue, valueType);
                         }
                     }
                 }
@@ -344,13 +373,17 @@ public class MarsValidatorImpl implements MarsValidator {
     }
 
 
-    private String parseMsg(Map<String, Object> annotationAttributes) {
-        if (annotationAttributes.containsKey(ValidatedConst.MSG)) {
-            String filterMsg = ValidatorUtil.filterMsg((String) annotationAttributes.get(ValidatedConst.MSG),getLanguage());
+    private String getAnnotationMsg(Annotation annotation, String language) {
+        String annotationMsg = MethodUtil.getAnnotationMsg(annotation);
+        String filterMsg = ValidatorUtil.filterMsg(annotationMsg, language);
+        if (GenericTokenUtil.isOpenToken(filterMsg, ValidatedConst.OPEN_TOKEN)) {
+            Map<String, Object> annotationAttributes = MethodUtil.getAnnotationAttributes(annotation);
             return GenericTokenUtil.parse(filterMsg, annotationAttributes);
         }
-        return "";
+        return filterMsg;
     }
+
+
 
 
     private void addMarsViolations(Object value, String paramName, Annotation annotation, String msg,Integer valueIndex) {
@@ -372,30 +405,6 @@ public class MarsValidatorImpl implements MarsValidator {
     }
 
 
-    /**
-     * check groups matches
-     *
-     * @param validatedGroupClass
-     * @param attributes
-     * @return boolean
-     */
-    private boolean checkGroup(Class<?>[] validatedGroupClass, Map<String, Object> attributes) {
-        //groups==null ,则不验证groups
-        if (ObjectUtil.isEmpty(validatedGroupClass)) {
-            return false;
-        }
-        //issue#6 如果注解 groups 为空，则默认 annotation 注解 groups=DefaultGroup.class
-        if (checkGroup(DefaultGroup.class,validatedGroupClass)) {
-            return false;
-        }
-        Class[] groups = (Class[]) attributes.get(ValidatedConst.GROUPS);
-        if (checkGroup(validatedGroupClass, groups)) {
-            return false;
-        }
-        return true;
-
-    }
-
     private boolean checkGroup(Class<?>[] vGroup, Class<?>[] aGroup) {
         if (ObjectUtil.isNotEmpty(aGroup)) {
             if (log.isDebugEnabled()) {
@@ -410,8 +419,8 @@ public class MarsValidatorImpl implements MarsValidator {
         return false;
     }
 
-    private boolean checkGroup(Class clazz, Class<?>[] aGroup) {
-        for (Class c : aGroup) {
+    private boolean checkGroup(Class clazz, Class[] classes) {
+        for (Class c : classes) {
             if (clazz.equals(c)) {
                 return true;
             }

@@ -5,8 +5,8 @@ import com.github.fashionbrot.annotation.Size;
 import com.github.fashionbrot.annotation.Valid;
 import com.github.fashionbrot.annotation.Validated;
 import com.github.fashionbrot.exception.ValidatedException;
-import com.github.fashionbrot.validator.MarsValidator;
-import com.github.fashionbrot.validator.MarsValidatorImpl;
+import com.github.fashionbrot.validator.Validator;
+import com.github.fashionbrot.validator.ValidatorImpl;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -32,8 +32,8 @@ public class SizeTest {
         String result="ValidatedException(fieldName=arg0, msg=1~3之间, annotationName=com.github.fashionbrot.annotation.Size, value=null, valueIndex=0, violations=null)";
         String returnResult="";
         try {
-            MarsValidator marsValidator = new MarsValidatorImpl();
-            marsValidator.parameterAnnotationValid(method,new Object[]{null});
+            Validator marsValidator = new ValidatorImpl();
+            marsValidator.validParameter(method,new Object[]{null},null);
         }catch (ValidatedException e){
             returnResult = e.toString();
         }
@@ -60,8 +60,8 @@ public class SizeTest {
         String returnResult="";
         try {
 
-            MarsValidator marsValidator = new MarsValidatorImpl();
-            marsValidator.parameterAnnotationValid(method,new Object[]{new Integer[]{integer1},Arrays.asList(Integer.valueOf(2))});
+            Validator marsValidator = new ValidatorImpl();
+            marsValidator.validParameter(method,new Object[]{new Integer[]{integer1},Arrays.asList(Integer.valueOf(2))},null);
         }catch (ValidatedException e){
             returnResult = e.toString();
         }
