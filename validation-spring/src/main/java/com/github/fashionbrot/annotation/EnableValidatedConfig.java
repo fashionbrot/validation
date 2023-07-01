@@ -11,12 +11,6 @@ import java.lang.annotation.*;
 @Documented
 @Import(ValidatedConfigBeanDefinitionRegistrar.class)
 public @interface EnableValidatedConfig {
-
-    /**
-     * language
-     * @return String
-     */
-    String language() default "";
     /**
      * request locale param name
      * @return String
