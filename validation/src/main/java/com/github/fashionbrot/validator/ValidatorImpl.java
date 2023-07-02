@@ -275,7 +275,7 @@ public class ValidatorImpl implements Validator {
                            Field field,String language) {
 
 
-        if (checkValidatedGroups(validated,annotation)) {
+        if (!isValidatedGroups(validated,annotation)) {
             return;
         }
 
@@ -287,20 +287,55 @@ public class ValidatorImpl implements Validator {
         validatedConstrain(validated,annotation,constraintValidatorList, params,paramIndex, paramName, valueType, field,language);
     }
 
-    private boolean checkValidatedGroups(Validated validated,Annotation annotation){
+    /**
+     * true 包含 false 不包含
+     * @param validated
+     * @param annotation
+     * @return boolean
+     */
+    private boolean isValidatedGroups(Validated validated,Annotation annotation){
         Class<?>[] validatedGroups = validated.groups();
-        if (ObjectUtil.isEmpty(validatedGroups)) {
+        if (ObjectUtil.isEmpty(validatedGroups) ) {
+
+            Class[] annotationGroups = MethodUtil.getAnnotationGroups(annotation);
+            if (ObjectUtil.isEmpty(annotationGroups)){
+                return true;
+            }
+            if (checkGroup(DefaultGroup.class,annotationGroups)) {
+                return true;
+            }
+
             return false;
+        }else{
+            if (checkGroup(DefaultGroup.class,validatedGroups)) {
+                return true;
+            }
+
+            Class[] annotationGroups = MethodUtil.getAnnotationGroups(annotation);
+            if (ObjectUtil.isEmpty(annotationGroups)){
+                return false;
+            }
+            return checkGroup(validatedGroups, annotationGroups);
         }
-        //issue#6 如果注解 groups 为空，则默认 annotation 注解 groups=DefaultGroup.class
-        if (checkGroup(DefaultGroup.class,validatedGroups)) {
+    }
+
+    private boolean checkValidatedGroups2(Validated validated,Annotation annotation){
+        Class<?>[] validatedGroups = validated.groups();
+        if (ObjectUtil.isEmpty(validatedGroups) ) {
+
+
             return false;
+        }else{
+            if (checkGroup(DefaultGroup.class,validatedGroups)) {
+                return false;
+            }
+
+            Class[] annotationGroups = MethodUtil.getAnnotationGroups(annotation);
+            if (ObjectUtil.isEmpty(annotationGroups)){
+                return false;
+            }
+            return !checkGroup(validatedGroups, annotationGroups);
         }
-        Class[] annotationGroups = MethodUtil.getAnnotationGroups(annotation);
-        if (ObjectUtil.isEmpty(annotationGroups)){
-            return false;
-        }
-        return !checkGroup(validatedGroups, annotationGroups);
     }
 
     private List<ConstraintValidator> getAnnotationConstraintValidator(Annotation annotation){
@@ -341,7 +376,7 @@ public class ValidatorImpl implements Validator {
                 ConstraintValidator constraintValidator = constraintValidatorList.get(i);
                 boolean isValid = constraintValidator.isValid(annotation, value, valueType);
                 if (!isValid) {
-                    String msg  = getAnnotationMsg(annotation,language); //issue#8
+                    String msg  = getAnnotationMsg(annotation,language);
                     if (validated.failFast()) {
                         ValidatedException.throwMsg(paramName, msg, annotation.annotationType().getSimpleName(), value,index);
                     } else {

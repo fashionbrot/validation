@@ -29,13 +29,6 @@ public class ValidatedException extends RuntimeException  {
 
     public ValidatedException(List<MarsViolation> violations) {
         super();
-        if (ObjectUtil.isNotEmpty(violations) && violations.size()==1){
-            MarsViolation marsViolation=  violations.get(0);
-            this.fieldName = marsViolation.getFieldName();
-            this.msg = marsViolation.getMsg();
-            this.annotationName = marsViolation.getAnnotationName();
-            this.value = marsViolation.getValue();
-        }
         this.violations = violations;
     }
 

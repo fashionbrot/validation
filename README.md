@@ -1,31 +1,13 @@
 # mars-validated springmvc springboot springcloud dubbo  参数校验
-简单好用的 springmvc springboot springcloud dubbo  参数校验
-validated 是 控制 springmvc  springboot 的验证框架。此框架基于spring 开发。
+###简单好用的 springmvc springboot springcloud dubbo  参数校验
+### validation 基于纯java 开发
+### validation-spring 基于spring框架封装的validation
+### spring-boot-starter-validation 基于springboot封装的validation-spring
 
-##### github:https://github.com/fashionbrot/mars-validated.git
-##### gitee :https://gitee.com/fashionbrot/mars-validated.git
-
-| 版本        | 新增功能                                                                                                                                                                                                                                               |
-|-----------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| 1.0.0     | 1、参数验证基本功能上线                                                                                                                                                                                                                                       |
-| 1.0.1     | 1、新增验证注解 <br>2、Validated 注解增加validClass方法，可以选择性验证自己想要的参数。 <br> 3、新增Default 注解                                                                                                                                                                      |
-| 1.0.2     | 1、代码逻辑优化。<br>2、新增groups 功能，可以根据groups 选择性验证                                                                                                                                                                                                        |
-| 1.0.3     | 1、Constraint 接口增加  validatedByBean 方法，用来自定义注解实现 <br/>2、新增国际化支持 EnableValidatedConfig 中增加了 language方法、localeParamName方法用来实现消息内容国际化支持，目前支持中英文两种。其他语言请自行添加 <br/> 3、增加1.0.3 的spring-boot-starter-validated 支持                                           |
-| 2.0.0     | 1、Constraint 接口删除  validatedByBean 方法 <br/> 2、删除ConstraintValidatorBean 接口 <br/>  3、ConstraintValidator 新增  modify 方法、validObject 方法 <br/> 4、Validated 注解增加 failFast快速失败方法、增加validReturnValue 方法（验证返回值） <br/> 5、重构了以前的逻辑，相比hibernate valid 速度快1倍左右 |
-| 2.0.1     | 1、修复 @Validation.groups={AddGroup.class} 并且 注解.groups ={} 时,注解.groups ={}代表默认Groups,则不验证是否包含  @Validation.groups={AddGroup.class},代表跳过groups 验证                                                                                                    |
-| 2.0.2     | 1、优化bean注入问题  <br/> 2、maven 编译修改为gradle 编译 3、代码优化                                                                                                                                                                                                  |
-| ~~2.0.3~~ | 1、优化验证逻辑实现   <br/> 2、删除 ConstraintValidator接口中的 validObject 方法。   3、所有注解可实现bean 验证，不在是对基本类型的验证，所有对象都可验证                                                                                                                                            |
-| ~~2.0.4~~ | 优化快速失败逻辑                                                                                                                                                                                                                                           |
-| ~~2.0.5~~ | 修改默认注解groups={DefaultGroup.class} @Validated(groups={DefaultGroup.class})                                                                                                                                                                          |
-| ~~2.0.6~~ | 修复2.0.3、2.0.4、2.0.5 参数带其他注解时导致参数验证失败bug                                                                                                                                                                                                            |
-| 2.0.7     | 修复自定义注解无法验证问题                                                                                                                                                                                                                                      |
-|2.0.8 | 代码优化、新增@Valid 注解，用于参数和属性的数组或List类型 如：UserReq[] userReq 、List<UserReq> userReq                                                                                                                                                                      |
-| 2.0.9 | 1、增加自定义注解实现类中可以注入spring容器中注册的bean issue#5  <br/> 2、注解默认中取消 groups中的DefaultGroup.class,但参数上的注解默认拥有DefaultGroup.class注解 issue#6 <br/> 3、@NotEqualLength 注解不支持字段属性 issue#7    <br/> 4、msg 支持 ${xxx} 替换 修复issue#8 <br/>5、疯狂优化                               |
-### hibernate valid 最新版本  和 mars validated 2.0.1 比较 调用1000次接口时间比较,验证参数10个 速度最优还是 mars-validated
+##### github:https://github.com/fashionbrot/validation.git
+##### gitee :https://gitee.com/fashionbrot/validation.git
 
 
-
-# validated 参数验证
 
 ## 使用环境
 
@@ -52,6 +34,95 @@ jdk1.8    及以上
 |Size|object[],boolean[],byte[],char[],double[],float[],int[],long[],short[],String length,Collection,Map|验证大小值|
 |NotEqualLength|String|验证长度|
 
+## ！！！自定义注解实现类中，可以注入spring容器中的bean 如下
+```java
+/**
+ *  自定义注解实现接口，调用顺序 isValid,modify
+ * @param <A> Annotation
+ * @param <T> T
+ */
+public  interface ConstraintValidator<A extends Annotation, T> {
+
+    /**
+     * annotation all
+     * @param annotation annotation
+     * @param value value
+     * @param valueType valueType
+     * @return boolean
+     */
+    boolean isValid(A annotation, T value,Class<?> valueType);
+
+    /**
+     * 修改 value 值
+     * @param annotation annotation
+     * @param value value
+     * @param valueType valueType
+     * @return T
+     */
+    default T modify(A annotation,T value,Class<?> valueType){
+        return value;
+    }
+
+}
+```
+```java
+package com.github.fashionbrot.constraint;
+
+import java.lang.annotation.*;
+
+@Documented
+@Target({ElementType.PARAMETER,ElementType.FIELD})
+@Retention(RetentionPolicy.RUNTIME)
+@Constraint(validatedBy = {ObjectBeanConstraintValidator.class})
+public @interface ObjectBean {
+    //没有任何参数
+    String msg() default "~";
+}
+```
+```java
+package com.github.fashionbrot.constraint;
+
+
+import com.github.fashionbrot.entity.Test1Entity;
+import com.github.fashionbrot.util.ObjectUtil;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
+
+public class ObjectBeanConstraintValidator implements ConstraintValidator<ObjectBean, Object> {
+    //也可以注入其他spring容器内的bean
+    @Autowired
+    private Environment environment;
+
+    @Override
+    public boolean isValid(ObjectBean annotation, Object value, Class<?> valueType) {
+        if (environment!=null){
+            System.out.println("111");
+        }
+        if (value instanceof Test1Entity){
+            Test1Entity req= (Test1Entity) value;
+            if (ObjectUtil.isEmpty(req.getA1())){
+                return false;
+            }
+        }
+        return true;
+    }
+
+    @Override
+    public Object modify(ObjectBean annotation, Object value, Class<?> valueType) {
+        System.out.println("CustomConstraintValidator:"+value);
+        if (value instanceof Test1Entity){
+            Test1Entity req= (Test1Entity) value;
+            if (ObjectUtil.isEmpty(req.getA1())){
+                req.setA1("A1");
+            }
+        }else{
+            return "A111";
+        }
+        return value;
+    }
+
+}
+```
 
 ## @Validated 注解支持功能说明： 接口方法添加此注解开启参数验证
 |方法| 默认值                  | 说明                       |
@@ -73,12 +144,12 @@ jdk1.8    及以上
         <dependency>
                <groupId>com.github.fashionbrot</groupId>
                <artifactId>spring-boot-starter-validation</artifactId>
-               <version>2.1.0</version>
+               <version>2.1.1</version>
         </dependency>
 ```
 #### gradle 依赖
 ```bash
-implementation 'com.github.fashionbrot:spring-boot-starter-validation:2.1.0'
+implementation 'com.github.fashionbrot:spring-boot-starter-validation:2.1.1'
 ```
 
 ### 1.2、参数验证
@@ -105,12 +176,12 @@ public class NotEmptyController {
         <dependency>
             <groupId>com.github.fashionbrot</groupId>
             <artifactId>validation-spring</artifactId>
-            <version>2.1.0</version>
+            <version>2.1.1</version>
         </dependency>
 ```
 #### gradle 依赖
 ```bash
-implementation 'com.github.fashionbrot:validation-spring:2.1.0'
+implementation 'com.github.fashionbrot:validation-spring:2.1.1
 ```
 
 ### 2.2、配置扫描类
@@ -315,7 +386,6 @@ public @interface CustomBean {
 ```java
 package com.github.fashion.test.annotation;
 
-
 import com.github.fashion.test.model.ValidBeanModel;
 import ConstraintValidator;
 import com.github.fashion.test.test.CustomModel;
@@ -323,7 +393,6 @@ import ValidatedException;
 import ExceptionUtil;
 import ObjectUtil;
 import lombok.Data;
-
 import java.util.StringJoiner;
 
 public class CustomBeanConstraintValidatorBean implements ConstraintValidator<CustomBean, Object> {
@@ -470,10 +539,8 @@ public class IdCardModel extends BaseModel{
 public class TestService{
     @Validated
     public void test2(@IdCard String abc){
-
     }
 }
-
 ```
 
 #### 按照 @Validated(groups = {EditGroup.class}) valid 校验
@@ -498,8 +565,8 @@ public class DemoController {
 ```
 
 
-#### 可通过项目中的 https://github.com/fashionbrot/mars-validated/tree/master/mars-validated-test 参考使用demo
-#### 如有问题请通过 https://github.com/fashionbrot/mars-validated/issues 提出 告诉我们。我们非常认真地对待错误和缺陷，在产品面前没有不重要的问题。不过在创建错误报告之前，请检查是否存在报告相同问题的issues。
+#### 可通过项目中的 https://github.com/fashionbrot/validation/tree/master/validation-test 参考使用demo
+#### 如有问题请通过 https://github.com/fashionbrot/validation/issues 提出 告诉我们。我们非常认真地对待错误和缺陷，在产品面前没有不重要的问题。不过在创建错误报告之前，请检查是否存在报告相同问题的issues。
 
 
 ### 如有问题请联系邮箱 fashionbrot@163.com 反馈问题

@@ -3,7 +3,7 @@ package com.github.fashionbrot.constraint;
 import java.lang.annotation.Annotation;
 
 /**
- *  自定义注解实现接口，调用顺序 isValid,modify,validObject
+ *  自定义注解实现接口，调用顺序 isValid,modify
  * @param <A> Annotation
  * @param <T> T
  */
@@ -28,7 +28,5 @@ public  interface ConstraintValidator<A extends Annotation, T> {
     default T modify(A annotation,T value,Class<?> valueType){
         return value;
     }
-
-
 
 }
