@@ -296,47 +296,18 @@ public class ValidatorImpl implements Validator {
     private boolean isValidatedGroups(Validated validated,Annotation annotation){
         Class<?>[] validatedGroups = validated.groups();
         if (ObjectUtil.isEmpty(validatedGroups) ) {
-
-            Class[] annotationGroups = MethodUtil.getAnnotationGroups(annotation);
-            if (ObjectUtil.isEmpty(annotationGroups)){
-                return true;
-            }
-            if (checkGroup(DefaultGroup.class,annotationGroups)) {
-                return true;
-            }
-
-            return false;
+            return true;
         }else{
-            if (checkGroup(DefaultGroup.class,validatedGroups)) {
-                return true;
-            }
 
             Class[] annotationGroups = MethodUtil.getAnnotationGroups(annotation);
-            if (ObjectUtil.isEmpty(annotationGroups)){
-                return false;
+            if (ObjectUtil.isNotEmpty(annotationGroups)) {
+                return checkGroup(validatedGroups, annotationGroups);
+            }else{
+                return checkGroup(DefaultGroup.class, validatedGroups);
             }
-            return checkGroup(validatedGroups, annotationGroups);
         }
     }
 
-    private boolean checkValidatedGroups2(Validated validated,Annotation annotation){
-        Class<?>[] validatedGroups = validated.groups();
-        if (ObjectUtil.isEmpty(validatedGroups) ) {
-
-
-            return false;
-        }else{
-            if (checkGroup(DefaultGroup.class,validatedGroups)) {
-                return false;
-            }
-
-            Class[] annotationGroups = MethodUtil.getAnnotationGroups(annotation);
-            if (ObjectUtil.isEmpty(annotationGroups)){
-                return false;
-            }
-            return !checkGroup(validatedGroups, annotationGroups);
-        }
-    }
 
     private List<ConstraintValidator> getAnnotationConstraintValidator(Annotation annotation){
         List<ConstraintValidator> constraintValidatorList = ConstraintHelper.getConstraint(annotation.annotationType());

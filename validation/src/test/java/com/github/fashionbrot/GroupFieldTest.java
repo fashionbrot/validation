@@ -78,7 +78,7 @@ public class GroupFieldTest {
         Method[] methods = GroupFieldTest.TestController2.class.getDeclaredMethods();
         Method method  = Arrays.stream(methods).filter(m -> m.getName().equals("test")).findFirst().get();
 
-        String result="ValidatedException(fieldName=null, msg=null, annotationName=null, value=null, valueIndex=null, violations=[MarsViolation(fieldName=a2, msg=a2不是对应的长度, annotationName=Length, value=2, valueIndex=0)])";
+        String result="ValidatedException(fieldName=null, msg=null, annotationName=null, value=null, valueIndex=null, violations=[MarsViolation(fieldName=a1, msg=a1不是对应的长度, annotationName=Length, value=1, valueIndex=0), MarsViolation(fieldName=a2, msg=a2不是对应的长度, annotationName=Length, value=2, valueIndex=0)])";
         String returnResult="";
         GroupRequest groupRequest = new GroupRequest();
         groupRequest.setA1("1");
@@ -109,6 +109,35 @@ public class GroupFieldTest {
         Method method  = Arrays.stream(methods).filter(m -> m.getName().equals("test")).findFirst().get();
 
         String result="ValidatedException(fieldName=null, msg=null, annotationName=null, value=null, valueIndex=null, violations=[MarsViolation(fieldName=a1, msg=a1不是对应的长度, annotationName=Length, value=1, valueIndex=0), MarsViolation(fieldName=a2, msg=a2不是对应的长度, annotationName=Length, value=2, valueIndex=0)])";
+        String returnResult="";
+        GroupRequest groupRequest = new GroupRequest();
+        groupRequest.setA1("1");
+        groupRequest.setA2("2");
+        Object[] params = new Object[]{groupRequest};
+
+        try {
+            Validator marsValidator = new ValidatorImpl();
+            marsValidator.validParameter(method,params,null);
+        }catch (ValidatedException e){
+            returnResult = e.toString();
+        }
+        System.out.println(returnResult);
+        Assert.assertEquals(result,returnResult);
+    }
+
+
+    public class TestController4{
+        @Validated(failFast = false,groups = { DefaultGroup.class})
+        private void test(GroupRequest request){
+
+        }
+    }
+    @Test
+    public void test4(){
+        Method[] methods = GroupFieldTest.TestController4.class.getDeclaredMethods();
+        Method method  = Arrays.stream(methods).filter(m -> m.getName().equals("test")).findFirst().get();
+
+        String result="ValidatedException(fieldName=null, msg=null, annotationName=null, value=null, valueIndex=null, violations=[MarsViolation(fieldName=a2, msg=a2不是对应的长度, annotationName=Length, value=2, valueIndex=0)])";
         String returnResult="";
         GroupRequest groupRequest = new GroupRequest();
         groupRequest.setA1("1");
