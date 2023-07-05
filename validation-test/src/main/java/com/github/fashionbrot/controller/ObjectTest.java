@@ -15,7 +15,7 @@ public class ObjectTest {
     @Validated
     @ResponseBody
     @GetMapping("/test1")
-    public String test1(@ObjectBean(msg = "Test1Entity 验证失败了") Test1Entity req){
+    public String test1(@ObjectBean(msg = "Test1Entity 验证失败了") String req){
 
         return req.toString();
     }

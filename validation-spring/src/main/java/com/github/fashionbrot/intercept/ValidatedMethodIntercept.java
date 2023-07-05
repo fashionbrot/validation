@@ -50,7 +50,6 @@ public class ValidatedMethodIntercept implements MethodInterceptor, BeanFactoryA
         return object;
     }
 
-
     @Override
     public void setBeanFactory(BeanFactory beanFactory) throws BeansException {
         this.beanFactory  = beanFactory;
