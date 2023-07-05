@@ -15,25 +15,26 @@ spring4.0 及以上
 jdk1.8    及以上
 
 
-|Annotation|Supported data types|作用
-|---|--------|---|
-|NotBlank|String|验证String 字符串是否为空|
-|NotNull|String,Object,Integer,Long,Double,Short,Float,BigDecimal, BigInteger| 验证对象是否为空|
-|NotEmpty|String |验证字符串不能为空|
-|AssertFalse|Boolean,boolean,String|只能为false|
-|AssertTrue|Boolean,boolean,String|只能为true|
-|BankCard|String|验证银行卡|
-|CreditCard|String|验证信用卡|
-|Default|Integer,Double,Long,Short,Float,BigDecimal,String|设置默认值|
-|Digits|String|验证是否是数字|
-|Email|String|验证是否是邮箱|
-|IdCard|String|验证是否是身份证，验证18岁|
-|Length|int,long,short,double,Integer,Long,Float,Double,Short,String|验证长度|
-|Pattern|String|正则表达式验证|
-|Phone|String|验证手机号是否正确|
-|Size|object[],boolean[],byte[],char[],double[],float[],int[],long[],short[],String length,Collection,Map|验证大小值|
-|NotEqualLength|String|验证长度|
-
+| 注解             | 作用类型                                                                                             |作用
+|----------------|----------------------------------|---|
+| NotBlank       | String |验证String 字符串是否为空|
+| NotNull        | String,Object,Integer,Long,Double,Short,Float,BigDecimal, BigInteger| 验证对象是否为空|
+| NotEmpty       | String |验证字符串不能为空|
+| AssertFalse    | Boolean,boolean,String|只能为false|
+| AssertTrue     | Boolean,boolean,String |只能为true|
+| BankCard       | String |验证银行卡|
+| CreditCard     | String |验证信用卡|
+| Default        | Integer,Double,Long,Short,Float,BigDecimal,String|设置默认值|
+| Digits         | String  |验证是否是数字|
+| Email          | String  |验证是否是邮箱|
+| IdCard         | String   |验证是否是身份证，验证18岁|
+| Length         | int,long,short,double,Integer,Long,Float,Double,Short,String |验证长度|
+| Pattern        | String  |正则表达式验证|
+| Phone          | String  |验证手机号是否正确|
+| Size           | object[],boolean[],byte[],char[],double[],float[],int[],long[],short[],String length,Collection,Map |验证大小值|
+| NotEqualLength | String |验证长度|
+| Range          | BigDecimal,BigInteger,byte,short,int,long,float,double | 判断值是否在一个范围之间                                                                                        |
+| Contain        | String,CharSequence,BigDecimal,BigInteger,short,int,long,float,double |判断内容是否包含指定的值 |
 ## ！！！自定义注解实现类中，可以注入spring容器中的bean 如下
 ```java
 /**
