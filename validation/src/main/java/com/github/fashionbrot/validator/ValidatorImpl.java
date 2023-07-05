@@ -118,9 +118,6 @@ public class ValidatorImpl implements Validator {
 
     private Validated getValidated(Method method){
         Validated validated = method.getDeclaredAnnotation(Validated.class);
-        if (validated==null){
-            validated = method.getDeclaringClass().getDeclaredAnnotation(Validated.class);
-        }
         return validated;
     }
 
@@ -144,9 +141,6 @@ public class ValidatorImpl implements Validator {
                 Parameter parameter = parameters[j];
                 Class<?> classType = parameter.getType();
                 String parameterTypeName = classType.getTypeName();
-                if (JavaUtil.isMvcIgnoreParams(parameterTypeName)) {
-                    continue;
-                }
 
                 List<Annotation> annotationList = getValidAnnotation(parameter.getDeclaredAnnotations());
                 if (ObjectUtil.isNotEmpty(annotationList)){

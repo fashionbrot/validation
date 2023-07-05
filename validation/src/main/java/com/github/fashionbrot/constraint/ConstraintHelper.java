@@ -38,6 +38,8 @@ public class ConstraintHelper {
         putTemp(builtinConstraints, Pattern.class, PatternConstraint.class);
         putTemp(builtinConstraints, Phone.class, PhoneConstraint.class);
         putTemp(builtinConstraints, Size.class, SizeConstraint.class);
+        putTemp(builtinConstraints, Range.class , RangeConstraint.class);
+        putTemp(builtinConstraints, Contain.class,ContainConstraint.class);
         builtinConstraint.putAll(builtinConstraints);
     }
 

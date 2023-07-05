@@ -9,11 +9,9 @@ import java.util.Properties;
 public class JavaUtil {
 
     public static Properties javaPrimitive = new Properties();
-    public static Properties mvcIgnoreParam = new Properties();
 
     static {
         javaPrimitive = ResourceUtil.getResourceAsProperties("mars-java-primitive.properties");
-        mvcIgnoreParam = ResourceUtil.getResourceAsProperties("mars-mvc-ignore-param.properties");
     }
 
     /**
@@ -116,44 +114,6 @@ public class JavaUtil {
     public static boolean isArray(Class clazz) {
         return clazz!=null && clazz.isArray();
     }
-
-
-
-    /**
-     * Download
-     *
-     * @param typeName return type name
-     * @return boolean
-     */
-    public static boolean isFileDownloadResource(String typeName) {
-        switch (typeName) {
-            case "org.springframework.core.io.Resource":
-            case "org.springframework.core.io.InputStreamSource":
-            case "org.springframework.core.io.ByteArrayResource":
-            case "org.noear.solon.core.handle.DownloadedFile":
-                return true;
-            default:
-                return false;
-        }
-    }
-
-    public static boolean isNotMvcIgnoreParams(String paramType) {
-        return !isMvcIgnoreParams(paramType);
-    }
-    /**
-     * ignore param of spring mvc
-     *
-     * @param paramType    param type name
-     * @return boolean
-     */
-    public static boolean isMvcIgnoreParams(String paramType) {
-        if (ObjectUtil.isEmpty(paramType)) {
-            return false;
-        }
-        return mvcIgnoreParam.containsKey(paramType);
-    }
-
-
 
 
     public static boolean isFinal(Field field) {
