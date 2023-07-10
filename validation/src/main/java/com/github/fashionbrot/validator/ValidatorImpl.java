@@ -352,22 +352,16 @@ public class ValidatorImpl implements Validator {
                 Class validConstraintClass = constraintValidator.getClass();
                 if (MethodUtil.checkDeclaredMethod(validConstraintClass, ValidatedConst.METHOD_NAME_MODIFY)) {
                     Object reValue = constraintValidator.modify(annotation, value, valueType);
-                    if (reValue != null) {
-                        if (field != null) {
-                            Object param = params[index];
-                            Object formatValue = ObjectUtil.formatObject(reValue, field.getType());
-                            if (formatValue != null && field.getType() == formatValue.getClass()) {
-                                try {
-                                    field.set(param, formatValue);
-                                } catch (IllegalAccessException e) {
-                                    e.printStackTrace();
-                                }
-                            } else {
-                                log.error("mars valid error setField fieldName:{} annotation:{} oldType:{} newType:{} ", field.getName(), annotation.annotationType().getName(), field.getType(), reValue.getClass());
-                            }
-                        } else {
-                            params[index] = ObjectUtil.formatObject(reValue, valueType);
-                        }
+                    if (reValue==null){
+                        return;
+                    }
+                    if (reValue.getClass()!=valueType){
+                        log.warn("default value reValue class!=valueType");
+                    }
+                    if (field==null){
+                        params[index] = reValue;
+                    }else{
+                        MethodUtil.setField(field,params[index],reValue);
                     }
                 }
             }

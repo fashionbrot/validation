@@ -12,17 +12,17 @@ public class ContainConstraint implements ConstraintValidator<Contain, Object> {
 
     @Override
     public boolean isValid(Contain contain, Object value, Class<?> valueType) {
-        if (value == null && contain.notEmpty()) {
-            return false;
+        if (value == null ) {
+            return contain.skipEmpty();
         }
+
         String[] values = contain.value();
         boolean ignoreCase = contain.ignoreCase();
 
-        if (value instanceof BigDecimal) {
+        if (valueType == BigDecimal.class) {
             BigDecimal bigDecimal = (BigDecimal) value;
-
             return checkContain(values,bigDecimal.toPlainString(),contain,ignoreCase);
-        } else if (value instanceof BigInteger) {
+        } else if (valueType ==  BigInteger.class) {
             BigInteger bigInteger = (BigInteger) value;
             return checkContain(values,bigInteger.toString(),contain,ignoreCase);
         } else if (valueType==Short.class || valueType==short.class) {
@@ -51,8 +51,8 @@ public class ContainConstraint implements ConstraintValidator<Contain, Object> {
     }
 
     public boolean checkContain(String[] values,String value,Contain contain,boolean ignoreCase){
-        if (ObjectUtil.isEmpty(value) && contain.notEmpty()){
-            return false;
+        if (ObjectUtil.isEmpty(value)){
+            return contain.skipEmpty();
         }
         for (int i = 0; i < values.length; i++) {
             if (ignoreCase && values[i].equalsIgnoreCase(value)){

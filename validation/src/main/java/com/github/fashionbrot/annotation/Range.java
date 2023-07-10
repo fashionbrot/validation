@@ -23,7 +23,12 @@ public @interface Range {//issue#1
 
     String msg() default "validated.Range.msg";
 
-    boolean notEmpty() default false;
+    /**
+     * 是否跳过空值
+     * @return boolean
+     */
+    boolean skipEmpty() default true;
+
     /**
      * default @see com.github.fashionbrot.groups.DefaultGroup
      * @return groups

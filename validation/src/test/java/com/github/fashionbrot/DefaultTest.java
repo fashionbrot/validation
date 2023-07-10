@@ -14,6 +14,8 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import java.lang.reflect.Method;
+import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.util.Arrays;
 import java.util.List;
 
@@ -23,7 +25,15 @@ public class DefaultTest {
     public class TestController{
 
         @Validated
-        private void test1(@Default(value = "abc") String string){
+        private void test1(@Default(value = "abc") String string,
+                           @Default(value = "abc") CharSequence charSequence,
+                           @Default(value = "11.11") BigDecimal bigDecimal,
+                           @Default(value = "12") BigInteger bigInteger,
+                           @Default(value = "2")Short s1,
+                           @Default(value = "3")Integer s2,
+                           @Default(value = "4")Long s3,
+                           @Default(value = "5.5")Float s4,
+                           @Default(value = "6.5")Double s5){
         }
     }
 
@@ -32,14 +42,14 @@ public class DefaultTest {
         Method[] methods = DefaultTest.TestController.class.getDeclaredMethods();
         Method method  = Arrays.stream(methods).filter(m -> m.getName().equals("test1")).findFirst().get();
 
-        String result="[\"abc\"]";
+        String result="[\"abc\",\"abc\",11.11,12,2,3,4,5.5,6.5]";
         String returnResult="";
 
-        Object[] param=new Object[]{null};
+        Object[] param=new Object[]{null,null,null,null,null,null,null,null,null};
         Validator marsValidator = new ValidatorImpl();
         marsValidator.validParameter(method,param,null);
         returnResult=JSON.toJSONString(param);
-        System.out.println(JSON.toJSONString(param));
+        System.out.println(returnResult);
 
         Assert.assertEquals(result,returnResult);
     }
@@ -73,7 +83,7 @@ public class DefaultTest {
         Validator marsValidator = new ValidatorImpl();
         marsValidator.validParameter(method,params,null);
         returnResult = JSON.toJSONString(params);
-        System.out.println(JSON.toJSONString(params));
+        System.out.println(returnResult);
         Assert.assertEquals(result,returnResult);
     }
 

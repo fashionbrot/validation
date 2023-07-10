@@ -148,5 +148,13 @@ public class MethodUtil {
     }
 
 
+    public static void setField(Field field,Object obj,Object reValue){
+        try {
+            field.set(obj,reValue);
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        }
+    }
+
 
 }

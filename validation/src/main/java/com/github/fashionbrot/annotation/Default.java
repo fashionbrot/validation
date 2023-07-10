@@ -6,13 +6,15 @@ import java.lang.annotation.*;
 /**
  * 是否设置默认值
  *
- * Integer
- * Double
- * Long
- * Short
- * Float
  * BigDecimal
+ * BigInteger
+ * Short
+ * Integer
+ * Long
+ * Float
+ * Double
  * String
+ * CharSequence
  */
 @Documented
 @Target({ElementType.FIELD,  ElementType.PARAMETER})

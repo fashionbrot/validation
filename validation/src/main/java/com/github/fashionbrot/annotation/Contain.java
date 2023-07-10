@@ -27,7 +27,11 @@ public @interface Contain { //issue#2
      */
     boolean ignoreCase() default true;
 
-    boolean notEmpty() default false;
+    /**
+     * 是否跳过空值
+     * @return boolean
+     */
+    boolean skipEmpty() default true;
 
     String msg() default "validated.Contain.msg";
 

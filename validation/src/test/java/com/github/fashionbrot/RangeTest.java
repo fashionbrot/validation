@@ -211,6 +211,32 @@ public class RangeTest {
     }
 
 
+    @Data
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public class RangeRequest8{
+        @Range(min = 1,max = 10,msg = "应当在${min}~${max}之间")
+        private int value1;
+
+        @Range(min = 1,max = 10,skipEmpty = false,msg = "应当在${min}~${max}之间")
+        private Float value2;
+    }
+    public class TestController8{
+        @Validated(failFast = false)
+        private void test(RangeRequest8 request){
+        }
+    }
+
+    @Test
+    public void test8(){
+
+        RangeRequest8 build = new RangeRequest8();
+
+        String returnResult = MethoUtil.getMsg(RangeTest.TestController8.class, "test", new Object[]{build});
+        String result="ValidatedException(fieldName=null, msg=null, annotationName=null, value=null, valueIndex=null, violations=[MarsViolation(fieldName=value1, msg=应当在1~10之间, annotationName=Range, value=0, valueIndex=0), MarsViolation(fieldName=value2, msg=应当在1~10之间, annotationName=Range, value=null, valueIndex=0)])";
+        System.out.println(returnResult);
+        Assert.assertEquals(result,returnResult);
+    }
 
 
 }

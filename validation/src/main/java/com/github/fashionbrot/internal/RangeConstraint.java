@@ -15,15 +15,14 @@ public class RangeConstraint implements ConstraintValidator<Range, Object> {
 
     @Override
     public boolean isValid(Range size, Object value, Class<?> valueType) {
-        if (value == null && size.notEmpty()) {
-            return false;
+        if (value == null) {
+            return size.skipEmpty();
         }
         long min = size.min();
         long max = size.max();
 
         if (value instanceof BigDecimal) {
             BigDecimal bigDecimal = (BigDecimal) value;
-
             return min <= bigDecimal.longValue() && bigDecimal.longValue() <= max;
         } else if (value instanceof BigInteger) {
             BigInteger bigInteger = (BigInteger) value;

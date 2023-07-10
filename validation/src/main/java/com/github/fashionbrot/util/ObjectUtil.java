@@ -212,6 +212,52 @@ public class ObjectUtil {
         }
     }
 
+
+    public static Short parseShort(final String str){
+        return parseShort(str,(short)0);
+    }
+
+    public static Short parseShort(final String str,final Short defaultValue){
+        if (ObjectUtil.isEmpty(str)){
+            return defaultValue;
+        }
+        try {
+            return Short.valueOf(str);
+        }catch (Exception e){
+            return defaultValue;
+        }
+    }
+
+    public static Float parseFloat(final String str) {
+        return parseFloat(str,0.0F);
+    }
+
+    public static Float parseFloat(final String str,final Float defaultValue) {
+        if (ObjectUtil.isEmpty(str)){
+            return defaultValue;
+        }
+        try {
+            return Float.valueOf(str);
+        }catch (Exception e){
+            return defaultValue;
+        }
+    }
+
+    public static Double parseDouble(final String str) {
+        return parseDouble(str,0.0D);
+    }
+
+    public static Double parseDouble(final String str,final Double defaultValue) {
+        if (ObjectUtil.isEmpty(str)){
+            return defaultValue;
+        }
+        try {
+            return Double.valueOf(str);
+        }catch (Exception e){
+            return defaultValue;
+        }
+    }
+
     /**
      * 格式化String 为 Integer
      * @param str str

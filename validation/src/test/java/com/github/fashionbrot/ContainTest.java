@@ -147,29 +147,56 @@ public class ContainTest {
     @Data
     @AllArgsConstructor
     @NoArgsConstructor
-    public class RangeRequest{
-        @Contain(value ={"1.123","2121.35"},msg = "参数不包含1.123,2121.35") double value1;
-        @Contain(value ={"1.123","2121.35"},msg = "参数不包含1.123,2121.35") Double value2;
+    public class RangeRequest {
+        @Contain(value = {"1.123", "2121.35"}, msg = "参数不包含1.123,2121.35")
+        double value1;
+        @Contain(value = {"1.123", "2121.35"},skipEmpty = false, msg = "参数不包含1.123,2121.35")
+        Double value2;
     }
-    public class TestController7{
+
+    public class TestController7 {
         @Validated(failFast = false)
-        private void test(RangeRequest request){
+        private void test(RangeRequest request) {
         }
     }
 
     @Test
     public void test7(){
-
         RangeRequest build = new RangeRequest();
-        build.setValue1(0);
-        build.setValue2(null);
 
         String returnResult = MethoUtil.getMsg(ContainTest.TestController7.class, "test", new Object[]{build});
-        String result="ValidatedException(fieldName=null, msg=null, annotationName=null, value=null, valueIndex=null, violations=[MarsViolation(fieldName=value1, msg=应当在1~10之间, annotationName=Range, value=0, valueIndex=0)])";
+        String result="ValidatedException(fieldName=null, msg=null, annotationName=null, value=null, valueIndex=null, violations=[MarsViolation(fieldName=value1, msg=参数不包含1.123,2121.35, annotationName=Contain, value=0.0, valueIndex=0), MarsViolation(fieldName=value2, msg=参数不包含1.123,2121.35, annotationName=Contain, value=null, valueIndex=0)])";
         System.out.println(returnResult);
         Assert.assertEquals(result,returnResult);
     }
 
+
+    @Data
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public class RangeRequest8 {
+        @Contain(value = {"1.123", "2121.35"}, msg = "参数不包含1.123,2121.35")
+        double value1;
+        @Contain(value = {"1.123", "2121.35"}, msg = "参数不包含1.123,2121.35")
+        Double value2;
+    }
+
+    public class TestController8 {
+        @Validated(failFast = false)
+        private void test(RangeRequest8 request) {
+        }
+    }
+
+    @Test
+    public void test8(){
+
+        RangeRequest8 build = new RangeRequest8();
+
+        String returnResult = MethoUtil.getMsg(ContainTest.TestController8.class, "test", new Object[]{build});
+        String result="ValidatedException(fieldName=null, msg=null, annotationName=null, value=null, valueIndex=null, violations=[MarsViolation(fieldName=value1, msg=参数不包含1.123,2121.35, annotationName=Contain, value=0.0, valueIndex=0)])";
+        System.out.println(returnResult);
+        Assert.assertEquals(result,returnResult);
+    }
 
 
 }
