@@ -12,7 +12,7 @@ public class ContainConstraint implements ConstraintValidator<Contain, Object> {
 
     @Override
     public boolean isValid(Contain contain, Object value, Class<?> valueType) {
-        if (value == null) {
+        if (value == null && contain.notEmpty()) {
             return false;
         }
         String[] values = contain.value();
@@ -21,37 +21,37 @@ public class ContainConstraint implements ConstraintValidator<Contain, Object> {
         if (value instanceof BigDecimal) {
             BigDecimal bigDecimal = (BigDecimal) value;
 
-            return checkContain(values,bigDecimal.toPlainString(),ignoreCase);
+            return checkContain(values,bigDecimal.toPlainString(),contain,ignoreCase);
         } else if (value instanceof BigInteger) {
             BigInteger bigInteger = (BigInteger) value;
-            return checkContain(values,bigInteger.toString(),ignoreCase);
+            return checkContain(values,bigInteger.toString(),contain,ignoreCase);
         } else if (valueType==Short.class || valueType==short.class) {
             Short aShort = (Short) value;
-            return checkContain(values,aShort.toString(),ignoreCase);
+            return checkContain(values,aShort.toString(),contain,ignoreCase);
         } else if (valueType==Integer.class || valueType==int.class) {
             Integer integer = (Integer) value;
-            return checkContain(values,integer.toString(),ignoreCase);
+            return checkContain(values,integer.toString(),contain,ignoreCase);
         } else if (valueType==Long.class || valueType==long.class) {
             Long aLong = (Long) value;
-            return checkContain(values,aLong.toString(),ignoreCase);
+            return checkContain(values,aLong.toString(),contain,ignoreCase);
         } else if (valueType==Float.class || valueType==float.class) {
             Float aFloat = (Float) value;
-            return checkContain(values,aFloat.toString(),ignoreCase);
+            return checkContain(values,aFloat.toString(),contain,ignoreCase);
         } else if (valueType==Double.class || valueType==double.class) {
             Double aDouble = (Double) value;
-            return checkContain(values,aDouble.toString(),ignoreCase);
+            return checkContain(values,aDouble.toString(),contain,ignoreCase);
         }else if (valueType==String.class ){
-            return checkContain(values,(String) value,ignoreCase);
+            return checkContain(values,(String) value,contain,ignoreCase);
         }else if (valueType==CharSequence.class){
             CharSequence charSequence = (CharSequence)value;
-            return checkContain(values,charSequence.toString(),ignoreCase);
+            return checkContain(values,charSequence.toString(),contain,ignoreCase);
         }
 
         return true;
     }
 
-    public boolean checkContain(String[] values,String value,boolean ignoreCase){
-        if (ObjectUtil.isEmpty(value)){
+    public boolean checkContain(String[] values,String value,Contain contain,boolean ignoreCase){
+        if (ObjectUtil.isEmpty(value) && contain.notEmpty()){
             return false;
         }
         for (int i = 0; i < values.length; i++) {

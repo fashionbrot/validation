@@ -27,6 +27,8 @@ public @interface Contain { //issue#2
      */
     boolean ignoreCase() default true;
 
+    boolean notEmpty() default false;
+
     String msg() default "validated.Contain.msg";
 
     /**
