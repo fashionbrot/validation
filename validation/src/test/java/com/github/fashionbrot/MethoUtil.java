@@ -21,10 +21,8 @@ public class MethoUtil {
 
         String returnResult="";
         try {
-            double value1=1.123;
-            Double value2=12323.3454;
             Validator marsValidator = new ValidatorImpl();
-            marsValidator.validParameter(method,new Object[]{value1,value2},null);
+            marsValidator.validParameter(method,values,null);
         }catch (ValidatedException e){
             returnResult = e.toString();
         }

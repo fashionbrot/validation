@@ -13,7 +13,7 @@ public class ContainConstraint implements ConstraintValidator<Contain, Object> {
     @Override
     public boolean isValid(Contain contain, Object value, Class<?> valueType) {
         if (value == null) {
-            return false;
+            return true;
         }
         String[] values = contain.value();
         boolean ignoreCase = contain.ignoreCase();
@@ -52,7 +52,7 @@ public class ContainConstraint implements ConstraintValidator<Contain, Object> {
 
     public boolean checkContain(String[] values,String value,boolean ignoreCase){
         if (ObjectUtil.isEmpty(value)){
-            return false;
+            return true;
         }
         for (int i = 0; i < values.length; i++) {
             if (ignoreCase && values[i].equalsIgnoreCase(value)){

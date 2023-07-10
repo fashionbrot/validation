@@ -6,6 +6,10 @@ import com.github.fashionbrot.annotation.Validated;
 import com.github.fashionbrot.exception.ValidatedException;
 import com.github.fashionbrot.validator.Validator;
 import com.github.fashionbrot.validator.ValidatorImpl;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -176,6 +180,35 @@ public class RangeTest {
         Assert.assertEquals(result,returnResult);
     }
 
+
+    @Data
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public class RangeRequest{
+        @Range(min = 1,max = 10,msg = "应当在${min}~${max}之间")
+        private int value1;
+
+        @Range(min = 1,max = 10,msg = "应当在${min}~${max}之间")
+        private Float value2;
+    }
+    public class TestController7{
+        @Validated(failFast = false)
+        private void test(RangeRequest request){
+        }
+    }
+
+    @Test
+    public void test7(){
+
+        RangeRequest build = new RangeRequest();
+        build.setValue1(0);
+        build.setValue2(null);
+
+        String returnResult = MethoUtil.getMsg(RangeTest.TestController7.class, "test", new Object[]{build});
+        String result="ValidatedException(fieldName=null, msg=null, annotationName=null, value=null, valueIndex=null, violations=[MarsViolation(fieldName=value1, msg=应当在1~10之间, annotationName=Range, value=0, valueIndex=0)])";
+        System.out.println(returnResult);
+        Assert.assertEquals(result,returnResult);
+    }
 
 
 

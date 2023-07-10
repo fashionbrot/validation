@@ -6,6 +6,9 @@ import com.github.fashionbrot.annotation.Validated;
 import com.github.fashionbrot.exception.ValidatedException;
 import com.github.fashionbrot.validator.Validator;
 import com.github.fashionbrot.validator.ValidatorImpl;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -136,6 +139,33 @@ public class ContainTest {
 
         String returnResult = MethoUtil.getMsg(TestController5.class, "test", new Object[]{value1, value2});
         String result="ValidatedException(fieldName=null, msg=null, annotationName=null, value=null, valueIndex=null, violations=[MarsViolation(fieldName=arg1, msg=参数不包含1.123,2121.35, annotationName=Contain, value=12323.3454, valueIndex=1)])";
+        System.out.println(returnResult);
+        Assert.assertEquals(result,returnResult);
+    }
+
+
+    @Data
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public class RangeRequest{
+        @Contain(value ={"1.123","2121.35"},msg = "参数不包含1.123,2121.35") double value1;
+        @Contain(value ={"1.123","2121.35"},msg = "参数不包含1.123,2121.35") Double value2;
+    }
+    public class TestController7{
+        @Validated(failFast = false)
+        private void test(RangeRequest request){
+        }
+    }
+
+    @Test
+    public void test7(){
+
+        RangeRequest build = new RangeRequest();
+        build.setValue1(0);
+        build.setValue2(null);
+
+        String returnResult = MethoUtil.getMsg(ContainTest.TestController7.class, "test", new Object[]{build});
+        String result="ValidatedException(fieldName=null, msg=null, annotationName=null, value=null, valueIndex=null, violations=[MarsViolation(fieldName=value1, msg=应当在1~10之间, annotationName=Range, value=0, valueIndex=0)])";
         System.out.println(returnResult);
         Assert.assertEquals(result,returnResult);
     }

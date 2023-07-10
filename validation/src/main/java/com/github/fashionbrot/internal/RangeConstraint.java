@@ -16,7 +16,7 @@ public class RangeConstraint implements ConstraintValidator<Range, Object> {
     @Override
     public boolean isValid(Range size, Object value, Class<?> valueType) {
         if (value == null) {
-            return false;
+            return true;
         }
         long min = size.min();
         long max = size.max();
