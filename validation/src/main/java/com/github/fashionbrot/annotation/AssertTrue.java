@@ -17,6 +17,11 @@ public @interface AssertTrue {
     String msg() default "validated.AssertTrue.msg";
 
     /**
+     * 是否跳过空值
+     * @return boolean
+     */
+    boolean skipEmpty() default true;
+    /**
      * default @see com.github.fashionbrot.groups.DefaultGroup
      * @return groups
      */

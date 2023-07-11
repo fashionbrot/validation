@@ -3,6 +3,7 @@ package com.github.fashionbrot.util;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.util.Collection;
+import java.util.Map;
 import java.util.Properties;
 
 
@@ -51,6 +52,10 @@ public class JavaUtil {
     public static boolean isCollection(Class clazz) {
 
         return clazz!=null && Collection.class.isAssignableFrom(clazz);
+    }
+
+    public static boolean isMap(Class clazz) {
+        return clazz!=null && Map.class.isAssignableFrom(clazz);
     }
 
     /**

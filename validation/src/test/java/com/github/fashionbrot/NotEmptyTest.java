@@ -14,8 +14,7 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import java.lang.reflect.Method;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 
 public class NotEmptyTest {
 
@@ -137,6 +136,23 @@ public class NotEmptyTest {
         }
         System.out.println(returnResult);
         Assert.assertEquals(result,returnResult);
+    }
+
+    public class TestController5{
+        @Validated(failFast = false)
+        private void test(@NotEmpty Collection collection){
+
+        }
+    }
+
+    @Test
+    public void test5(){
+        String returnResult="";
+        Collection collection= new ArrayList();
+        collection.add("string");
+        String test = MethodUtil.getMsg(TestController5.class, "test", new Object[]{collection});
+        System.out.println(test);
+        Assert.assertEquals(test,returnResult);
     }
 
 }

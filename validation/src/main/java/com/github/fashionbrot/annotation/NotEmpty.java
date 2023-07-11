@@ -7,7 +7,11 @@ import java.lang.annotation.*;
 /**
  * 验证 字符串是否为空
  *
- * String 类型
+ * String
+ * CharSequence
+ * Collection
+ * Map
+ * Array
  */
 @Documented
 @Target({ElementType.FIELD,  ElementType.PARAMETER})

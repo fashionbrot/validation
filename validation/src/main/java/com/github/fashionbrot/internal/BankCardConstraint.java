@@ -11,24 +11,28 @@ public class BankCardConstraint implements ConstraintValidator<BankCard,Object> 
 
 
     @Override
-    public boolean isValid(BankCard bankCard, Object value,Class<?> valueType) {
-        String str = ObjectUtil.formatString(value);
-        if (ObjectUtil.isBlank(str)) {
-            return false;
-        } else {
-            String regexp = bankCard.regexp();
+    public boolean isValid(BankCard annotation, Object value,Class<?> valueType) {
+        String strValue = ObjectUtil.formatString(value);
+        if (ObjectUtil.isEmpty(strValue)){
+            return annotation.skipEmpty();
+        }
+        if (valueType== String.class || valueType ==  CharSequence.class){
+
+            String regexp = annotation.regexp();
             if (PatternSts.BANKCARD_PATTERN.pattern().equals(regexp)) {
-                return PatternSts.BANKCARD_PATTERN.matcher(str).matches();
+                return PatternSts.BANKCARD_PATTERN.matcher(strValue).matches();
             } else {
                 Pattern pattern ;
-                if (ObjectUtil.isBlank(regexp)) {
+                if (ObjectUtil.isNotEmpty(regexp)) {
                     pattern =PatternSts.BANKCARD_PATTERN;
                 } else {
                     pattern = Pattern.compile(regexp);
                 }
-                return pattern.matcher(str).matches();
+                return pattern.matcher(strValue).matches();
             }
         }
+
+        return true;
     }
 
 }

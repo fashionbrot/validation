@@ -8,7 +8,8 @@ import java.lang.annotation.*;
 /**
  * 验证 字符串是否为空
  *
- * String 类型
+ * String
+ * CharSequence
  */
 @Documented
 @Target({ElementType.FIELD,  ElementType.PARAMETER})

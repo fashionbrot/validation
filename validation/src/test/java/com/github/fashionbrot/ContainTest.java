@@ -1,7 +1,6 @@
 package com.github.fashionbrot;
 
 import com.github.fashionbrot.annotation.Contain;
-import com.github.fashionbrot.annotation.Range;
 import com.github.fashionbrot.annotation.Validated;
 import com.github.fashionbrot.exception.ValidatedException;
 import com.github.fashionbrot.validator.Validator;
@@ -137,7 +136,7 @@ public class ContainTest {
         double value1=1.123;
         Double value2=12323.3454;
 
-        String returnResult = MethoUtil.getMsg(TestController5.class, "test", new Object[]{value1, value2});
+        String returnResult = MethodUtil.getMsg(TestController5.class, "test", new Object[]{value1, value2});
         String result="ValidatedException(fieldName=null, msg=null, annotationName=null, value=null, valueIndex=null, violations=[MarsViolation(fieldName=arg1, msg=参数不包含1.123,2121.35, annotationName=Contain, value=12323.3454, valueIndex=1)])";
         System.out.println(returnResult);
         Assert.assertEquals(result,returnResult);
@@ -164,7 +163,7 @@ public class ContainTest {
     public void test7(){
         RangeRequest build = new RangeRequest();
 
-        String returnResult = MethoUtil.getMsg(ContainTest.TestController7.class, "test", new Object[]{build});
+        String returnResult = MethodUtil.getMsg(ContainTest.TestController7.class, "test", new Object[]{build});
         String result="ValidatedException(fieldName=null, msg=null, annotationName=null, value=null, valueIndex=null, violations=[MarsViolation(fieldName=value1, msg=参数不包含1.123,2121.35, annotationName=Contain, value=0.0, valueIndex=0), MarsViolation(fieldName=value2, msg=参数不包含1.123,2121.35, annotationName=Contain, value=null, valueIndex=0)])";
         System.out.println(returnResult);
         Assert.assertEquals(result,returnResult);
@@ -192,7 +191,7 @@ public class ContainTest {
 
         RangeRequest8 build = new RangeRequest8();
 
-        String returnResult = MethoUtil.getMsg(ContainTest.TestController8.class, "test", new Object[]{build});
+        String returnResult = MethodUtil.getMsg(ContainTest.TestController8.class, "test", new Object[]{build});
         String result="ValidatedException(fieldName=null, msg=null, annotationName=null, value=null, valueIndex=null, violations=[MarsViolation(fieldName=value1, msg=参数不包含1.123,2121.35, annotationName=Contain, value=0.0, valueIndex=0)])";
         System.out.println(returnResult);
         Assert.assertEquals(result,returnResult);

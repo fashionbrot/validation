@@ -36,9 +36,9 @@ public class GroupParamTest {
         Method[] methods = GroupParamTest.TestController1.class.getDeclaredMethods();
         Method method  = Arrays.stream(methods).filter(m -> m.getName().equals("test1")).findFirst().get();
 
-        String result="ValidatedException(fieldName=null, msg=null, annotationName=null, value=null, valueIndex=null, violations=[MarsViolation(fieldName=arg0, msg=d1不是数字, annotationName=Digits, value=, valueIndex=0)])";
+        String result="";
         String returnResult="";
-        Object[] params = new Object[]{"",""};
+        Object[] params = new Object[]{"","a"};
 
         try {
             Validator marsValidator = new ValidatorImpl();
@@ -65,9 +65,9 @@ public class GroupParamTest {
         Method[] methods = GroupParamTest.TestController2.class.getDeclaredMethods();
         Method method  = Arrays.stream(methods).filter(m -> m.getName().equals("test1")).findFirst().get();
 
-        String result="ValidatedException(fieldName=null, msg=null, annotationName=null, value=null, valueIndex=null, violations=[MarsViolation(fieldName=arg0, msg=d1不是数字, annotationName=Digits, value=, valueIndex=0), MarsViolation(fieldName=arg1, msg=d2不是数字, annotationName=Digits, value=, valueIndex=1)])";
+        String result="ValidatedException(fieldName=null, msg=null, annotationName=null, value=null, valueIndex=null, violations=[MarsViolation(fieldName=arg1, msg=d2不是数字, annotationName=Digits, value=a, valueIndex=1)])";
         String returnResult="";
-        Object[] params = new Object[]{"",""};
+        Object[] params = new Object[]{"","a"};
 
         try {
             Validator marsValidator = new ValidatorImpl();
@@ -94,7 +94,7 @@ public class GroupParamTest {
         Method[] methods = GroupParamTest.TestController3.class.getDeclaredMethods();
         Method method  = Arrays.stream(methods).filter(m -> m.getName().equals("test1")).findFirst().get();
 
-        String result="ValidatedException(fieldName=null, msg=null, annotationName=null, value=null, valueIndex=null, violations=[MarsViolation(fieldName=arg0, msg=d1不是数字, annotationName=Digits, value=, valueIndex=0), MarsViolation(fieldName=arg1, msg=d2不是数字, annotationName=Digits, value=, valueIndex=1)])";
+        String result="";
         String returnResult="";
         Object[] params = new Object[]{"",""};
 
@@ -124,9 +124,9 @@ public class GroupParamTest {
         Method[] methods = GroupParamTest.TestController4.class.getDeclaredMethods();
         Method method  = Arrays.stream(methods).filter(m -> m.getName().equals("test1")).findFirst().get();
 
-        String result="ValidatedException(fieldName=null, msg=null, annotationName=null, value=null, valueIndex=null, violations=[MarsViolation(fieldName=arg1, msg=d2不是数字, annotationName=Digits, value=, valueIndex=1)])";
+        String result="";
         String returnResult="";
-        Object[] params = new Object[]{"",""};
+        Object[] params = new Object[]{"","1.12"};
 
         try {
             Validator marsValidator = new ValidatorImpl();

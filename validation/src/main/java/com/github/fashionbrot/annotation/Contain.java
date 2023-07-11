@@ -3,6 +3,7 @@ package com.github.fashionbrot.annotation;
 import java.lang.annotation.*;
 
 /**
+ * 验证参数是否包含
  * CharSequence
  * String
  * BigDecimal

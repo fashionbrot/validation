@@ -6,21 +6,8 @@ import java.lang.annotation.*;
 
 /**
  * 验证 长度
- * String 类型
- *
- * int
- * long
- * short
- * float
- * double
- *
- * Integer
- * Long
- * Float
- * Double
- * Short
  * String
- *
+ * CharSequence
  */
 @Documented
 @Target({ElementType.FIELD,  ElementType.PARAMETER})
@@ -33,6 +20,11 @@ public @interface Length {
 
     String msg() default "validated.Length.msg";
 
+    /**
+     * 是否跳过空值
+     * @return boolean
+     */
+    boolean skipEmpty() default true;
     /**
      * default @see com.github.fashionbrot.groups.DefaultGroup
      * @return groups

@@ -21,9 +21,13 @@ public class DefaultConstraint implements ConstraintValidator<Default,Object> {
         if (ObjectUtil.isEmpty(annotation.value())){
             return value;
         }
-        if (value!=null){
+
+
+        String strValue = (String) value;
+        if (ObjectUtil.isNotEmpty(strValue)){
             return value;
         }
+
         if (valueType == BigDecimal.class){
                 return new BigDecimal(annotation.value());
         }else if (valueType == BigInteger.class) {
@@ -38,15 +42,11 @@ public class DefaultConstraint implements ConstraintValidator<Default,Object> {
             return ObjectUtil.parseFloat(annotation.value());
         }else if (valueType == Double.class){
             return ObjectUtil.parseDouble(annotation.value());
-        }else if (valueType==String.class){
+        }else if (valueType==String.class || valueType == CharSequence.class){
             return annotation.value();
-        }else if (valueType == CharSequence.class){
-            return parseCharSequence(annotation.value());
         }
+
         return value;
     }
 
-    public CharSequence parseCharSequence(String value){
-        return value;
-    }
 }

@@ -7,17 +7,17 @@ import com.github.fashionbrot.validator.ValidatorImpl;
 import java.lang.reflect.Method;
 import java.util.Arrays;
 
-public class MethoUtil {
+public class MethodUtil {
 
-    public static Method getMethod(Class clazz,String methoName){
+    public static Method getMethod(Class clazz,String methodName){
         Method[] methods = clazz.getDeclaredMethods();
-        Method method  = Arrays.stream(methods).filter(m -> m.getName().equals(methoName)).findFirst().get();
+        Method method  = Arrays.stream(methods).filter(m -> m.getName().equals(methodName)).findFirst().get();
         return method;
     }
 
-    public static String getMsg(Class clazz,String methoName,Object[] values){
+    public static String getMsg(Class clazz,String methodName,Object[] values){
 
-        Method method = getMethod( clazz,  methoName);
+        Method method = getMethod( clazz,  methodName);
 
         String returnResult="";
         try {

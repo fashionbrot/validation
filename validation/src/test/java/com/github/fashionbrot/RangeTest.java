@@ -1,13 +1,11 @@
 package com.github.fashionbrot;
 
-import com.github.fashionbrot.annotation.NotNull;
 import com.github.fashionbrot.annotation.Range;
 import com.github.fashionbrot.annotation.Validated;
 import com.github.fashionbrot.exception.ValidatedException;
 import com.github.fashionbrot.validator.Validator;
 import com.github.fashionbrot.validator.ValidatorImpl;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.junit.Assert;
@@ -204,7 +202,7 @@ public class RangeTest {
         build.setValue1(0);
         build.setValue2(null);
 
-        String returnResult = MethoUtil.getMsg(RangeTest.TestController7.class, "test", new Object[]{build});
+        String returnResult = MethodUtil.getMsg(RangeTest.TestController7.class, "test", new Object[]{build});
         String result="ValidatedException(fieldName=null, msg=null, annotationName=null, value=null, valueIndex=null, violations=[MarsViolation(fieldName=value1, msg=应当在1~10之间, annotationName=Range, value=0, valueIndex=0)])";
         System.out.println(returnResult);
         Assert.assertEquals(result,returnResult);
@@ -232,7 +230,7 @@ public class RangeTest {
 
         RangeRequest8 build = new RangeRequest8();
 
-        String returnResult = MethoUtil.getMsg(RangeTest.TestController8.class, "test", new Object[]{build});
+        String returnResult = MethodUtil.getMsg(RangeTest.TestController8.class, "test", new Object[]{build});
         String result="ValidatedException(fieldName=null, msg=null, annotationName=null, value=null, valueIndex=null, violations=[MarsViolation(fieldName=value1, msg=应当在1~10之间, annotationName=Range, value=0, valueIndex=0), MarsViolation(fieldName=value2, msg=应当在1~10之间, annotationName=Range, value=null, valueIndex=0)])";
         System.out.println(returnResult);
         Assert.assertEquals(result,returnResult);
