@@ -7,7 +7,8 @@ import java.lang.annotation.*;
 
 /**
  * 验证正则表达式
- * String 类型
+ * String
+ * CharSequence
  */
 @Documented
 @Target({ElementType.FIELD,  ElementType.PARAMETER})
@@ -18,6 +19,11 @@ public @interface Pattern {
 
     String msg();
 
+    /**
+     * 是否跳过空值
+     * @return boolean
+     */
+    boolean skipEmpty() default false;
     /**
      * default @see com.github.fashionbrot.groups.DefaultGroup
      * @return groups

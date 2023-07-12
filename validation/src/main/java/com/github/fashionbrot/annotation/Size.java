@@ -6,18 +6,9 @@ import java.lang.annotation.*;
 
 /**
  * 验证 值大小范围
- * object[]
- * boolean[]
- * byte[]
- * char[]
- * double[]
- * float[]
- * int[]
- * long[]
- * short[]
- * String length
  * Collection
  * Map
+ * Array
  */
 @Documented
 @Target({ElementType.FIELD,  ElementType.PARAMETER})
@@ -27,6 +18,12 @@ public @interface Size {
     long min() default 0;
 
     long max() default Long.MAX_VALUE;
+
+    /**
+     * 是否跳过空值
+     * @return boolean
+     */
+    boolean skipEmpty() default true;
 
     String msg() default "validated.Size.msg";
 

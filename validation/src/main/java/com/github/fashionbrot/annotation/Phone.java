@@ -20,6 +20,11 @@ public @interface Phone {
     String msg() default "validated.Phone.msg";
 
     /**
+     * 是否跳过空值
+     * @return boolean
+     */
+    boolean skipEmpty() default false;
+    /**
      * default @see com.github.fashionbrot.groups.DefaultGroup
      * @return groups
      */

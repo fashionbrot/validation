@@ -10,17 +10,18 @@ public class PatternConstraint implements ConstraintValidator<com.github.fashion
 
     @Override
     public boolean isValid(com.github.fashionbrot.annotation.Pattern pattern, Object objectValue, Class<?> valueType) {
-
-        if (objectValue == null) {
-            return false;
-        } else {
+        String strValue = ObjectUtil.formatString(objectValue);
+        if (ObjectUtil.isEmpty(strValue)){
+            return pattern.skipEmpty();
+        }
+        if (valueType== String.class || valueType==CharSequence.class){
             String regexp = pattern.regexp();
-            String str = ObjectUtil.formatString(objectValue);
             if (ObjectUtil.isNotEmpty(regexp)) {
                 Pattern patternV = Pattern.compile(pattern.regexp());
-                return patternV.matcher(str).matches();
+                return patternV.matcher(strValue).matches();
             }
         }
+
         return true;
     }
 

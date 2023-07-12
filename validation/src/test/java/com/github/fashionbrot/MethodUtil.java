@@ -29,4 +29,16 @@ public class MethodUtil {
         return returnResult;
     }
 
+    public static ValidatedException getException(Class clazz,String methodName,Object[] values){
+
+        Method method = getMethod( clazz,  methodName);
+        try {
+            Validator marsValidator = new ValidatorImpl();
+            marsValidator.validParameter(method,values,null);
+        }catch (ValidatedException e){
+            return e;
+        }
+        return null;
+    }
+
 }

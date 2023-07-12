@@ -23,11 +23,11 @@ public class ObjectUtil {
      * @param str str
      * @return String
      */
-    public static String trim(final String str) {
+    public static String trim( String str) {
         return str == null ? EMPTY : str.trim();
     }
 
-    public static boolean isBlank(String str) {
+    public static boolean isBlank(final String str) {
         int strLen;
         if (str == null || (strLen = str.length()) == 0) {
             return true;
@@ -40,10 +40,18 @@ public class ObjectUtil {
         return true;
     }
 
-    public static boolean isNotBlank(String str) {
+    public static boolean isNotBlank(final String str) {
         return !isBlank(str);
     }
 
+
+    public static boolean isEmpty(final Object object) {
+        return object==null;
+    }
+
+    public static boolean isNotEmpty(final Object object) {
+        return !isEmpty(object);
+    }
 
     /**
      * 判断字符是否为空

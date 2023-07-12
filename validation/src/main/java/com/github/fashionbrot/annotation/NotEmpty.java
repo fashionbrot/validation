@@ -5,7 +5,7 @@ package com.github.fashionbrot.annotation;
 import java.lang.annotation.*;
 
 /**
- * 验证 字符串是否为空
+ * 验证是否为空
  *
  * String
  * CharSequence

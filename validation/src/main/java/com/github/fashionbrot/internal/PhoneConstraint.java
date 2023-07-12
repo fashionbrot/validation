@@ -12,14 +12,14 @@ public class PhoneConstraint implements ConstraintValidator<Phone,Object> {
 
     @Override
     public boolean isValid(Phone phone, Object objectValue, Class<?> valueType) {
-
-        String regexp = phone.regexp();
-        String value = ObjectUtil.formatString(objectValue);
-        if (ObjectUtil.isEmpty(value)) {
-            return false;
-        } else {
+        String strValue = ObjectUtil.formatString(objectValue);
+        if (ObjectUtil.isEmpty(strValue)){
+            return phone.skipEmpty();
+        }
+        if (valueType == String.class || valueType== CharSequence.class){
+            String regexp = phone.regexp();
             if (PatternSts.PHONE_PATTERN.pattern().equals(regexp)) {
-                return PatternSts.PHONE_PATTERN.matcher(value).matches();
+                return PatternSts.PHONE_PATTERN.matcher(strValue).matches();
             } else {
                 Pattern pattern ;
                 if (ObjectUtil.isEmpty(regexp)) {
@@ -27,9 +27,11 @@ public class PhoneConstraint implements ConstraintValidator<Phone,Object> {
                 } else {
                     pattern = Pattern.compile(regexp);
                 }
-                return pattern.matcher(value).matches();
+                return pattern.matcher(strValue).matches();
             }
         }
+
+        return true;
     }
 
 }

@@ -1,10 +1,13 @@
 package com.github.fashionbrot;
 
 
+import com.alibaba.fastjson2.JSON;
 import com.github.fashionbrot.annotation.NotEmpty;
 import com.github.fashionbrot.annotation.Valid;
 import com.github.fashionbrot.annotation.Validated;
+import com.github.fashionbrot.constraint.MarsViolation;
 import com.github.fashionbrot.exception.ValidatedException;
+import com.github.fashionbrot.util.ObjectUtil;
 import com.github.fashionbrot.validator.Validator;
 import com.github.fashionbrot.validator.ValidatorImpl;
 import lombok.AllArgsConstructor;
@@ -140,19 +143,29 @@ public class NotEmptyTest {
 
     public class TestController5{
         @Validated(failFast = false)
-        private void test(@NotEmpty Collection collection){
+        private void test(@NotEmpty Collection collection,
+                          @NotEmpty HashMap map,
+                          @NotEmpty String[] strArray,
+                          @NotEmpty Integer[] integerArray){
 
         }
     }
 
     @Test
     public void test5(){
-        String returnResult="";
-        Collection collection= new ArrayList();
+        List collection= new ArrayList();
         collection.add("string");
-        String test = MethodUtil.getMsg(TestController5.class, "test", new Object[]{collection});
-        System.out.println(test);
-        Assert.assertEquals(test,returnResult);
+        HashMap map=new HashMap();
+        map.put("test","1");
+        Object[] objects = {collection,map,new String[]{},new Integer[]{}};
+        ValidatedException validatedException = MethodUtil.getException(TestController5.class, "test", objects);
+        if (ObjectUtil.isNotEmpty(validatedException)){
+            List<MarsViolation> violations = validatedException.getViolations();
+            long count = violations.stream().filter(m -> m.getFieldName().equals("arg2") || m.getFieldName().equals("arg3")).count();
+            Assert.assertEquals(count,2);
+            System.out.println(JSON.toJSONString(validatedException.getViolations()));
+        }
+
     }
 
 }
