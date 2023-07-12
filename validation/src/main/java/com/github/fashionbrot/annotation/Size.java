@@ -5,7 +5,7 @@ package com.github.fashionbrot.annotation;
 import java.lang.annotation.*;
 
 /**
- * 验证 值大小范围
+ * 验证数量大小范围
  * Collection
  * Map
  * Array
