@@ -3,30 +3,22 @@ package com.github.fashionbrot.annotation;
 import java.lang.annotation.*;
 
 /**
- * 验证参数是否包含
- * CharSequence
- * String
- * BigDecimal
- * BigInteger
- * Short
- * Integer
+ *
+ * @author fashionbrot
  * Long
+ * Integer
+ * Short
  * Float
  * Double
+ * BigDecimal
+ * BigInteger
  */
 @Documented
 @Target({ElementType.FIELD,  ElementType.PARAMETER})
 @Retention(RetentionPolicy.RUNTIME)
-public @interface Contain { //issue#2
+public @interface Min {
 
-
-    String[] value();
-
-    /**
-     * 是否忽略大小写
-     * @return boolean
-     */
-    boolean ignoreCase() default true;
+    String value();
 
     /**
      * 是否跳过空值
@@ -34,7 +26,7 @@ public @interface Contain { //issue#2
      */
     boolean skipEmpty() default true;
 
-    String msg() default "validated.Contain.msg";
+    String  msg() default "validated.Min.msg";
 
     /**
      * default @see com.github.fashionbrot.groups.DefaultGroup

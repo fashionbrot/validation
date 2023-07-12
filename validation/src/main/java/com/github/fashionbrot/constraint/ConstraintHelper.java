@@ -20,7 +20,6 @@ public class ConstraintHelper {
     static {
 
 
-
         Map<Class<? extends Annotation>, List<ConstraintValidator>> builtinConstraints = new HashMap<>();
         putTemp(builtinConstraints, NotNull.class, NotNullConstraint.class);
         putTemp(builtinConstraints, Default.class, DefaultConstraint.class);
@@ -38,8 +37,10 @@ public class ConstraintHelper {
         putTemp(builtinConstraints, Pattern.class, PatternConstraint.class);
         putTemp(builtinConstraints, Phone.class, PhoneConstraint.class);
         putTemp(builtinConstraints, Size.class, SizeConstraint.class);
-        putTemp(builtinConstraints, Range.class , RangeConstraint.class);
-        putTemp(builtinConstraints, Contain.class,ContainConstraint.class);
+        putTemp(builtinConstraints, Range.class, RangeConstraint.class);
+        putTemp(builtinConstraints, Contain.class, ContainConstraint.class);
+        putTemp(builtinConstraints, Max.class, MaxConstraint.class);
+        putTemp(builtinConstraints, Min.class, MimConstraint.class);
         builtinConstraint.putAll(builtinConstraints);
     }
 
@@ -48,7 +49,7 @@ public class ConstraintHelper {
         Map<Class<? extends Annotation>, List<ConstraintValidator>> builtinConstraints,
         Class<A> constraintType,
         Class<? extends ConstraintValidator>... constraintValidators) {
-        if (constraintValidators!=null && constraintValidators.length > 0) {
+        if (constraintValidators != null && constraintValidators.length > 0) {
             List<ConstraintValidator> list = new ArrayList<>(constraintValidators.length);
             for (int i = 0; i < constraintValidators.length; i++) {
                 list.add(MethodUtil.newInstance(constraintValidators[i]));
@@ -71,26 +72,26 @@ public class ConstraintHelper {
 
 
     public static <A extends Annotation> List<ConstraintValidator> getConstraint(Class<A> constraintType) {
-            return builtinConstraint.get(constraintType);
+        return builtinConstraint.get(constraintType);
     }
 
     public static boolean containsKey(Class constraintType) {
         return builtinConstraint.containsKey(constraintType);
     }
 
-    private static ConstraintValidator inject(Class<? extends ConstraintValidator<? extends Annotation, ?>> constraintValidator){
-        if (validatorContainer==null){
+    private static ConstraintValidator inject(Class<? extends ConstraintValidator<? extends Annotation, ?>> constraintValidator) {
+        if (validatorContainer == null) {
             return MethodUtil.newInstance(constraintValidator);
         }
         ConstraintValidator injectConstraintValidator = validatorContainer.injectContainer(constraintValidator);
-        if (injectConstraintValidator==null){
+        if (injectConstraintValidator == null) {
             return MethodUtil.newInstance(constraintValidator);
         }
         return injectConstraintValidator;
     }
 
-    public static void setValidatorContainer(ValidatorContainer validatorContainer){
-        if (validatorContainer!=null){
+    public static void setValidatorContainer(ValidatorContainer validatorContainer) {
+        if (validatorContainer != null) {
             ConstraintHelper.validatorContainer = validatorContainer;
         }
     }
