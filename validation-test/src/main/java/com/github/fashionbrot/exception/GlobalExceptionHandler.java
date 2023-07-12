@@ -55,8 +55,7 @@ public class GlobalExceptionHandler {
         if (ObjectUtil.isEmpty(violations)){
             return e.getMsg();
         }else {
-            String msg = String.join(",", violations.stream().map(m -> m.getMsg()).collect(Collectors.toList()));
-            return msg;
+            return violations.stream().map(m -> m.getMsg()).collect(Collectors.joining(","));
         }
     }
 

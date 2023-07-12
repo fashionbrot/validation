@@ -6,10 +6,12 @@ import com.github.fashionbrot.util.ObjectUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 
+import javax.annotation.Resource;
+
 public class ObjectBeanConstraintValidator implements ConstraintValidator<ObjectBean, Object> {
 
 
-    @Autowired
+    @Resource
     private Environment environment;
 
     @Override

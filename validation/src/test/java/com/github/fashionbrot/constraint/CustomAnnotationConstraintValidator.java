@@ -18,7 +18,6 @@ public class CustomAnnotationConstraintValidator implements ConstraintValidator<
 
     @Override
     public Object modify(CustomAnnotation annotation, Object value, Class<?> valueType) {
-
         if (annotation.modify() && value==null){
             if (ObjectUtil.isNotEmpty(annotation.defaultValue())){
                 TestEntity entity = JSON.parseObject(annotation.defaultValue(), TestEntity.class);
@@ -33,12 +32,7 @@ public class CustomAnnotationConstraintValidator implements ConstraintValidator<
                     return entity;
                 }
             }
-
         }
-
-
         return value;
     }
-
-
 }

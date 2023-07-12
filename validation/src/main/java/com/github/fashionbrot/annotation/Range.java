@@ -5,12 +5,12 @@ import java.lang.annotation.*;
 /**
  * BigDecimal
  * BigInteger
- * byte
- * short
- * int
- * long
- * float
- * double
+ * Byte
+ * Short
+ * Integer
+ * Long
+ * Float
+ * Double
  */
 @Documented
 @Target({ElementType.FIELD,  ElementType.PARAMETER})
