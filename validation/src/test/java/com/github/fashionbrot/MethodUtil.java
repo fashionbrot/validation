@@ -41,4 +41,17 @@ public class MethodUtil {
         return null;
     }
 
+    public static Object getValue(Class clazz,String methodName,Object[] values){
+
+        Method method = getMethod( clazz,  methodName);
+        try {
+            Validator marsValidator = new ValidatorImpl();
+            marsValidator.validParameter(method,values,null);
+
+            return values;
+        }catch (ValidatedException e){
+            return null;
+        }
+    }
+
 }

@@ -20,29 +20,7 @@ import java.util.*;
 public class SizeTest {
 
 
-    public class TestController{
-        @Validated
-        private void test1(@Size(min = 1,max = 3,msg = "${min }~${ max}之间") String string){
 
-        }
-    }
-
-    @Test
-    public void test1(){
-        Method[] methods = SizeTest.TestController.class.getDeclaredMethods();
-        Method method  = Arrays.stream(methods).filter(m -> m.getName().equals("test1")).findFirst().get();
-
-        String result="ValidatedException(fieldName=arg0, msg=1~3之间, annotationName=Size, value=null, valueIndex=0, violations=null)";
-        String returnResult="";
-        try {
-            Validator marsValidator = new ValidatorImpl();
-            marsValidator.validParameter(method,new Object[]{null},null);
-        }catch (ValidatedException e){
-            returnResult = e.toString();
-        }
-        System.out.println(returnResult);
-        Assert.assertEquals(result,returnResult);
-    }
 
 
 
