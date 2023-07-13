@@ -6,9 +6,7 @@ import com.github.fashionbrot.enums.ClassTypeEnum;
 import lombok.extern.slf4j.Slf4j;
 import java.math.BigDecimal;
 import java.nio.charset.Charset;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Map;
+import java.util.*;
 
 /**
  * @author fashi
@@ -44,14 +42,6 @@ public class ObjectUtil {
         return !isBlank(str);
     }
 
-
-    public static boolean isEmpty(final Object object) {
-        return object==null;
-    }
-
-    public static boolean isNotEmpty(final Object object) {
-        return !isEmpty(object);
-    }
 
     /**
      * 判断字符是否为空

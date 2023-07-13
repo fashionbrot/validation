@@ -36,7 +36,7 @@ public class NotEqualsLengthTest {
         map.put("test","1");
         Object[] objects = {collection,map,new String[]{},new Integer[]{}};
         ValidatedException validatedException = MethodUtil.getException(TestController1.class, "test",objects);
-        if (ObjectUtil.isNotEmpty(validatedException)){
+        if (validatedException!=null){
             List<MarsViolation> violations = validatedException.getViolations();
             long count = violations.stream().filter(m -> m.getFieldName().equals("arg3") ).count();
             Assert.assertEquals(count,1);
