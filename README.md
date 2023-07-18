@@ -37,21 +37,21 @@
 <dependency>
     <groupId>com.github.fashionbrot</groupId>
     <artifactId>validation-spring</artifactId>
-    <version>2.1.4</version>
+    <version>2.1.5</version>
 </dependency>
     <!-- springboot 依赖-->
 <dependency>
     <groupId>com.github.fashionbrot</groupId>
     <artifactId>spring-boot-starter-validation</artifactId>
-    <version>2.1.4</version>
+    <version>2.1.5</version>
 </dependency>
 ```
 #### gradle 引入
 ```bash
  # springmvc 依赖
-implementation 'com.github.fashionbrot:validation-spring:2.1.4'
+implementation 'com.github.fashionbrot:validation-spring:2.1.5'
  #springboot 依赖
-implementation 'com.github.fashionbrot:spring-boot-starter-validation:2.1.4'
+implementation 'com.github.fashionbrot:spring-boot-starter-validation:2.1.5'
 ```
 
 #### 配置方式
