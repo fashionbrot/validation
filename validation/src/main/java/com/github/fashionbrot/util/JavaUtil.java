@@ -1,5 +1,7 @@
 package com.github.fashionbrot.util;
 
+import com.github.fashionbrot.enums.ClassTypeEnum;
+
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.util.Collection;
@@ -9,11 +11,6 @@ import java.util.Properties;
 
 public class JavaUtil {
 
-    public static Properties javaPrimitive = new Properties();
-
-    static {
-        javaPrimitive = ResourceUtil.getResourceAsProperties("mars-java-primitive.properties");
-    }
 
     /**
      * Check if it is the basic data type of json data
@@ -22,7 +19,7 @@ public class JavaUtil {
      * @return boolean
      */
     public static boolean isPrimitive(Class clazz) {
-        return javaPrimitive.containsKey(clazz.getTypeName());
+        return ClassTypeEnum.checkClass(clazz.getTypeName());
     }
 
     public static boolean isNotPrimitive(Class clazz) {
@@ -36,7 +33,7 @@ public class JavaUtil {
      * @return boolean
      */
     public static boolean isPrimitive(String typeName) {
-        return javaPrimitive.containsKey(typeName);
+        return ClassTypeEnum.checkClass(typeName);
     }
 
     public static boolean isNotPrimitive(String typeName) {
@@ -121,16 +118,15 @@ public class JavaUtil {
     }
 
 
-    public static boolean isFinal(Field field) {
-        if (Modifier.isFinal(field.getModifiers())) {
-            return true;
-        }
-        field.setAccessible(true);
-        return false;
-    }
 
-    public static boolean isNotFinal(Field field){
-        return !isFinal(field);
+    public static boolean filter(Field field){
+        if (Modifier.isStatic(field.getModifiers())){
+            return false;
+        }
+        if (Modifier.isFinal(field.getModifiers())){
+            return false;
+        }
+        return true;
     }
 
 }

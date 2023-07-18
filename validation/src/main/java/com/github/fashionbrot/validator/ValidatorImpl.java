@@ -42,7 +42,7 @@ public class ValidatorImpl implements Validator {
         }
 
         for (Field field : fields) {
-            if (JavaUtil.isFinal(field)) {
+            if (!JavaUtil.filter(field)) {
                 continue;
             }
             Class<?> fieldClassType = field.getType();
@@ -60,22 +60,17 @@ public class ValidatorImpl implements Validator {
             }else{
 
                 Valid valid = field.getDeclaredAnnotation(Valid.class);
-                String typeName = fieldClassType.getTypeName();
-                if (JavaUtil.isArray(typeName)) {
-                    if (valid==null){
-                        continue;
-                    }
-                    validArrayObject(validated,field,params,paramIndex,language);
-                } else if (JavaUtil.isCollection(typeName)) {
-                    if (valid==null){
-                        continue;
-                    }
-                    validListObject(validated,field, params,paramIndex,language);
-                } else {
+                if (valid==null){
                     //验证参数属性
                     entityFieldsAnnotationValid(validated , fieldClassType, params, paramIndex ,language);
+                }else{
+                    String typeName = fieldClassType.getTypeName();
+                    if (JavaUtil.isArray(typeName)) {
+                        validArrayObject(validated,field,params,paramIndex,language);
+                    } else if (JavaUtil.isCollection(typeName)) {
+                        validListObject(validated,field, params,paramIndex,language);
+                    }
                 }
-
             }
         }
 
@@ -84,6 +79,9 @@ public class ValidatorImpl implements Validator {
 
 
     private void checkClassSuper(Validated validated, Class clazz, Object[] params,Integer valueIndex,String language) {
+        if (JavaUtil.isPrimitive(clazz)){//#issue5 修复
+            return;
+        }
         Class superclass = clazz.getSuperclass();
         if (superclass != null && JavaUtil.isNotObject(superclass)) {
             //如果不是定义的类型，则把 class 当做bean 进行校验 field
@@ -153,21 +151,16 @@ public class ValidatorImpl implements Validator {
                 }else{
 
                     Valid valid = parameter.getDeclaredAnnotation(Valid.class);
-                    if (JavaUtil.isArray(parameterTypeName)) {
-                        if (valid == null) {
-                            continue;
-                        }
-                        validArrayObject(validated, parameter.getType(), arguments, j, parameter.getName());
-                    } else if (JavaUtil.isCollection(parameterTypeName)) {
-                        if (valid == null) {
-                            continue;
-                        }
-                        validListObject(validated, parameter, arguments, j, language);
-                    } else {
+                    if (valid==null){
                         //验证参数属性
                         entityFieldsAnnotationValid(validated, classType, arguments, j , language);
+                    }else{
+                        if (JavaUtil.isArray(parameterTypeName)) {
+                            validArrayObject(validated, parameter.getType(), arguments, j, parameter.getName());
+                        } else if (JavaUtil.isCollection(parameterTypeName)) {
+                            validListObject(validated, parameter, arguments, j, language);
+                        }
                     }
-
                 }
             }
 
