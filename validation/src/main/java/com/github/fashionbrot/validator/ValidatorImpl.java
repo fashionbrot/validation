@@ -58,7 +58,9 @@ public class ValidatorImpl implements Validator {
                 }
 
             }else{
-
+                if (JavaUtil.isPrimitive(fieldClassType)){
+                    continue;
+                }
                 Valid valid = field.getDeclaredAnnotation(Valid.class);
                 if (valid==null){
                     //验证参数属性
@@ -149,6 +151,10 @@ public class ValidatorImpl implements Validator {
                     }
 
                 }else{
+
+                    if (JavaUtil.isPrimitive(classType)){
+                        continue;
+                    }
 
                     Valid valid = parameter.getDeclaredAnnotation(Valid.class);
                     if (valid==null){
