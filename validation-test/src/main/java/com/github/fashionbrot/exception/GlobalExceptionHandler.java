@@ -1,8 +1,8 @@
 package com.github.fashionbrot.exception;
 
 
+import com.github.fashionbrot.common.util.ObjectUtil;
 import com.github.fashionbrot.constraint.MarsViolation;
-import com.github.fashionbrot.util.ObjectUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.BindException;

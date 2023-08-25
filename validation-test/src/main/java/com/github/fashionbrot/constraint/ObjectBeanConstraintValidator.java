@@ -1,9 +1,8 @@
 package com.github.fashionbrot.constraint;
 
 
+import com.github.fashionbrot.common.util.ObjectUtil;
 import com.github.fashionbrot.entity.Test1Entity;
-import com.github.fashionbrot.util.ObjectUtil;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 
 import javax.annotation.Resource;
