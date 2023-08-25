@@ -1,8 +1,8 @@
 package com.github.fashionbrot.internal;
 
 import com.github.fashionbrot.annotation.Max;
+import com.github.fashionbrot.common.util.ObjectUtil;
 import com.github.fashionbrot.constraint.ConstraintValidator;
-import com.github.fashionbrot.util.ObjectUtil;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;

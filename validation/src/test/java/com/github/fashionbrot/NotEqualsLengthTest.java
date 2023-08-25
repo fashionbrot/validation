@@ -1,12 +1,10 @@
 package com.github.fashionbrot;
 
 import com.alibaba.fastjson2.JSON;
-import com.github.fashionbrot.annotation.NotEmpty;
 import com.github.fashionbrot.annotation.NotEqualLength;
 import com.github.fashionbrot.annotation.Validated;
 import com.github.fashionbrot.constraint.MarsViolation;
 import com.github.fashionbrot.exception.ValidatedException;
-import com.github.fashionbrot.util.ObjectUtil;
 import org.junit.Assert;
 import org.junit.Test;
 

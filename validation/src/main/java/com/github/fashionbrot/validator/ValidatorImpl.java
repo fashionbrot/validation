@@ -1,5 +1,9 @@
 package com.github.fashionbrot.validator;
 
+import com.github.fashionbrot.common.util.GenericTokenUtil;
+import com.github.fashionbrot.common.util.JavaUtil;
+import com.github.fashionbrot.common.util.ObjectUtil;
+import com.github.fashionbrot.common.util.TypeUtil;
 import com.github.fashionbrot.constraint.Constraint;
 import com.github.fashionbrot.constraint.ConstraintHelper;
 import com.github.fashionbrot.constraint.ConstraintValidator;
@@ -24,11 +28,11 @@ public class ValidatorImpl implements Validator {
 
     public static final String BEAN_NAME = "defaultValidatorImpl";
 
-    public void entityFieldsAnnotationValid(Validated validated, Class<?> clazz, Object[] params,Integer paramIndex,String language) {
+    public void entityFieldsAnnotationValid(Validated validated, Class<?> clazz, Object[] params,Integer parameterIndex,String language) {
 
 
         // 判断是否 有继承类
-        checkClassSuper(validated, clazz, params,paramIndex,language);
+        checkClassSuper(validated, clazz, params,parameterIndex,language);
 
         //如果填写 validClass
         Class<?>[] validClass = validated != null ? validated.validClass() : null;
@@ -42,7 +46,7 @@ public class ValidatorImpl implements Validator {
         }
 
         for (Field field : fields) {
-            if (!JavaUtil.filter(field)) {
+            if (com.github.fashionbrot.common.util.MethodUtil.isStatic(field) || com.github.fashionbrot.common.util.MethodUtil.isFinal(field)) {
                 continue;
             }
             Class<?> fieldClassType = field.getType();
@@ -54,21 +58,24 @@ public class ValidatorImpl implements Validator {
 
                 for (Annotation annotation : fieldAnnotations) {
 
-                    validated(validated, params,paramIndex, fieldClassType, fieldName, annotation, field , language);
+                    validated(validated, params,parameterIndex, fieldClassType, fieldName, annotation, field , language);
                 }
 
             }else{
 
                 Valid valid = field.getDeclaredAnnotation(Valid.class);
                 if (valid==null){
+                    if (JavaUtil.isPrimitive(field.getType())){
+                        return;
+                    }
                     //验证参数属性
-                    entityFieldsAnnotationValid(validated , fieldClassType, params, paramIndex ,language);
+                    entityFieldsAnnotationValid(validated , fieldClassType, params, parameterIndex ,language);
                 }else{
                     String typeName = fieldClassType.getTypeName();
                     if (JavaUtil.isArray(typeName)) {
-                        validArrayObject(validated,field,params,paramIndex,language);
-                    } else if (JavaUtil.isCollection(typeName)) {
-                        validListObject(validated,field, params,paramIndex,language);
+                        validArrayObject(validated,field,params,parameterIndex,language);
+                    } else if (JavaUtil.isCollection(fieldClassType)) {
+                        validListObject(validated,field, params,parameterIndex,language);
                     }
                 }
             }
@@ -78,45 +85,50 @@ public class ValidatorImpl implements Validator {
 
 
 
-    private void checkClassSuper(Validated validated, Class clazz, Object[] params,Integer valueIndex,String language) {
+    private void checkClassSuper(Validated validated, Class clazz, Object[] params,Integer parameterIndex,String language) {
         if (JavaUtil.isPrimitive(clazz)){//#issue5 修复
             return;
         }
         Class superclass = clazz.getSuperclass();
         if (superclass != null && JavaUtil.isNotObject(superclass)) {
             //如果不是定义的类型，则把 class 当做bean 进行校验 field
-            entityFieldsAnnotationValid(validated , superclass, params,valueIndex ,language);
+            entityFieldsAnnotationValid(validated , superclass, params,parameterIndex ,language);
         }
     }
 
+
+
     @Override
-    public void validReturnValue(Method method, Object argument,String language) {
+    public void validReturnValue(Method method, Object argument, String language) {
         Validated validated = getValidated(method);
-        if (validated==null){
+        if (validated == null || ObjectUtil.isFalse(validated.validReturnValue())) {
             return;
         }
-        if (!validated.validReturnValue()){
+        if (argument==null){
+            return;
+        }
+        if (ObjectUtil.equals(argument.getClass(),Void.class)){
+            return;
+        }
+        if (JavaUtil.isPrimitive(argument.getClass())) {
             return;
         }
 
         try {
-            if (JavaUtil.isNotPrimitive(argument.getClass().getName())) {
-                //验证参数属性
-                entityFieldsAnnotationValid(validated, argument.getClass(), new Object[]{argument}, 0, language);
-            }
-            if (!validated.failFast()) {
+            //验证参数属性
+            entityFieldsAnnotationValid(validated, argument.getClass(), new Object[]{argument}, 0, language);
+            if (ObjectUtil.isFalse(validated.failFast())) {
                 ExceptionUtil.throwException();
             }
         } finally {
-            if (!validated.failFast()) {
+            if (ObjectUtil.isFalse(validated.failFast())) {
                 ExceptionUtil.reset();
             }
         }
     }
 
     private Validated getValidated(Method method){
-        Validated validated = method.getDeclaredAnnotation(Validated.class);
-        return validated;
+        return method.getDeclaredAnnotation(Validated.class);
     }
 
 
@@ -134,9 +146,9 @@ public class ValidatorImpl implements Validator {
         }
 
         try {
-            for (int j = 0; j < parameters.length; j++) {
+            for (int parameterIndex = 0; parameterIndex < parameters.length; parameterIndex++) {
 
-                Parameter parameter = parameters[j];
+                Parameter parameter = parameters[parameterIndex];
                 Class<?> classType = parameter.getType();
                 String parameterTypeName = classType.getTypeName();
 
@@ -145,30 +157,33 @@ public class ValidatorImpl implements Validator {
 
                     for (Annotation parameterAnnotation : annotationList) {
 
-                        validated(validated, arguments, j, parameter.getType(), parameter.getName(), parameterAnnotation, null,language);
+                        validated(validated, arguments, parameterIndex , parameter.getType(), parameter.getName(), parameterAnnotation, null,language);
                     }
 
                 }else{
 
                     Valid valid = parameter.getDeclaredAnnotation(Valid.class);
                     if (valid==null){
+                        if (JavaUtil.isPrimitive(parameter.getType())){
+                            return;
+                        }
                         //验证参数属性
-                        entityFieldsAnnotationValid(validated, classType, arguments, j , language);
+                        entityFieldsAnnotationValid(validated, classType, arguments, parameterIndex , language);
                     }else{
                         if (JavaUtil.isArray(parameterTypeName)) {
-                            validArrayObject(validated, parameter.getType(), arguments, j, parameter.getName());
-                        } else if (JavaUtil.isCollection(parameterTypeName)) {
-                            validListObject(validated, parameter, arguments, j, language);
+                            validArrayObject(validated, parameter.getType(), arguments, parameterIndex , parameter.getName());
+                        } else if (JavaUtil.isCollection(classType)) {
+                            validListObject(validated, parameter, arguments, parameterIndex , language);
                         }
                     }
                 }
             }
 
-            if (!validated.failFast()) {
+            if (ObjectUtil.isFalse(validated.failFast())) {
                 ExceptionUtil.throwException();
             }
         } finally {
-            if (!validated.failFast()) {
+            if (ObjectUtil.isFalse(validated.failFast())) {
                 ExceptionUtil.reset();
             }
         }

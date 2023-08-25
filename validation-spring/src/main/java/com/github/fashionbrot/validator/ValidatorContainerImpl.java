@@ -1,8 +1,8 @@
 package com.github.fashionbrot.validator;
 
+import com.github.fashionbrot.common.util.BeanUtil;
 import com.github.fashionbrot.constraint.ConstraintHelper;
 import com.github.fashionbrot.constraint.ConstraintValidator;
-import com.github.fashionbrot.util.BeanUtil;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.BeanFactory;
 import org.springframework.beans.factory.BeanFactoryAware;

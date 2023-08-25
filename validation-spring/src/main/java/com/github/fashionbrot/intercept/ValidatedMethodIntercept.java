@@ -2,8 +2,8 @@ package com.github.fashionbrot.intercept;
 
 
 import com.github.fashionbrot.annotation.Validated;
+import com.github.fashionbrot.common.util.ObjectUtil;
 import com.github.fashionbrot.config.GlobalValidatedProperties;
-import com.github.fashionbrot.util.ObjectUtil;
 import com.github.fashionbrot.validator.Validator;
 import com.github.fashionbrot.validator.ValidatorImpl;
 import lombok.extern.slf4j.Slf4j;

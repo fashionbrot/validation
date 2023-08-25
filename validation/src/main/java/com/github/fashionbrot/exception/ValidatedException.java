@@ -1,6 +1,5 @@
 package com.github.fashionbrot.exception;
 
-import com.github.fashionbrot.util.ObjectUtil;
 import com.github.fashionbrot.constraint.MarsViolation;
 import lombok.Data;
 import lombok.EqualsAndHashCode;

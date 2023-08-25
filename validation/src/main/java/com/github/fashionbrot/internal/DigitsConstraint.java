@@ -1,8 +1,8 @@
 package com.github.fashionbrot.internal;
 
 
-import com.github.fashionbrot.util.ObjectUtil;
 import com.github.fashionbrot.annotation.Digits;
+import com.github.fashionbrot.common.util.ObjectUtil;
 import com.github.fashionbrot.constraint.ConstraintValidator;
 
 import java.util.regex.Pattern;

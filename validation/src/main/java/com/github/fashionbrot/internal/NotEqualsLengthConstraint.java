@@ -2,9 +2,9 @@ package com.github.fashionbrot.internal;
 
 
 import com.github.fashionbrot.annotation.NotEqualLength;
+import com.github.fashionbrot.common.util.JavaUtil;
+import com.github.fashionbrot.common.util.ObjectUtil;
 import com.github.fashionbrot.constraint.ConstraintValidator;
-import com.github.fashionbrot.util.JavaUtil;
-import com.github.fashionbrot.util.ObjectUtil;
 
 import java.util.Collection;
 import java.util.Map;

@@ -4,7 +4,7 @@ package com.github.fashionbrot.constraint;
 import com.alibaba.fastjson2.JSON;
 import com.github.fashionbrot.TestEntity;
 import com.github.fashionbrot.annotation.CustomAnnotation;
-import com.github.fashionbrot.util.ObjectUtil;
+import com.github.fashionbrot.common.util.ObjectUtil;
 
 public class CustomAnnotationConstraintValidator implements ConstraintValidator<CustomAnnotation, Object> {
 

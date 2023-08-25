@@ -1,5 +1,6 @@
 package com.github.fashionbrot.util;
 
+import com.github.fashionbrot.common.util.ObjectUtil;
 import com.github.fashionbrot.consts.ValidatedConst;
 import lombok.extern.slf4j.Slf4j;
 import java.util.Map;

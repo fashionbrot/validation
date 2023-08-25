@@ -1,9 +1,9 @@
 package com.github.fashionbrot.internal;
 
 
-import com.github.fashionbrot.util.JavaUtil;
-import com.github.fashionbrot.util.ObjectUtil;
 import com.github.fashionbrot.annotation.NotEmpty;
+import com.github.fashionbrot.common.util.JavaUtil;
+import com.github.fashionbrot.common.util.ObjectUtil;
 import com.github.fashionbrot.constraint.ConstraintValidator;
 
 import java.util.Collection;

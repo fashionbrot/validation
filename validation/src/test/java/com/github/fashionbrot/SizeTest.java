@@ -2,19 +2,14 @@ package com.github.fashionbrot;
 
 
 import com.alibaba.fastjson2.JSON;
-import com.github.fashionbrot.annotation.NotEmpty;
 import com.github.fashionbrot.annotation.Size;
 import com.github.fashionbrot.annotation.Valid;
 import com.github.fashionbrot.annotation.Validated;
 import com.github.fashionbrot.constraint.MarsViolation;
 import com.github.fashionbrot.exception.ValidatedException;
-import com.github.fashionbrot.util.ObjectUtil;
-import com.github.fashionbrot.validator.Validator;
-import com.github.fashionbrot.validator.ValidatorImpl;
 import org.junit.Assert;
 import org.junit.Test;
 
-import java.lang.reflect.Method;
 import java.util.*;
 
 public class SizeTest {
