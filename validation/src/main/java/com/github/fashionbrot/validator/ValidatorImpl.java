@@ -221,7 +221,7 @@ public class ValidatorImpl implements Validator {
             actualTypeArguments[0] instanceof Class &&
             JavaUtil.isNotPrimitive(actualTypeArguments[0].getTypeName())) {
 
-            Class typeConvertClass = TypeUtil.typeConvertClass(actualTypeArguments[0]);
+            Class typeConvertClass = TypeUtil.convertTypeToClass(actualTypeArguments[0]);
             if (typeConvertClass != null && params[paramIndex] instanceof List) {
                 List param = (List) params[paramIndex];
 
@@ -241,7 +241,7 @@ public class ValidatorImpl implements Validator {
             actualTypeArguments[0] instanceof Class &&
             JavaUtil.isNotPrimitive(actualTypeArguments[0].getTypeName())) {
 
-            Class typeConvertClass = TypeUtil.typeConvertClass(actualTypeArguments[0]);
+            Class typeConvertClass = TypeUtil.convertTypeToClass(actualTypeArguments[0]);
             if (typeConvertClass != null ) {
                 List param = (List)MethodUtil.getFieldValue(field, params[paramIndex]);
                 if (ObjectUtil.isNotEmpty(param)) {
