@@ -18,7 +18,7 @@ public @interface Length {
 
     int max() default Integer.MAX_VALUE;
 
-    String msg() default "validated.Length.msg";
+    String msg() default "${validated.Length.msg}";
 
     /**
      * 是否跳过空值

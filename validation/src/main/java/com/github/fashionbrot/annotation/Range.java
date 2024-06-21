@@ -21,7 +21,7 @@ public @interface Range {//issue#1
 
     long max() default Integer.MIN_VALUE;
 
-    String msg() default "validated.Range.msg";
+    String msg() default "${validated.Range.msg}";
 
     /**
      * 是否跳过空值

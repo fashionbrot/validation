@@ -86,8 +86,6 @@ public class ValidatedConfigBeanDefinitionRegistrar implements ImportBeanDefinit
 
         BeanUtil.registerInfrastructureBeanIfAbsent(registry, ValidatorImpl.BEAN_NAME, ValidatorImpl.class);
 
-        BeanUtil.registerInfrastructureBeanIfAbsent(registry, ValidatorUtil.BEAN_NAME, ValidatorUtil.class);
-
     }
 
 

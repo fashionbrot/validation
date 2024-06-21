@@ -11,6 +11,7 @@ import com.github.fashionbrot.constraint.MarsViolation;
 import com.github.fashionbrot.consts.ValidatedConst;
 import com.github.fashionbrot.exception.ValidatedException;
 import com.github.fashionbrot.groups.DefaultGroup;
+import com.github.fashionbrot.ognl.OgnlParse;
 import com.github.fashionbrot.util.*;
 import com.github.fashionbrot.annotation.Valid;
 import com.github.fashionbrot.annotation.Validated;
@@ -221,7 +222,7 @@ public class ValidatorImpl implements Validator {
             actualTypeArguments[0] instanceof Class &&
             JavaUtil.isNotPrimitive(actualTypeArguments[0].getTypeName())) {
 
-            Class typeConvertClass = TypeUtil.typeConvertClass(actualTypeArguments[0]);
+            Class typeConvertClass = TypeUtil.convertTypeToClass(actualTypeArguments[0]);
             if (typeConvertClass != null && params[paramIndex] instanceof List) {
                 List param = (List) params[paramIndex];
 
@@ -241,7 +242,7 @@ public class ValidatorImpl implements Validator {
             actualTypeArguments[0] instanceof Class &&
             JavaUtil.isNotPrimitive(actualTypeArguments[0].getTypeName())) {
 
-            Class typeConvertClass = TypeUtil.typeConvertClass(actualTypeArguments[0]);
+            Class typeConvertClass = TypeUtil.convertTypeToClass(actualTypeArguments[0]);
             if (typeConvertClass != null ) {
                 List param = (List)MethodUtil.getFieldValue(field, params[paramIndex]);
                 if (ObjectUtil.isNotEmpty(param)) {
@@ -339,6 +340,11 @@ public class ValidatorImpl implements Validator {
                                     Field field,
                                     String language) {
 
+        Method[] annotationMethods = annotation.annotationType().getDeclaredMethods();
+        if (ObjectUtil.isEmpty(annotationMethods)){
+            return ;
+        }
+
         if (ObjectUtil.isNotEmpty(constraintValidatorList)) {
             Object value = params[index];
             if (field != null) {
@@ -347,17 +353,37 @@ public class ValidatorImpl implements Validator {
             for (int i = 0; i < constraintValidatorList.size(); i++) {
 
                 ConstraintValidator constraintValidator = constraintValidatorList.get(i);
-                boolean isValid = constraintValidator.isValid(annotation, value, valueType);
-                if (!isValid) {
-                    String msg  = getAnnotationMsg(annotation,language);
-                    if (validated.failFast()) {
-                        ValidatedException.throwMsg(paramName, msg, annotation.annotationType().getSimpleName(), value,index);
-                    } else {
-                        addMarsViolations(value, paramName, annotation, msg,index);
+                Class validConstraintClass = constraintValidator.getClass();
+                byte expressionFlag = ValidatedConst.SUCCESS;
+
+
+                Method expressionMethod = MethodUtil.filterMethodName(annotationMethods, ValidatedConst.EXPRESSION);
+                if (expressionMethod!=null){
+                    String expression = (String)MethodUtil.getReturnValue(expressionMethod, annotation);
+                    if (ObjectUtil.isEmpty(expression)){
+                        return;
+                    }
+                    boolean validationExpression = OgnlParse.validationExpression(expression,params);
+                    if (!validationExpression){
+                        expressionFlag = ValidatedConst.FAIL;
                     }
                 }
 
-                Class validConstraintClass = constraintValidator.getClass();
+                if (ObjectUtil.equals(ValidatedConst.SUCCESS,expressionFlag)){
+
+                    boolean isValid = constraintValidator.isValid(annotation, value, valueType);
+                    if (!isValid) {
+                        String msg  = getAnnotationMsg(annotation,language);
+                        if (validated.failFast()) {
+                            ValidatedException.throwMsg(paramName, msg, annotation.annotationType().getSimpleName(), value,index);
+                        } else {
+                            addMarsViolations(value, paramName, annotation, msg,index);
+                        }
+                    }
+                }
+
+
+
                 if (MethodUtil.checkDeclaredMethod(validConstraintClass, ValidatedConst.METHOD_NAME_MODIFY)) {
                     Object reValue = constraintValidator.modify(annotation, value, valueType);
                     if (reValue==null){
@@ -379,7 +405,7 @@ public class ValidatorImpl implements Validator {
 
     private String getAnnotationMsg(Annotation annotation, String language) {
         String annotationMsg = MethodUtil.getAnnotationMsg(annotation);
-        String filterMsg = ValidatorUtil.filterMsg(annotationMsg, language);
+        String filterMsg = ValidatorUtil.filterMessage(annotationMsg, language);
         if (GenericTokenUtil.isOpenToken(filterMsg, ValidatedConst.OPEN_TOKEN)) {
             Map<String, Object> annotationAttributes = MethodUtil.getAnnotationMapExcludeMsgAndGroups(annotation);
             return GenericTokenUtil.parse(filterMsg, annotationAttributes);
@@ -390,8 +416,7 @@ public class ValidatorImpl implements Validator {
 
 
 
-    private void
-    addMarsViolations(Object value, String paramName, Annotation annotation, String msg,Integer valueIndex) {
+    private void addMarsViolations(Object value, String paramName, Annotation annotation, String msg,Integer valueIndex) {
         ExceptionUtil.addMarsViolation(MarsViolation.builder()
                 .annotationName(annotation.annotationType().getSimpleName())
                 .fieldName(paramName)

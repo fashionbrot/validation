@@ -12,50 +12,48 @@ import java.util.concurrent.ConcurrentHashMap;
 @Slf4j
 public class ValidatorUtil{
 
-    public static final String BEAN_NAME = "marsValidatorUtil";
 
-    private static Map<String,ResourceBundle> MSG_MAP=new ConcurrentHashMap<>();
+    private static final Map<String, ResourceBundle> RESOURCE_BUNDLE_CACHE = new ConcurrentHashMap<>();
 
-
-    public static String filterMsg(String msg,String language) {
-        if (ObjectUtil.isEmpty(msg)){
+    public static String filterMessage(String message, String language) {
+        if (ObjectUtil.isEmpty(message)) {
             return "";
         }
-        boolean isDefaultMsg = msg.startsWith("validated.");
-        if (isDefaultMsg) {
-            msg = getMsg(msg,language);
+        boolean isDefaultMessage = message.startsWith(ValidatedConst.OPEN_TOKEN) && message.endsWith(ValidatedConst.CLOSE_TOKEN);
+        if (isDefaultMessage) {
+            message = resolveMessage(message, language);
         }
-        return msg;
+        return message;
     }
 
-    private static String getMsg(String msg,String language) {
-
+    private static String resolveMessage(String messageKey, String language) {
+        String key = extractVariables(messageKey);
         String currentLanguage = language;
-        if (ObjectUtil.isEmpty(language)){
+        if (ObjectUtil.isEmpty(currentLanguage)){
             currentLanguage = ValidatedConst.DEFAULT_LANGUAGE;
         }
-        ResourceBundle resourceBundle = getResourceBundle(ValidatedConst.FILE_NAME_PREFIX+currentLanguage);
-        if (resourceBundle==null){
-            throw new MissingResourceException(ValidatedConst.FILE_NAME_PREFIX+currentLanguage+" does not exist", "EnableValidatedConfig","language");
+        ResourceBundle resourceBundle = getResourceBundle(ValidatedConst.FILE_NAME_PREFIX + currentLanguage);
+        if (resourceBundle == null || !resourceBundle.containsKey(key)) {
+            throw new MissingResourceException("Message for key '" + key + "' not found in " + ValidatedConst.FILE_NAME_PREFIX + currentLanguage, ValidatorUtil.class.getName(), messageKey);
         }
-        if (resourceBundle.containsKey(msg)){
-            msg = resourceBundle.getString(msg);
-        }
-        return msg;
+        return resourceBundle.getString(key);
+    }
+
+    public static ResourceBundle getResourceBundle(final String fileName) {
+        return RESOURCE_BUNDLE_CACHE.computeIfAbsent(fileName, ResourceBundle::getBundle);
     }
 
 
-
-    public static ResourceBundle getResourceBundle(final String fileName){
-        ResourceBundle resourceBundle = MSG_MAP.get(fileName);
-        if (resourceBundle==null){
-            resourceBundle = ResourceBundle.getBundle(fileName);
-            if (resourceBundle!=null){
-                MSG_MAP.put(fileName,resourceBundle);
-            }
+    public static String extractVariables(String input) {
+        if (ObjectUtil.isEmpty(input)){
+            return input;
         }
-        return resourceBundle;
+        int startIndex = input.indexOf("${");
+        int endIndex = input.lastIndexOf("}");
+        if (startIndex != -1 && endIndex != -1 && startIndex < endIndex) {
+            return input.substring(startIndex + 2, endIndex);
+        }
+        return input;
     }
-
 
 }

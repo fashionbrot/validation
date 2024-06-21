@@ -34,7 +34,7 @@ public @interface Contain { //issue#2
      */
     boolean skipEmpty() default true;
 
-    String msg() default "validated.Contain.msg";
+    String msg() default "${validated.Contain.msg}";
 
     /**
      * default @see com.github.fashionbrot.groups.DefaultGroup

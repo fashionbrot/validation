@@ -167,4 +167,32 @@ public class NotEmptyTest {
 
     }
 
+
+    public class TestController6{
+
+        @Validated
+        private void test(@NotEmpty(expression = "arg1!=null") Collection collection,
+                          @NotEmpty HashMap map){
+
+        }
+    }
+
+    @Test
+    public void test6(){
+        List collection= new ArrayList();
+        collection.add("string");
+        HashMap map=new HashMap();
+        map.put("test","1");
+        Object[] objects = {null,null};
+
+        ValidatedException validatedException = MethodUtil.getException(TestController6.class, "test", objects);
+        if (validatedException!=null){
+            System.out.println(JSON.toJSONString(validatedException));
+            List<MarsViolation> violations = validatedException.getViolations();
+            long count = violations.stream().filter(m -> m.getFieldName().equals("arg2") || m.getFieldName().equals("arg3")).count();
+            Assert.assertEquals(count,2);
+            System.out.println(JSON.toJSONString(validatedException.getViolations()));
+        }
+
+    }
 }

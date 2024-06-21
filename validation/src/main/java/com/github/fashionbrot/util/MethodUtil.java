@@ -93,6 +93,18 @@ public class MethodUtil {
         return msg;
     }
 
+    public static Method filterMethodName(Method[] methods,String methodName){
+        if (ObjectUtil.isNotEmpty(methods)){
+            for (int i = 0; i < methods.length; i++) {
+                Method method = methods[i];
+                if (methodName.equals(method.getName())){
+                    return method;
+                }
+            }
+        }
+        return null;
+    }
+
 
     public static Map<String,Object> getAnnotationAttributes(Annotation annotation){
         if (annotation==null){

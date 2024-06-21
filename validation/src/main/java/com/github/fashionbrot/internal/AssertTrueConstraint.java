@@ -21,8 +21,7 @@ public class AssertTrueConstraint implements ConstraintValidator<AssertTrue, Obj
         }
 
         if(valueType == String.class || valueType== boolean.class || valueType == Boolean.class){
-            boolean bool = ObjectUtil.parseBoolean(strValue);
-            return bool;
+            return ObjectUtil.isTrue(strValue);
         }
         return true;
 	}

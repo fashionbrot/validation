@@ -25,7 +25,7 @@ public @interface Size {
      */
     boolean skipEmpty() default true;
 
-    String msg() default "validated.Size.msg";
+    String msg() default "${validated.Size.msg}";
 
     /**
      * default @see com.github.fashionbrot.groups.DefaultGroup

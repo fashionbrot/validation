@@ -16,7 +16,7 @@ import java.lang.annotation.*;
 @Retention(RetentionPolicy.RUNTIME)
 public @interface BankCard {
 
-    String msg() default "validated.BankCard.msg";
+    String msg() default "${validated.BankCard.msg}";
 
     /**
      * @return String

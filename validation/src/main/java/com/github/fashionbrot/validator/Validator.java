@@ -9,7 +9,7 @@ public interface Validator {
      * 获取 接口参数，验证是否含有注解
      * @param method method
      * @param arguments arguments
-     * @param language error msg language,language==null?zh_CN:language
+     * @param language error msg language,language default zh_CN
      */
     void validParameter(Method method, Object[] arguments,String language);
 
@@ -18,7 +18,7 @@ public interface Validator {
      * 验证返回值
      * @param method method
      * @param argument argument
-     * @param language error msg language,language==null?zh_CN:language
+     * @param language error msg language,language default zh_CN
      */
     void validReturnValue(Method method, Object argument,String language);
 
