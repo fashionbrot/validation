@@ -1,8 +1,6 @@
 package com.github.fashionbrot;
 
 import com.github.fashionbrot.exception.ValidatedException;
-import com.github.fashionbrot.validator.Validator;
-import com.github.fashionbrot.validator.ValidatorImpl;
 
 import java.lang.reflect.Method;
 import java.util.Arrays;
@@ -21,8 +19,10 @@ public class MethodUtil {
 
         String returnResult="";
         try {
-            Validator marsValidator = new ValidatorImpl();
-            marsValidator.validParameter(method,values,null);
+            ValidationConfiguration configuration=new ValidationConfiguration(method,"");
+            configuration.validParameter(values);
+//            Validator marsValidator = new ValidatorImpl();
+//            marsValidator.validParameter(method,values,null);
         }catch (ValidatedException e){
             returnResult = e.toString();
         }
@@ -33,8 +33,22 @@ public class MethodUtil {
 
         Method method = getMethod( clazz,  methodName);
         try {
-            Validator marsValidator = new ValidatorImpl();
-            marsValidator.validParameter(method,values,null);
+            ValidationConfiguration configuration=new ValidationConfiguration(method,"");
+            configuration.validParameter(values);
+//            Validator marsValidator = new ValidatorImpl();
+//            marsValidator.validParameter(method,values,null);
+        }catch (ValidatedException e){
+            return e;
+        }
+        return null;
+    }
+
+    public static ValidatedException getNewException(Class clazz,String methodName,Object[] values){
+
+        Method method = getMethod( clazz,  methodName);
+        try {
+            ValidationConfiguration configuration=new ValidationConfiguration(method,"");
+            configuration.validParameter(values);
         }catch (ValidatedException e){
             return e;
         }
@@ -45,8 +59,10 @@ public class MethodUtil {
 
         Method method = getMethod( clazz,  methodName);
         try {
-            Validator marsValidator = new ValidatorImpl();
-            marsValidator.validParameter(method,values,null);
+//            Validator marsValidator = new ValidatorImpl();
+//            marsValidator.validParameter(method,values,null);
+            ValidationConfiguration configuration=new ValidationConfiguration(method,"");
+            configuration.validParameter(values);
 
             return values;
         }catch (ValidatedException e){

@@ -5,8 +5,6 @@ import com.github.fashionbrot.annotation.EnableValidatedConfig;
 import com.github.fashionbrot.common.util.BeanUtil;
 import com.github.fashionbrot.common.util.ObjectUtil;
 import com.github.fashionbrot.intercept.ValidatedMethodIntercept;
-import com.github.fashionbrot.util.ValidatorUtil;
-import com.github.fashionbrot.validator.ValidatorImpl;
 import org.springframework.beans.factory.support.BeanDefinitionRegistry;
 import org.springframework.context.EnvironmentAware;
 import org.springframework.context.annotation.ImportBeanDefinitionRegistrar;
@@ -84,7 +82,7 @@ public class ValidatedConfigBeanDefinitionRegistrar implements ImportBeanDefinit
 
     public static void registerValidated(BeanDefinitionRegistry registry) {
 
-        BeanUtil.registerInfrastructureBeanIfAbsent(registry, ValidatorImpl.BEAN_NAME, ValidatorImpl.class);
+//        BeanUtil.registerInfrastructureBeanIfAbsent(registry, ValidatorImpl.BEAN_NAME, ValidatorImpl.class);
 
     }
 

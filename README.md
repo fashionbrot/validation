@@ -80,7 +80,7 @@ validated.locale-param-name=lang
 package com.github.fashionbrot.exception;
 
 
-import com.github.fashionbrot.constraint.MarsViolation;
+import com.github.fashionbrot.constraint.Violation;
 import com.github.fashionbrot.util.ObjectUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -103,7 +103,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(ValidatedException.class)
     @ResponseStatus(HttpStatus.OK)
     public Object ValidatedException(ValidatedException e) {
-        List<MarsViolation> violations = e.getViolations();
+        List<Violation> violations = e.getViolations();
         if (ObjectUtil.isEmpty(violations)){// 快速失败抛出异常信息
             return e.getMsg();
         }else {

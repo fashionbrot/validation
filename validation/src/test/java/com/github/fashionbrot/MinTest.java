@@ -31,7 +31,7 @@ public class MinTest {
 
     @Test
     public void test1() {
-        String returnResult = "ValidatedException(fieldName=null, msg=null, annotationName=null, value=null, valueIndex=null, violations=[MarsViolation(fieldName=arg5, msg=最小不能小于5, annotationName=Min, value=4.99999, valueIndex=5)])";
+        String returnResult = "ValidatedException(fieldName=null, msg=null, annotationName=null, value=null, valueIndex=null, violations=[Violation(fieldName=arg5, msg=最小不能小于5, annotationName=Min, value=4.99999, valueIndex=5)])";
         Object[] objects = {new BigDecimal("10"),
             BigInteger.valueOf(9),
             Long.valueOf(8),
@@ -78,7 +78,7 @@ public class MinTest {
 
     @Test
     public void test3() {
-        String returnResult = "ValidatedException(fieldName=null, msg=null, annotationName=null, value=null, valueIndex=null, violations=[MarsViolation(fieldName=arg1, msg=最小不能小于9, annotationName=Min, value=null, valueIndex=1)])";
+        String returnResult = "ValidatedException(fieldName=null, msg=null, annotationName=null, value=null, valueIndex=null, violations=[Violation(fieldName=arg1, msg=最小不能小于9, annotationName=Min, value=null, valueIndex=1)])";
         Object[] objects = {null,null};
         String test = MethodUtil.getMsg(Controller3.class, "test", objects);
         System.out.println(test);

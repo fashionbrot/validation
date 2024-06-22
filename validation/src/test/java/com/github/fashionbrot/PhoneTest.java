@@ -20,7 +20,7 @@ public class PhoneTest {
 
     @Test
     public void test1(){
-        String returnResult="ValidatedException(fieldName=null, msg=null, annotationName=null, value=null, valueIndex=null, violations=[MarsViolation(fieldName=arg1, msg=无效手机号码, annotationName=Phone, value=1760039211, valueIndex=1)])";
+        String returnResult="ValidatedException(fieldName=null, msg=null, annotationName=null, value=null, valueIndex=null, violations=[Violation(fieldName=arg1, msg=无效手机号码, annotationName=Phone, value=1760039211, valueIndex=1)])";
         Object[] objects = {"17600382911", "1760039211", "", "19912341234"};
         String test = MethodUtil.getMsg(Controller1.class, "test",objects );
         System.out.println(test);

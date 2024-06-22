@@ -2,7 +2,7 @@ package com.github.fashionbrot;
 
 import com.github.fashionbrot.common.util.ObjectUtil;
 import com.github.fashionbrot.ognl.DefaultMemberAccess;
-import com.github.fashionbrot.ognl.OgnlParse;
+import com.github.fashionbrot.ognl.OgnlCache;
 import ognl.*;
 
 import java.lang.reflect.Member;
@@ -35,7 +35,7 @@ public class OgnlTest {
         root.put("p",person);
         root.put("ObjectUtil",new ObjectUtil());
 
-        Map defaultContext = Ognl.createDefaultContext(root, memberAccess);
+//        Map defaultContext = Ognl.createDefaultContext(root, memberAccess);
         // 创建一个 OgnlContext 对象
         OgnlContext context = new OgnlContext(classResolver,typeConverter,memberAccess);
 //        context.put("ObjectUtil",new ObjectUtil());
@@ -44,16 +44,18 @@ public class OgnlTest {
 
         // 执行表达式
         try {
-
-            boolean result = (boolean) Ognl.getValue(expression, defaultContext, root);
-            System.out.println("Expression result: " + result);
+//
+//            boolean result = (boolean) Ognl.getValue(expression, context, root);
+//            System.out.println("Expression result: " + result);
 
             System.out.println(Ognl.getValue("p.name",context,root));
+
+
         } catch (OgnlException e) {
             e.printStackTrace();
         }
 
-        boolean b = OgnlParse.validationExpression("this.name==null", person);
+        boolean b = OgnlCache.executeExpression("name!=null", person);
         System.out.println(b);
     }
 

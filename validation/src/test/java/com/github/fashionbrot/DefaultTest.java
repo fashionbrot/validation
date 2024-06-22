@@ -5,8 +5,6 @@ import com.alibaba.fastjson2.JSON;
 import com.github.fashionbrot.annotation.Default;
 import com.github.fashionbrot.annotation.Valid;
 import com.github.fashionbrot.annotation.Validated;
-import com.github.fashionbrot.validator.Validator;
-import com.github.fashionbrot.validator.ValidatorImpl;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -46,8 +44,10 @@ public class DefaultTest {
         String returnResult="";
 
         Object[] param=new Object[]{null,null,null,null,null,null,null,null,null};
-        Validator marsValidator = new ValidatorImpl();
-        marsValidator.validParameter(method,param,null);
+
+        ValidationConfiguration configuration=new ValidationConfiguration(method,"");
+        configuration.validParameter(param);
+
         returnResult=JSON.toJSONString(param);
         System.out.println(returnResult);
 
@@ -80,8 +80,11 @@ public class DefaultTest {
         test2Req.setAbc(null);
         Object[] params = {test2Req};
 
-        Validator marsValidator = new ValidatorImpl();
-        marsValidator.validParameter(method,params,null);
+        ValidationConfiguration configuration=new ValidationConfiguration(method,"");
+        configuration.validParameter(params);
+
+//        Validator marsValidator = new ValidatorImpl();
+//        marsValidator.validParameter(method,params,null);
         returnResult = JSON.toJSONString(params);
         System.out.println(returnResult);
         Assert.assertEquals(result,returnResult);
@@ -110,8 +113,11 @@ public class DefaultTest {
         test22Req.setAbc(null);
         Object[] params = {Arrays.asList(test2Req, test22Req)};
 
-        Validator marsValidator = new ValidatorImpl();
-        marsValidator.validParameter(method,params,null);
+//        Validator marsValidator = new ValidatorImpl();
+//        marsValidator.validParameter(method,params,null);
+        ValidationConfiguration configuration=new ValidationConfiguration(method,"");
+        configuration.validParameter(params);
+
         returnResult = JSON.toJSONString(params);
         System.out.println(JSON.toJSONString(params));
         Assert.assertEquals(result,returnResult);
@@ -139,8 +145,11 @@ public class DefaultTest {
         test22Req.setAbc(null);
         Object[] params = {new Object[]{test2Req, test22Req}};
 
-        Validator marsValidator = new ValidatorImpl();
-        marsValidator.validParameter(method,params,null);
+        ValidationConfiguration configuration=new ValidationConfiguration(method,"");
+        configuration.validParameter(params);
+
+//        Validator marsValidator = new ValidatorImpl();
+//        marsValidator.validParameter(method,params,null);
         returnResult = JSON.toJSONString(params);
         System.out.println(JSON.toJSONString(params));
         Assert.assertEquals(result,returnResult);
@@ -184,8 +193,10 @@ public class DefaultTest {
         testReq5.setTestReq55s(Arrays.asList(r1,r2));
         Object[] params =new Object[] {testReq5};
 
-        Validator marsValidator = new ValidatorImpl();
-        marsValidator.validParameter(method,params,null);
+        ValidationConfiguration configuration=new ValidationConfiguration(method,"");
+        configuration.validParameter(params);
+//        Validator marsValidator = new ValidatorImpl();
+//        marsValidator.validParameter(method,params,null);
 
         returnResult=JSON.toJSONString(params);
         System.out.println(returnResult);

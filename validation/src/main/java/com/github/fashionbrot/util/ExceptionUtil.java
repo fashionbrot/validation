@@ -1,7 +1,7 @@
 package com.github.fashionbrot.util;
 
 import com.github.fashionbrot.common.util.ObjectUtil;
-import com.github.fashionbrot.constraint.MarsViolation;
+import com.github.fashionbrot.constraint.Violation;
 import com.github.fashionbrot.exception.ValidatedException;
 import lombok.extern.slf4j.Slf4j;
 
@@ -11,14 +11,14 @@ import java.util.List;
 @Slf4j
 public class ExceptionUtil {
 
-    private static final ThreadLocal<List<MarsViolation>> LOCAL = ThreadLocal.withInitial(ArrayList::new);
+    private static final ThreadLocal<List<Violation>> LOCAL = ThreadLocal.withInitial(ArrayList::new);
 
 
-    public static void addMarsViolation(MarsViolation marsViolation){
-        LOCAL.get().add(marsViolation);
+    public static void addViolation(Violation Violation){
+        LOCAL.get().add(Violation);
     }
 
-    public static List<MarsViolation> getMarsViolationList(){
+    public static List<Violation> getViolationList(){
         return LOCAL.get();
     }
 
@@ -28,9 +28,15 @@ public class ExceptionUtil {
 
 
     public static void throwException(){
-        List<MarsViolation> marsViolationList = getMarsViolationList();
-        if (ObjectUtil.isNotEmpty(marsViolationList)) {
-            throw new ValidatedException(marsViolationList);
+        List<Violation> ViolationList = getViolationList();
+        if (ObjectUtil.isNotEmpty(ViolationList)) {
+            throw new ValidatedException(ViolationList);
+        }
+    }
+
+    public static void throwException(List<Violation> ViolationList){
+        if (ObjectUtil.isNotEmpty(ViolationList)) {
+            throw new ValidatedException(ViolationList);
         }
     }
 

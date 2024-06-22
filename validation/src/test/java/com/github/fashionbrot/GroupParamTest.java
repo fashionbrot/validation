@@ -4,8 +4,6 @@ import com.github.fashionbrot.annotation.Digits;
 import com.github.fashionbrot.annotation.Validated;
 import com.github.fashionbrot.exception.ValidatedException;
 import com.github.fashionbrot.groups.DefaultGroup;
-import com.github.fashionbrot.validator.Validator;
-import com.github.fashionbrot.validator.ValidatorImpl;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -33,19 +31,18 @@ public class GroupParamTest {
 
     @Test
     public void test1(){
-        Method[] methods = GroupParamTest.TestController1.class.getDeclaredMethods();
-        Method method  = Arrays.stream(methods).filter(m -> m.getName().equals("test1")).findFirst().get();
 
-        String result="";
-        String returnResult="";
         Object[] params = new Object[]{"","a"};
+        String result="";
+        String returnResult=MethodUtil.getMsg(GroupParamTest.TestController1.class,"test1",params);
 
-        try {
-            Validator marsValidator = new ValidatorImpl();
-            marsValidator.validParameter(method,params,null);
-        }catch (ValidatedException e){
-            returnResult = e.toString();
-        }
+
+//        try {
+//            Validator marsValidator = new ValidatorImpl();
+//            marsValidator.validParameter(method,params,null);
+//        }catch (ValidatedException e){
+//            returnResult = e.toString();
+//        }
         System.out.println(returnResult);
         Assert.assertEquals(result,returnResult);
     }
@@ -62,19 +59,11 @@ public class GroupParamTest {
 
     @Test
     public void test2(){
-        Method[] methods = GroupParamTest.TestController2.class.getDeclaredMethods();
-        Method method  = Arrays.stream(methods).filter(m -> m.getName().equals("test1")).findFirst().get();
 
-        String result="ValidatedException(fieldName=null, msg=null, annotationName=null, value=null, valueIndex=null, violations=[MarsViolation(fieldName=arg1, msg=d2不是数字, annotationName=Digits, value=a, valueIndex=1)])";
-        String returnResult="";
+        String result="ValidatedException(fieldName=null, msg=null, annotationName=null, value=null, valueIndex=null, violations=[Violation(fieldName=arg1, msg=d2不是数字, annotationName=Digits, value=a, valueIndex=1)])";
         Object[] params = new Object[]{"","a"};
+        String returnResult=MethodUtil.getMsg(GroupParamTest.TestController2.class,"test1",params);
 
-        try {
-            Validator marsValidator = new ValidatorImpl();
-            marsValidator.validParameter(method,params,null);
-        }catch (ValidatedException e){
-            returnResult = e.toString();
-        }
         System.out.println(returnResult);
         Assert.assertEquals(result,returnResult);
     }
@@ -95,15 +84,9 @@ public class GroupParamTest {
         Method method  = Arrays.stream(methods).filter(m -> m.getName().equals("test1")).findFirst().get();
 
         String result="";
-        String returnResult="";
         Object[] params = new Object[]{"",""};
+        String returnResult=MethodUtil.getMsg(GroupParamTest.TestController3.class,"test1",params);
 
-        try {
-            Validator marsValidator = new ValidatorImpl();
-            marsValidator.validParameter(method,params,null);
-        }catch (ValidatedException e){
-            returnResult = e.toString();
-        }
         System.out.println(returnResult);
         Assert.assertEquals(result,returnResult);
     }
@@ -121,19 +104,11 @@ public class GroupParamTest {
 
     @Test
     public void test4(){
-        Method[] methods = GroupParamTest.TestController4.class.getDeclaredMethods();
-        Method method  = Arrays.stream(methods).filter(m -> m.getName().equals("test1")).findFirst().get();
-
         String result="";
-        String returnResult="";
         Object[] params = new Object[]{"","1.12"};
 
-        try {
-            Validator marsValidator = new ValidatorImpl();
-            marsValidator.validParameter(method,params,null);
-        }catch (ValidatedException e){
-            returnResult = e.toString();
-        }
+        String returnResult=MethodUtil.getMsg(GroupParamTest.TestController4.class,"test1",params);
+
         System.out.println(returnResult);
         Assert.assertEquals(result,returnResult);
     }

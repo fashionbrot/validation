@@ -5,7 +5,7 @@ import lombok.Data;
 
 @Builder
 @Data
-public class MarsViolation {
+public class Violation {
     /**
      * 验证字段
      */

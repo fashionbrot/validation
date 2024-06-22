@@ -1,6 +1,6 @@
 package com.github.fashionbrot.exception;
 
-import com.github.fashionbrot.constraint.MarsViolation;
+import com.github.fashionbrot.constraint.Violation;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -24,9 +24,9 @@ public class ValidatedException extends RuntimeException  {
      */
     private Integer valueIndex;
 
-    private List<MarsViolation> violations;
+    private List<Violation> violations;
 
-    public ValidatedException(List<MarsViolation> violations) {
+    public ValidatedException(List<Violation> violations) {
         super();
         this.violations = violations;
     }

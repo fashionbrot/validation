@@ -2,7 +2,7 @@ package com.github.fashionbrot.exception;
 
 
 import com.github.fashionbrot.common.util.ObjectUtil;
-import com.github.fashionbrot.constraint.MarsViolation;
+import com.github.fashionbrot.constraint.Violation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.BindException;
@@ -51,7 +51,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(ValidatedException.class)
     @ResponseStatus(HttpStatus.OK)
     public Object ValidatedException(ValidatedException e) {
-        List<MarsViolation> violations = e.getViolations();
+        List<Violation> violations = e.getViolations();
         if (ObjectUtil.isEmpty(violations)){
             return e.getMsg();
         }else {

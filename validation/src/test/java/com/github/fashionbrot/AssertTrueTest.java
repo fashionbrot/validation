@@ -55,7 +55,7 @@ public class AssertTrueTest {
 
     @Test
     public void test3(){
-        String returnResult="ValidatedException(fieldName=null, msg=null, annotationName=null, value=null, valueIndex=null, violations=[MarsViolation(fieldName=arg0, msg=参数错误1, annotationName=AssertTrue, value=null, valueIndex=0)])";
+        String returnResult="ValidatedException(fieldName=null, msg=null, annotationName=null, value=null, valueIndex=null, violations=[Violation(fieldName=arg0, msg=参数错误1, annotationName=AssertTrue, value=null, valueIndex=0)])";
         String test = MethodUtil.getMsg(Controller3.class, "test", new Object[]{null,null});
         System.out.println(test);
         Assert.assertEquals(test,returnResult);
@@ -71,7 +71,7 @@ public class AssertTrueTest {
 
     @Test
     public void test4(){
-        String returnResult="ValidatedException(fieldName=null, msg=null, annotationName=null, value=null, valueIndex=null, violations=[MarsViolation(fieldName=arg1, msg=参数错误2, annotationName=AssertTrue, value=false, valueIndex=1)])";
+        String returnResult="ValidatedException(fieldName=null, msg=null, annotationName=null, value=null, valueIndex=null, violations=[Violation(fieldName=arg1, msg=参数错误2, annotationName=AssertTrue, value=false, valueIndex=1)])";
         String test = MethodUtil.getMsg(Controller4.class, "test", new Object[]{true,"false"});
         System.out.println(test);
         Assert.assertEquals(test,returnResult);
