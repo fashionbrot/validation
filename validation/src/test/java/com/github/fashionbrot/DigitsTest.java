@@ -25,7 +25,7 @@ public class DigitsTest {
 
     @Test
     public void test1(){
-        String returnResult="ValidatedException(fieldName=null, msg=null, annotationName=null, value=null, valueIndex=null, violations=[MarsViolation(fieldName=arg0, msg=参数错误1, annotationName=Digits, value=1a, valueIndex=0), MarsViolation(fieldName=arg2, msg=参数错误3, annotationName=Digits, value=, valueIndex=2), MarsViolation(fieldName=arg3, msg=参数错误4, annotationName=Digits, value=null, valueIndex=3)])";
+        String returnResult="ValidatedException(fieldName=null, msg=null, annotationName=null, value=null, valueIndex=null, violations=[Violation(fieldName=arg0, msg=参数错误1, annotationName=Digits, value=1a, valueIndex=0), Violation(fieldName=arg2, msg=参数错误3, annotationName=Digits, value=, valueIndex=2), Violation(fieldName=arg3, msg=参数错误4, annotationName=Digits, value=null, valueIndex=3)])";
         String test = MethodUtil.getMsg(Controller1.class, "test", new Object[]{"1a","5107512.8607082342","",null,"-12","-11212.12121"});
         System.out.println(test);
         Assert.assertEquals(test,returnResult);

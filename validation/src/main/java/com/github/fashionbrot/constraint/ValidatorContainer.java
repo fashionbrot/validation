@@ -1,6 +1,4 @@
-package com.github.fashionbrot.validator;
-
-import com.github.fashionbrot.constraint.ConstraintValidator;
+package com.github.fashionbrot.constraint;
 
 import java.lang.annotation.Annotation;
 

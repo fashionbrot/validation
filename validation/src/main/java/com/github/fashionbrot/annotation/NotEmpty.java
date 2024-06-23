@@ -18,11 +18,18 @@ import java.lang.annotation.*;
 @Retention(RetentionPolicy.RUNTIME)
 public @interface NotEmpty {
 
-    String msg() default  "validated.NotEmpty.msg";
+    String msg() default  "${validated.NotEmpty.msg}";
 
     /**
      * default @see com.github.fashionbrot.groups.DefaultGroup
      * @return groups
      */
     Class<?>[] groups() default  {};
+
+    /**
+     * ognl expression
+     * @return String
+     */
+    String expression() default "";
+
 }

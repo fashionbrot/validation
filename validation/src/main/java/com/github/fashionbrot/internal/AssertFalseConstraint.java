@@ -19,8 +19,7 @@ public class AssertFalseConstraint implements ConstraintValidator<AssertFalse, O
         }
 
         if(valueType == String.class || valueType== boolean.class || valueType == Boolean.class){
-            boolean bool = ObjectUtil.parseBoolean(strValue);
-            return !bool;
+            return ObjectUtil.isFalse(strValue);
         }
         return true;
 	}

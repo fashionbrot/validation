@@ -21,7 +21,7 @@ public @interface NotEqualLength {
     int length();
 
 
-    String msg() default "validated.NotEqualLength.msg";
+    String msg() default "${validated.NotEqualLength.msg}";
     /**
      * 是否跳过空值
      * @return boolean
@@ -32,4 +32,10 @@ public @interface NotEqualLength {
      * @return groups
      */
     Class<?>[] groups() default  {};
+
+    /**
+     * ognl expression
+     * @return String
+     */
+    String expression() default "";
 }

@@ -13,7 +13,7 @@ import java.lang.annotation.*;
 @Retention(RetentionPolicy.RUNTIME)
 public @interface AssertFalse {
 
-    String msg() default "validated.AssertFalse.msg";
+    String msg() default "${validated.AssertFalse.msg}";
 
     /**
      * 是否跳过空值
@@ -25,4 +25,10 @@ public @interface AssertFalse {
      * @return groups
      */
     Class<?>[] groups() default  {};
+
+    /**
+     * ognl expression
+     * @return String
+     */
+    String expression() default "";
 }

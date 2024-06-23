@@ -5,8 +5,6 @@ import com.github.fashionbrot.annotation.NotNull;
 import com.github.fashionbrot.annotation.Valid;
 import com.github.fashionbrot.annotation.Validated;
 import com.github.fashionbrot.exception.ValidatedException;
-import com.github.fashionbrot.validator.Validator;
-import com.github.fashionbrot.validator.ValidatorImpl;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -31,17 +29,9 @@ public class NotNullTest {
 
     @Test
     public void test1(){
-        Method[] methods = NotNullTest.TestController.class.getDeclaredMethods();
-        Method method  = Arrays.stream(methods).filter(m -> m.getName().equals("test1")).findFirst().get();
-
         String result="ValidatedException(fieldName=arg0, msg=string 不能为空, annotationName=NotNull, value=null, valueIndex=0, violations=null)";
-        String returnResult="";
-        try {
-            Validator marsValidator = new ValidatorImpl();
-            marsValidator.validParameter(method,new Object[]{null},null);
-        }catch (ValidatedException e){
-            returnResult = e.toString();
-        }
+        String returnResult=MethodUtil.getMsg(NotNullTest.TestController.class,"test1",new Object[]{null});
+
         System.out.println(returnResult);
         Assert.assertEquals(result,returnResult);
     }
@@ -62,20 +52,14 @@ public class NotNullTest {
 
     @Test
     public void test2(){
-        Method[] methods = NotNullTest.TestController2.class.getDeclaredMethods();
-        Method method  = Arrays.stream(methods).filter(m -> m.getName().equals("test2")).findFirst().get();
+
+        Test2Req test2Req =new Test2Req();
+        test2Req.setAbc(null);
+
 
         String result="ValidatedException(fieldName=abc, msg=abc不能为null, annotationName=NotNull, value=null, valueIndex=0, violations=null)";
-        String returnResult="";
-        try {
-            Test2Req test2Req =new Test2Req();
-            test2Req.setAbc(null);
+        String returnResult=MethodUtil.getMsg(NotNullTest.TestController2.class,"test2",new Object[]{test2Req});
 
-            Validator marsValidator = new ValidatorImpl();
-            marsValidator.validParameter(method,new Object[]{test2Req},null);
-        }catch (ValidatedException e){
-            returnResult = e.toString();
-        }
         System.out.println(returnResult);
         Assert.assertEquals(result,returnResult);
     }
@@ -90,23 +74,22 @@ public class NotNullTest {
 
     @Test
     public void test3(){
-        Method[] methods = NotNullTest.TestController3.class.getDeclaredMethods();
-        Method method  = Arrays.stream(methods).filter(m -> m.getName().equals("test3")).findFirst().get();
+        Test2Req test2Req =new Test2Req();
+        test2Req.setAbc("abc");
+
+        Test2Req test22Req =new Test2Req();
+        test22Req.setAbc(null);
 
         String result="ValidatedException(fieldName=abc, msg=abc不能为null, annotationName=NotNull, value=null, valueIndex=1, violations=null)";
-        String returnResult="";
-        try {
-            Test2Req test2Req =new Test2Req();
-            test2Req.setAbc("abc");
-
-            Test2Req test22Req =new Test2Req();
-            test22Req.setAbc(null);
-
-            Validator marsValidator = new ValidatorImpl();
-            marsValidator.validParameter(method,new Object[]{Arrays.asList(test2Req,test22Req)},null);
-        }catch (ValidatedException e){
-            returnResult = e.toString();
-        }
+        String returnResult=MethodUtil.getMsg(NotNullTest.TestController3.class,"test3",new Object[]{Arrays.asList(test2Req,test22Req)});
+//        try {
+//
+//
+//            Validator marsValidator = new ValidatorImpl();
+//            marsValidator.validParameter(method,new Object[]{Arrays.asList(test2Req,test22Req)},null);
+//        }catch (ValidatedException e){
+//            returnResult = e.toString();
+//        }
         System.out.println(returnResult);
         Assert.assertEquals(result,returnResult);
     }
@@ -120,23 +103,23 @@ public class NotNullTest {
 
     @Test
     public void test4(){
-        Method[] methods = NotNullTest.TestController4.class.getDeclaredMethods();
-        Method method  = Arrays.stream(methods).filter(m -> m.getName().equals("test4")).findFirst().get();
+
+        Test2Req test2Req =new Test2Req();
+        test2Req.setAbc("abc");
+
+        Test2Req test22Req =new Test2Req();
+        test22Req.setAbc(null);
 
         String result="ValidatedException(fieldName=abc, msg=abc不能为null, annotationName=NotNull, value=null, valueIndex=1, violations=null)";
-        String returnResult="";
-        try {
-            Test2Req test2Req =new Test2Req();
-            test2Req.setAbc("abc");
-
-            Test2Req test22Req =new Test2Req();
-            test22Req.setAbc(null);
-
-            Validator marsValidator = new ValidatorImpl();
-            marsValidator.validParameter(method,new Object[]{new Object[]{test2Req,test22Req}},null);
-        }catch (ValidatedException e){
-            returnResult = e.toString();
-        }
+        String returnResult=MethodUtil.getMsg(NotNullTest.TestController4.class,"test4",new Object[]{new Object[]{test2Req,test22Req}});
+//        try {
+//
+//
+//            Validator marsValidator = new ValidatorImpl();
+//            marsValidator.validParameter(method,new Object[]{new Object[]{test2Req,test22Req}},null);
+//        }catch (ValidatedException e){
+//            returnResult = e.toString();
+//        }
         System.out.println(returnResult);
         Assert.assertEquals(result,returnResult);
     }
@@ -158,26 +141,20 @@ public class NotNullTest {
 
     @Test
     public void test5(){
-        Method[] methods = NotNullTest.TestController5.class.getDeclaredMethods();
-        Method method  = Arrays.stream(methods).filter(m -> m.getName().equals("test5")).findFirst().get();
+
+        Test2Req test2Req =new Test2Req();
+        test2Req.setAbc("abc");
+
+        Test2Req test22Req =new Test2Req();
+        test22Req.setAbc(null);
+        TestReq5 testReq5=new TestReq5();
+        testReq5.setTest2Reqs(Arrays.asList(test2Req,test22Req));
+        Object[] params =new Object[] {testReq5};
+
 
         String result="ValidatedException(fieldName=abc, msg=abc不能为null, annotationName=NotNull, value=null, valueIndex=1, violations=null)";
-        String returnResult="";
-        try {
-            Test2Req test2Req =new Test2Req();
-            test2Req.setAbc("abc");
+        String returnResult=MethodUtil.getMsg(NotNullTest.TestController5.class,"test5",params);
 
-            Test2Req test22Req =new Test2Req();
-            test22Req.setAbc(null);
-            TestReq5 testReq5=new TestReq5();
-            testReq5.setTest2Reqs(Arrays.asList(test2Req,test22Req));
-            Object[] params =new Object[] {testReq5};
-
-            Validator marsValidator = new ValidatorImpl();
-            marsValidator.validParameter(method,params,null);
-        }catch (ValidatedException e){
-            returnResult = e.toString();
-        }
         System.out.println(returnResult);
         Assert.assertEquals(result,returnResult);
     }
@@ -199,27 +176,20 @@ public class NotNullTest {
 
     @Test
     public void test6(){
-        Method[] methods = NotNullTest.TestController6.class.getDeclaredMethods();
-        Method method  = Arrays.stream(methods).filter(m -> m.getName().equals("test6")).findFirst().get();
+
+        Test2Req test2Req =new Test2Req();
+        test2Req.setAbc("abc");
+
+        Test2Req test22Req =new Test2Req();
+        test22Req.setAbc(null);
+
+        TestReq6 testReq6=new TestReq6();
+        testReq6.setTest2Reqs(new Test2Req[]{test2Req,test22Req});
+        Object[] params =new Object[] {testReq6};
 
         String result="ValidatedException(fieldName=abc, msg=abc不能为null, annotationName=NotNull, value=null, valueIndex=1, violations=null)";
-        String returnResult="";
-        try {
-            Test2Req test2Req =new Test2Req();
-            test2Req.setAbc("abc");
+        String returnResult=MethodUtil.getMsg(NotNullTest.TestController6.class,"test6",params);
 
-            Test2Req test22Req =new Test2Req();
-            test22Req.setAbc(null);
-
-            TestReq6 testReq6=new TestReq6();
-            testReq6.setTest2Reqs(new Test2Req[]{test2Req,test22Req});
-            Object[] params =new Object[] {testReq6};
-
-            Validator marsValidator = new ValidatorImpl();
-            marsValidator.validParameter(method,params,null);
-        }catch (ValidatedException e){
-            returnResult = e.toString();
-        }
         System.out.println(returnResult);
         Assert.assertEquals(result,returnResult);
     }

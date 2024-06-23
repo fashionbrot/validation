@@ -15,7 +15,7 @@ import java.lang.annotation.*;
 @Retention(RetentionPolicy.RUNTIME)
 public @interface CreditCard {
 
-    String msg() default "validated.CreditCard.msg";
+    String msg() default "${validated.CreditCard.msg}";
 
     /**
      * 正则表达式
@@ -33,4 +33,10 @@ public @interface CreditCard {
      * @return groups
      */
     Class<?>[] groups() default  {};
+
+    /**
+     * ognl expression
+     * @return String
+     */
+    String expression() default "";
 }

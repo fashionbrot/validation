@@ -21,7 +21,7 @@ public class IdCardTest {
 
     @Test
     public void test1(){
-        String returnResult="ValidatedException(fieldName=null, msg=null, annotationName=null, value=null, valueIndex=null, violations=[MarsViolation(fieldName=arg1, msg=身份证格式不正确2, annotationName=IdCard, value=513701930509101, valueIndex=1)])";
+        String returnResult="ValidatedException(fieldName=null, msg=null, annotationName=null, value=null, valueIndex=null, violations=[Violation(fieldName=arg1, msg=身份证格式不正确2, annotationName=IdCard, value=513701930509101, valueIndex=1)])";
         String test = MethodUtil.getMsg(Controller1.class, "test", new Object[]{"110101200507123071","513701930509101"});
         System.out.println(test);
         Assert.assertEquals(test,returnResult);

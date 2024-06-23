@@ -16,6 +16,32 @@ import java.util.Map;
 @Slf4j
 public class MethodUtil {
 
+    /**
+     * 判断 Field 是否是 static 或者 final
+     * @param field field
+     * @return boolean
+     */
+    public static boolean isStaticOrFinal(Field field){
+        return isStatic(field) || isFinal(field);
+    }
+
+    /**
+     * 判断 Field 是否是 static
+     * @param field field
+     * @return boolean
+     */
+    public static boolean isStatic(Field field){
+        return Modifier.isStatic(field.getModifiers());
+    }
+
+    /**
+     * 判断 Field 是否是 final
+     * @param field field
+     * @return boolean
+     */
+    public static boolean isFinal(Field field){
+        return Modifier.isFinal(field.getModifiers());
+    }
 
     public static Object getFieldValue(Field field,Object object){
         if (field!=null && !Modifier.isStatic(field.getModifiers())){
@@ -91,6 +117,18 @@ public class MethodUtil {
             }
         }
         return msg;
+    }
+
+    public static Method filterMethodName(Method[] methods,String methodName){
+        if (ObjectUtil.isNotEmpty(methods)){
+            for (int i = 0; i < methods.length; i++) {
+                Method method = methods[i];
+                if (methodName.equals(method.getName())){
+                    return method;
+                }
+            }
+        }
+        return null;
     }
 
 

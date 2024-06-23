@@ -15,7 +15,7 @@ import java.lang.annotation.*;
 public @interface Digits {
 
 
-    String msg() default "validated.Digits.msg";
+    String msg() default "${validated.Digits.msg}";
 
     /**
      * 是否跳过空值
@@ -27,4 +27,10 @@ public @interface Digits {
      * @return groups
      */
     Class<?>[] groups() default  {};
+
+    /**
+     * ognl expression
+     * @return String
+     */
+    String expression() default "";
 }

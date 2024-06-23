@@ -3,8 +3,6 @@ package com.github.fashionbrot;
 import com.github.fashionbrot.annotation.Range;
 import com.github.fashionbrot.annotation.Validated;
 import com.github.fashionbrot.exception.ValidatedException;
-import com.github.fashionbrot.validator.Validator;
-import com.github.fashionbrot.validator.ValidatorImpl;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -29,17 +27,9 @@ public class RangeTest {
 
     @Test
     public void test1(){
-        Method[] methods = RangeTest.TestController1.class.getDeclaredMethods();
-        Method method  = Arrays.stream(methods).filter(m -> m.getName().equals("test")).findFirst().get();
+        String result="ValidatedException(fieldName=null, msg=null, annotationName=null, value=null, valueIndex=null, violations=[Violation(fieldName=arg0, msg=应当在1~10之间, annotationName=Range, value=0, valueIndex=0)])";
+        String returnResult=MethodUtil.getMsg(RangeTest.TestController1.class,"test",new Object[]{BigDecimal.ZERO,BigDecimal.ONE,new BigDecimal("10")});
 
-        String result="ValidatedException(fieldName=null, msg=null, annotationName=null, value=null, valueIndex=null, violations=[MarsViolation(fieldName=arg0, msg=应当在1~10之间, annotationName=Range, value=0, valueIndex=0)])";
-        String returnResult="";
-        try {
-            Validator marsValidator = new ValidatorImpl();
-            marsValidator.validParameter(method,new Object[]{BigDecimal.ZERO,BigDecimal.ONE,new BigDecimal("10")},null);
-        }catch (ValidatedException e){
-            returnResult = e.toString();
-        }
         System.out.println(returnResult);
         Assert.assertEquals(result,returnResult);
     }
@@ -55,17 +45,9 @@ public class RangeTest {
 
     @Test
     public void test2(){
-        Method[] methods = RangeTest.TestController2.class.getDeclaredMethods();
-        Method method  = Arrays.stream(methods).filter(m -> m.getName().equals("test")).findFirst().get();
+        String result="ValidatedException(fieldName=null, msg=null, annotationName=null, value=null, valueIndex=null, violations=[Violation(fieldName=arg0, msg=应当在1~10之间, annotationName=Range, value=0, valueIndex=0), Violation(fieldName=arg2, msg=应当在1~10之间, annotationName=Range, value=11, valueIndex=2)])";
+        String returnResult=MethodUtil.getMsg(RangeTest.TestController2.class,"test",new Object[]{BigInteger.ZERO,BigInteger.ONE,new BigInteger("11")});
 
-        String result="ValidatedException(fieldName=null, msg=null, annotationName=null, value=null, valueIndex=null, violations=[MarsViolation(fieldName=arg0, msg=应当在1~10之间, annotationName=Range, value=0, valueIndex=0), MarsViolation(fieldName=arg2, msg=应当在1~10之间, annotationName=Range, value=11, valueIndex=2)])";
-        String returnResult="";
-        try {
-            Validator marsValidator = new ValidatorImpl();
-            marsValidator.validParameter(method,new Object[]{BigInteger.ZERO,BigInteger.ONE,new BigInteger("11")},null);
-        }catch (ValidatedException e){
-            returnResult = e.toString();
-        }
         System.out.println(returnResult);
         Assert.assertEquals(result,returnResult);
     }
@@ -82,17 +64,9 @@ public class RangeTest {
 
     @Test
     public void test3(){
-        Method[] methods = RangeTest.TestController3.class.getDeclaredMethods();
-        Method method  = Arrays.stream(methods).filter(m -> m.getName().equals("test")).findFirst().get();
+        String result="ValidatedException(fieldName=null, msg=null, annotationName=null, value=null, valueIndex=null, violations=[Violation(fieldName=arg0, msg=应当在1~10之间, annotationName=Range, value=0, valueIndex=0), Violation(fieldName=arg2, msg=应当在1~10之间, annotationName=Range, value=11, valueIndex=2)])";
+        String returnResult=MethodUtil.getMsg(RangeTest.TestController3.class,"test",new Object[]{(byte)0,new Byte("1"),new Byte("11")});
 
-        String result="ValidatedException(fieldName=null, msg=null, annotationName=null, value=null, valueIndex=null, violations=[MarsViolation(fieldName=arg0, msg=应当在1~10之间, annotationName=Range, value=0, valueIndex=0), MarsViolation(fieldName=arg2, msg=应当在1~10之间, annotationName=Range, value=11, valueIndex=2)])";
-        String returnResult="";
-        try {
-            Validator marsValidator = new ValidatorImpl();
-            marsValidator.validParameter(method,new Object[]{(byte)0,new Byte("1"),new Byte("11")},null);
-        }catch (ValidatedException e){
-            returnResult = e.toString();
-        }
         System.out.println(returnResult);
         Assert.assertEquals(result,returnResult);
     }
@@ -108,17 +82,9 @@ public class RangeTest {
 
     @Test
     public void test4(){
-        Method[] methods = RangeTest.TestController4.class.getDeclaredMethods();
-        Method method  = Arrays.stream(methods).filter(m -> m.getName().equals("test")).findFirst().get();
+        String result="ValidatedException(fieldName=null, msg=null, annotationName=null, value=null, valueIndex=null, violations=[Violation(fieldName=arg0, msg=应当在1~10之间, annotationName=Range, value=0, valueIndex=0), Violation(fieldName=arg2, msg=应当在1~10之间, annotationName=Range, value=11, valueIndex=2)])";
+        String returnResult=MethodUtil.getMsg(RangeTest.TestController4.class,"test",new Object[]{(short)0,new Short("1"),new Short("11")});
 
-        String result="ValidatedException(fieldName=null, msg=null, annotationName=null, value=null, valueIndex=null, violations=[MarsViolation(fieldName=arg0, msg=应当在1~10之间, annotationName=Range, value=0, valueIndex=0), MarsViolation(fieldName=arg2, msg=应当在1~10之间, annotationName=Range, value=11, valueIndex=2)])";
-        String returnResult="";
-        try {
-            Validator marsValidator = new ValidatorImpl();
-            marsValidator.validParameter(method,new Object[]{(short)0,new Short("1"),new Short("11")},null);
-        }catch (ValidatedException e){
-            returnResult = e.toString();
-        }
         System.out.println(returnResult);
         Assert.assertEquals(result,returnResult);
     }
@@ -136,17 +102,9 @@ public class RangeTest {
 
     @Test
     public void test5(){
-        Method[] methods = RangeTest.TestController5.class.getDeclaredMethods();
-        Method method  = Arrays.stream(methods).filter(m -> m.getName().equals("test")).findFirst().get();
+        String result="ValidatedException(fieldName=null, msg=null, annotationName=null, value=null, valueIndex=null, violations=[Violation(fieldName=arg0, msg=应当在1~10之间, annotationName=Range, value=0, valueIndex=0), Violation(fieldName=arg2, msg=应当在1~10之间, annotationName=Range, value=11, valueIndex=2)])";
+        String returnResult=MethodUtil.getMsg(RangeTest.TestController5.class,"test",new Object[]{0,new Integer("1"),new Integer("11")});
 
-        String result="ValidatedException(fieldName=null, msg=null, annotationName=null, value=null, valueIndex=null, violations=[MarsViolation(fieldName=arg0, msg=应当在1~10之间, annotationName=Range, value=0, valueIndex=0), MarsViolation(fieldName=arg2, msg=应当在1~10之间, annotationName=Range, value=11, valueIndex=2)])";
-        String returnResult="";
-        try {
-            Validator marsValidator = new ValidatorImpl();
-            marsValidator.validParameter(method,new Object[]{0,new Integer("1"),new Integer("11")},null);
-        }catch (ValidatedException e){
-            returnResult = e.toString();
-        }
         System.out.println(returnResult);
         Assert.assertEquals(result,returnResult);
     }
@@ -163,17 +121,9 @@ public class RangeTest {
 
     @Test
     public void test6(){
-        Method[] methods = RangeTest.TestController6.class.getDeclaredMethods();
-        Method method  = Arrays.stream(methods).filter(m -> m.getName().equals("test")).findFirst().get();
+        String result="ValidatedException(fieldName=null, msg=null, annotationName=null, value=null, valueIndex=null, violations=[Violation(fieldName=arg0, msg=应当在1~10之间, annotationName=Range, value=0.0, valueIndex=0), Violation(fieldName=arg2, msg=应当在1~10之间, annotationName=Range, value=11.0, valueIndex=2)])";
+        String returnResult=MethodUtil.getMsg(RangeTest.TestController6.class,"test",new Object[]{(float)0,new Float("1"),new Float("11")});
 
-        String result="ValidatedException(fieldName=null, msg=null, annotationName=null, value=null, valueIndex=null, violations=[MarsViolation(fieldName=arg0, msg=应当在1~10之间, annotationName=Range, value=0.0, valueIndex=0), MarsViolation(fieldName=arg2, msg=应当在1~10之间, annotationName=Range, value=11.0, valueIndex=2)])";
-        String returnResult="";
-        try {
-            Validator marsValidator = new ValidatorImpl();
-            marsValidator.validParameter(method,new Object[]{(float)0,new Float("1"),new Float("11")},null);
-        }catch (ValidatedException e){
-            returnResult = e.toString();
-        }
         System.out.println(returnResult);
         Assert.assertEquals(result,returnResult);
     }
@@ -203,7 +153,7 @@ public class RangeTest {
         build.setValue2(null);
 
         String returnResult = MethodUtil.getMsg(RangeTest.TestController7.class, "test", new Object[]{build});
-        String result="ValidatedException(fieldName=null, msg=null, annotationName=null, value=null, valueIndex=null, violations=[MarsViolation(fieldName=value1, msg=应当在1~10之间, annotationName=Range, value=0, valueIndex=0)])";
+        String result="ValidatedException(fieldName=null, msg=null, annotationName=null, value=null, valueIndex=null, violations=[Violation(fieldName=value1, msg=应当在1~10之间, annotationName=Range, value=0, valueIndex=0)])";
         System.out.println(returnResult);
         Assert.assertEquals(result,returnResult);
     }
@@ -231,7 +181,7 @@ public class RangeTest {
         RangeRequest8 build = new RangeRequest8();
 
         String returnResult = MethodUtil.getMsg(RangeTest.TestController8.class, "test", new Object[]{build});
-        String result="ValidatedException(fieldName=null, msg=null, annotationName=null, value=null, valueIndex=null, violations=[MarsViolation(fieldName=value1, msg=应当在1~10之间, annotationName=Range, value=0, valueIndex=0), MarsViolation(fieldName=value2, msg=应当在1~10之间, annotationName=Range, value=null, valueIndex=0)])";
+        String result="ValidatedException(fieldName=null, msg=null, annotationName=null, value=null, valueIndex=null, violations=[Violation(fieldName=value1, msg=应当在1~10之间, annotationName=Range, value=0, valueIndex=0), Violation(fieldName=value2, msg=应当在1~10之间, annotationName=Range, value=null, valueIndex=0)])";
         System.out.println(returnResult);
         Assert.assertEquals(result,returnResult);
     }

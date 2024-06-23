@@ -27,7 +27,7 @@ public class EmailTest {
 
     @Test
     public void test1(){
-        String returnResult="ValidatedException(fieldName=null, msg=null, annotationName=null, value=null, valueIndex=null, violations=[MarsViolation(fieldName=arg0, msg=邮箱格式不正确1, annotationName=Email, value=1a, valueIndex=0), MarsViolation(fieldName=arg1, msg=邮箱格式不正确2, annotationName=Email, value=, valueIndex=1), MarsViolation(fieldName=arg2, msg=邮箱格式不正确3, annotationName=Email, value=null, valueIndex=2), MarsViolation(fieldName=arg4, msg=char邮箱格式不正确5, annotationName=Email, value=1a, valueIndex=4), MarsViolation(fieldName=arg5, msg=char邮箱格式不正确6, annotationName=Email, value=, valueIndex=5)])";
+        String returnResult="ValidatedException(fieldName=null, msg=null, annotationName=null, value=null, valueIndex=null, violations=[Violation(fieldName=arg0, msg=邮箱格式不正确1, annotationName=Email, value=1a, valueIndex=0), Violation(fieldName=arg1, msg=邮箱格式不正确2, annotationName=Email, value=, valueIndex=1), Violation(fieldName=arg2, msg=邮箱格式不正确3, annotationName=Email, value=null, valueIndex=2), Violation(fieldName=arg4, msg=char邮箱格式不正确5, annotationName=Email, value=1a, valueIndex=4), Violation(fieldName=arg5, msg=char邮箱格式不正确6, annotationName=Email, value=, valueIndex=5)])";
         String test = MethodUtil.getMsg(Controller1.class, "test", new Object[]{"1a","",null,"fashionbrot@163.com","1a","",null,"fashionbrot@163.com"});
         System.out.println(test);
         Assert.assertEquals(test,returnResult);

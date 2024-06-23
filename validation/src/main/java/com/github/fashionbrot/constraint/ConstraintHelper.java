@@ -2,9 +2,9 @@ package com.github.fashionbrot.constraint;
 
 
 import com.github.fashionbrot.annotation.*;
+import com.github.fashionbrot.common.util.ObjectUtil;
 import com.github.fashionbrot.internal.*;
 import com.github.fashionbrot.util.MethodUtil;
-import com.github.fashionbrot.validator.ValidatorContainer;
 
 import java.lang.annotation.Annotation;
 import java.util.*;
@@ -94,6 +94,24 @@ public class ConstraintHelper {
         if (validatorContainer != null) {
             ConstraintHelper.validatorContainer = validatorContainer;
         }
+    }
+
+
+    public static List<ConstraintValidator> getAnnotationConstraintValidator(Annotation annotation){
+        List<ConstraintValidator> constraintValidatorList = ConstraintHelper.getConstraint(annotation.annotationType());
+        if (ObjectUtil.isNotEmpty(constraintValidatorList)){
+            return constraintValidatorList;
+        }
+        Constraint constraint = annotation.annotationType().getDeclaredAnnotation(Constraint.class);
+        if (constraint==null){
+            return null;
+        }
+        Class<? extends ConstraintValidator<? extends Annotation, ?>>[] classes = constraint.validatedBy();
+        if (ObjectUtil.isEmpty(classes)) {
+            return null;
+        }
+        ConstraintHelper.putConstraintValidator(annotation.annotationType(), classes);
+        return ConstraintHelper.getConstraint(annotation.annotationType());
     }
 
 }

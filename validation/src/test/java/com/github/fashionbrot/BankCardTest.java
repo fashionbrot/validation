@@ -24,7 +24,7 @@ public class BankCardTest {
 
     @Test
     public void test1(){
-        String returnResult="ValidatedException(fieldName=null, msg=null, annotationName=null, value=null, valueIndex=null, violations=[MarsViolation(fieldName=arg1, msg=参数错误2, annotationName=BankCard, value=93215061700012345681, valueIndex=1)])";
+        String returnResult="ValidatedException(fieldName=null, msg=null, annotationName=null, value=null, valueIndex=null, violations=[Violation(fieldName=arg1, msg=参数错误2, annotationName=BankCard, value=93215061700012345681, valueIndex=1)])";
         String test = MethodUtil.getMsg(Controller1.class, "test", new Object[]{"6221506170001234568","93215061700012345681"});
         System.out.println(test);
         Assert.assertEquals(test,returnResult);

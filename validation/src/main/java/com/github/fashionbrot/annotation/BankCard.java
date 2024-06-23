@@ -16,7 +16,7 @@ import java.lang.annotation.*;
 @Retention(RetentionPolicy.RUNTIME)
 public @interface BankCard {
 
-    String msg() default "validated.BankCard.msg";
+    String msg() default "${validated.BankCard.msg}";
 
     /**
      * @return String
@@ -33,4 +33,10 @@ public @interface BankCard {
      * @return groups
      */
     Class<?>[] groups() default  {};
+
+    /**
+     * ognl expression
+     * @return String
+     */
+    String expression() default "";
 }

@@ -26,7 +26,7 @@ public @interface Min {
      */
     boolean skipEmpty() default true;
 
-    String  msg() default "validated.Min.msg";
+    String  msg() default "${validated.Min.msg}";
 
     /**
      * default @see com.github.fashionbrot.groups.DefaultGroup
@@ -34,4 +34,9 @@ public @interface Min {
      */
     Class<?>[] groups() default  {};
 
+    /**
+     * ognl expression
+     * @return String
+     */
+    String expression() default "";
 }

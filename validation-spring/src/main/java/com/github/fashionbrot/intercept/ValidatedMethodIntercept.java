@@ -1,11 +1,10 @@
 package com.github.fashionbrot.intercept;
 
 
+import com.github.fashionbrot.ValidationConfiguration;
 import com.github.fashionbrot.annotation.Validated;
 import com.github.fashionbrot.common.util.ObjectUtil;
 import com.github.fashionbrot.config.GlobalValidatedProperties;
-import com.github.fashionbrot.validator.Validator;
-import com.github.fashionbrot.validator.ValidatorImpl;
 import lombok.extern.slf4j.Slf4j;
 import org.aopalliance.intercept.MethodInterceptor;
 import org.aopalliance.intercept.MethodInvocation;
@@ -28,7 +27,6 @@ public class ValidatedMethodIntercept implements MethodInterceptor, BeanFactoryA
     public static final String BEAN_NAME = "defaultValidatedMethodIntercept";
 
     private BeanFactory beanFactory;
-    private Validator validator;
     private GlobalValidatedProperties globalValidatedProperties;
 
     @Override
@@ -37,25 +35,25 @@ public class ValidatedMethodIntercept implements MethodInterceptor, BeanFactoryA
         Object[] params=methodInvocation.getArguments();
         Method method=methodInvocation.getMethod();
         Validated validated=method.getDeclaredAnnotation(Validated.class);
-        String language = null;
-        if (validated!=null) {
-            language = getLanguage();
-            validator.validParameter(method, params,language);
-        }
+        if (validated==null){
+            return methodInvocation.proceed();
+        }else{
+            String language = getLanguage();
+            String springProfilesActive = globalValidatedProperties.getSpringProfilesActive();
+            ValidationConfiguration configuration = new ValidationConfiguration(validated.groups(),validated.failFast(),language,springProfilesActive);
+            configuration.validParameter(method.getParameters(),params);
 
-        Object object =  methodInvocation.proceed();
-        if (validated.validReturnValue()) {
-            validator.validReturnValue(method, object,language);
+            Object proceed = methodInvocation.proceed();
+            if (validated.validReturnValue()){
+                configuration.validReturnValue(proceed);
+            }
+            return proceed;
         }
-        return object;
     }
 
     @Override
     public void setBeanFactory(BeanFactory beanFactory) throws BeansException {
         this.beanFactory  = beanFactory;
-        if (beanFactory!=null){
-            this.validator = (ValidatorImpl) beanFactory.getBean(ValidatorImpl.BEAN_NAME);
-        }
     }
 
 
@@ -68,6 +66,10 @@ public class ValidatedMethodIntercept implements MethodInterceptor, BeanFactoryA
         if (requestAttributes!=null){
             HttpServletRequest request = ((ServletRequestAttributes)requestAttributes).getRequest();
             if (request!=null){
+                String header = request.getHeader(globalValidatedProperties.getLocaleParamName());
+                if (ObjectUtil.isNotEmpty(header)){
+                    return header;
+                }
                 return request.getParameter(globalValidatedProperties.getLocaleParamName());
             }
         }

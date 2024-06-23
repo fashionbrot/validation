@@ -3,8 +3,7 @@ package com.github.fashionbrot;
 import com.github.fashionbrot.annotation.Contain;
 import com.github.fashionbrot.annotation.Validated;
 import com.github.fashionbrot.exception.ValidatedException;
-import com.github.fashionbrot.validator.Validator;
-import com.github.fashionbrot.validator.ValidatorImpl;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -28,17 +27,9 @@ public class ContainTest {
 
     @Test
     public void test1(){
-        Method[] methods = ContainTest.TestController1.class.getDeclaredMethods();
-        Method method  = Arrays.stream(methods).filter(m -> m.getName().equals("test")).findFirst().get();
+        String result="ValidatedException(fieldName=null, msg=null, annotationName=null, value=null, valueIndex=null, violations=[Violation(fieldName=arg0, msg=参数不包含1,2, annotationName=Contain, value=0, valueIndex=0)])";
+        String returnResult=MethodUtil.getMsg(ContainTest.TestController1.class,"test",new Object[]{BigDecimal.ZERO,BigDecimal.ONE});
 
-        String result="ValidatedException(fieldName=null, msg=null, annotationName=null, value=null, valueIndex=null, violations=[MarsViolation(fieldName=arg0, msg=参数不包含1,2, annotationName=Contain, value=0, valueIndex=0)])";
-        String returnResult="";
-        try {
-            Validator marsValidator = new ValidatorImpl();
-            marsValidator.validParameter(method,new Object[]{BigDecimal.ZERO,BigDecimal.ONE},null);
-        }catch (ValidatedException e){
-            returnResult = e.toString();
-        }
         System.out.println(returnResult);
         Assert.assertEquals(result,returnResult);
     }
@@ -53,17 +44,9 @@ public class ContainTest {
 
     @Test
     public void test2(){
-        Method[] methods = ContainTest.TestController2.class.getDeclaredMethods();
-        Method method  = Arrays.stream(methods).filter(m -> m.getName().equals("test")).findFirst().get();
+        String result="ValidatedException(fieldName=null, msg=null, annotationName=null, value=null, valueIndex=null, violations=[Violation(fieldName=arg1, msg=参数不包含abc,cba, annotationName=Contain, value=cba11, valueIndex=1)])";
+        String returnResult=MethodUtil.getMsg(ContainTest.TestController2.class,"test",new Object[]{"abc","cba11"});
 
-        String result="ValidatedException(fieldName=null, msg=null, annotationName=null, value=null, valueIndex=null, violations=[MarsViolation(fieldName=arg1, msg=参数不包含abc,cba, annotationName=Contain, value=cba11, valueIndex=1)])";
-        String returnResult="";
-        try {
-            Validator marsValidator = new ValidatorImpl();
-            marsValidator.validParameter(method,new Object[]{"abc","cba11"},null);
-        }catch (ValidatedException e){
-            returnResult = e.toString();
-        }
         System.out.println(returnResult);
         Assert.assertEquals(result,returnResult);
     }
@@ -79,19 +62,13 @@ public class ContainTest {
 
     @Test
     public void test3(){
-        Method[] methods = ContainTest.TestController3.class.getDeclaredMethods();
-        Method method  = Arrays.stream(methods).filter(m -> m.getName().equals("test")).findFirst().get();
 
-        String result="ValidatedException(fieldName=null, msg=null, annotationName=null, value=null, valueIndex=null, violations=[MarsViolation(fieldName=arg0, msg=参数不包含abc,cba, annotationName=Contain, value=好风光, valueIndex=0)])";
-        String returnResult="";
-        try {
-            CharSequence value1 = "好风光";
-            CharSequence value2 = "cba";
-            Validator marsValidator = new ValidatorImpl();
-            marsValidator.validParameter(method,new Object[]{value1,value2},null);
-        }catch (ValidatedException e){
-            returnResult = e.toString();
-        }
+        CharSequence value1 = "好风光";
+        CharSequence value2 = "cba";
+
+        String result="ValidatedException(fieldName=null, msg=null, annotationName=null, value=null, valueIndex=null, violations=[Violation(fieldName=arg0, msg=参数不包含abc,cba, annotationName=Contain, value=好风光, valueIndex=0)])";
+        String returnResult= MethodUtil.getMsg(ContainTest.TestController3.class,"test",new Object[]{value1,value2});
+
         System.out.println(returnResult);
         Assert.assertEquals(result,returnResult);
     }
@@ -106,18 +83,9 @@ public class ContainTest {
 
     @Test
     public void test4(){
-        Method[] methods = ContainTest.TestController4.class.getDeclaredMethods();
-        Method method  = Arrays.stream(methods).filter(m -> m.getName().equals("test")).findFirst().get();
+        String result="ValidatedException(fieldName=null, msg=null, annotationName=null, value=null, valueIndex=null, violations=[Violation(fieldName=arg0, msg=参数不包含1,2, annotationName=Contain, value=3, valueIndex=0), Violation(fieldName=arg1, msg=参数不包含1,2, annotationName=Contain, value=4, valueIndex=1)])";
+        String returnResult=MethodUtil.getMsg(ContainTest.TestController4.class,"test",new Object[]{3,4});
 
-        String result="ValidatedException(fieldName=null, msg=null, annotationName=null, value=null, valueIndex=null, violations=[MarsViolation(fieldName=arg0, msg=参数不包含1,2, annotationName=Contain, value=3, valueIndex=0), MarsViolation(fieldName=arg1, msg=参数不包含1,2, annotationName=Contain, value=4, valueIndex=1)])";
-        String returnResult="";
-        try {
-
-            Validator marsValidator = new ValidatorImpl();
-            marsValidator.validParameter(method,new Object[]{3,4},null);
-        }catch (ValidatedException e){
-            returnResult = e.toString();
-        }
         System.out.println(returnResult);
         Assert.assertEquals(result,returnResult);
     }
@@ -137,7 +105,7 @@ public class ContainTest {
         Double value2=12323.3454;
 
         String returnResult = MethodUtil.getMsg(TestController5.class, "test", new Object[]{value1, value2});
-        String result="ValidatedException(fieldName=null, msg=null, annotationName=null, value=null, valueIndex=null, violations=[MarsViolation(fieldName=arg1, msg=参数不包含1.123,2121.35, annotationName=Contain, value=12323.3454, valueIndex=1)])";
+        String result="ValidatedException(fieldName=null, msg=null, annotationName=null, value=null, valueIndex=null, violations=[Violation(fieldName=arg1, msg=参数不包含1.123,2121.35, annotationName=Contain, value=12323.3454, valueIndex=1)])";
         System.out.println(returnResult);
         Assert.assertEquals(result,returnResult);
     }
@@ -164,7 +132,7 @@ public class ContainTest {
         RangeRequest build = new RangeRequest();
 
         String returnResult = MethodUtil.getMsg(ContainTest.TestController7.class, "test", new Object[]{build});
-        String result="ValidatedException(fieldName=null, msg=null, annotationName=null, value=null, valueIndex=null, violations=[MarsViolation(fieldName=value1, msg=参数不包含1.123,2121.35, annotationName=Contain, value=0.0, valueIndex=0), MarsViolation(fieldName=value2, msg=参数不包含1.123,2121.35, annotationName=Contain, value=null, valueIndex=0)])";
+        String result="ValidatedException(fieldName=null, msg=null, annotationName=null, value=null, valueIndex=null, violations=[Violation(fieldName=value1, msg=参数不包含1.123,2121.35, annotationName=Contain, value=0.0, valueIndex=0), Violation(fieldName=value2, msg=参数不包含1.123,2121.35, annotationName=Contain, value=null, valueIndex=0)])";
         System.out.println(returnResult);
         Assert.assertEquals(result,returnResult);
     }
@@ -192,7 +160,7 @@ public class ContainTest {
         RangeRequest8 build = new RangeRequest8();
 
         String returnResult = MethodUtil.getMsg(ContainTest.TestController8.class, "test", new Object[]{build});
-        String result="ValidatedException(fieldName=null, msg=null, annotationName=null, value=null, valueIndex=null, violations=[MarsViolation(fieldName=value1, msg=参数不包含1.123,2121.35, annotationName=Contain, value=0.0, valueIndex=0)])";
+        String result="ValidatedException(fieldName=null, msg=null, annotationName=null, value=null, valueIndex=null, violations=[Violation(fieldName=value1, msg=参数不包含1.123,2121.35, annotationName=Contain, value=0.0, valueIndex=0)])";
         System.out.println(returnResult);
         Assert.assertEquals(result,returnResult);
     }

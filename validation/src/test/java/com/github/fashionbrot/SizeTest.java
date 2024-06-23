@@ -5,7 +5,7 @@ import com.alibaba.fastjson2.JSON;
 import com.github.fashionbrot.annotation.Size;
 import com.github.fashionbrot.annotation.Valid;
 import com.github.fashionbrot.annotation.Validated;
-import com.github.fashionbrot.constraint.MarsViolation;
+import com.github.fashionbrot.constraint.Violation;
 import com.github.fashionbrot.exception.ValidatedException;
 import org.junit.Assert;
 import org.junit.Test;
@@ -29,7 +29,7 @@ public class SizeTest {
         Object[] objects = {new Integer[]{Integer.getInteger("1")}, Arrays.asList(Integer.valueOf(2))};
         ValidatedException validatedException = MethodUtil.getException(TestController2.class, "test", objects);
         if (validatedException != null) {
-            List<MarsViolation> violations = validatedException.getViolations();
+            List<Violation> violations = validatedException.getViolations();
             long count = violations.stream().filter(m -> m.getFieldName().equals("arg0") || m.getFieldName().equals("arg1")).count();
             Assert.assertEquals(count, 2);
             System.out.println(JSON.toJSONString(validatedException.getViolations()));
@@ -57,7 +57,7 @@ public class SizeTest {
         Object[] objects = {collection, map, null, new Integer[]{}};
         ValidatedException validatedException = MethodUtil.getException(TestController3.class, "test", objects);
         if (validatedException != null) {
-            List<MarsViolation> violations = validatedException.getViolations();
+            List<Violation> violations = validatedException.getViolations();
             long count = violations.stream().filter(m -> m.getFieldName().equals("arg3")).count();
             Assert.assertEquals(count, 1);
             System.out.println(JSON.toJSONString(validatedException.getViolations()));
