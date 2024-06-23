@@ -52,11 +52,14 @@ public class ValidatedConfigBeanDefinitionRegistrar implements ImportBeanDefinit
         if (ObjectUtil.isNotEmpty(globalProperties)) {
             GlobalValidatedProperties validatedProperties = GlobalValidatedProperties.builder()
                 .localeParamName((String) globalProperties.get(GlobalValidatedProperties.LOCALE_PARAM_NAME))
+                .springProfilesActive((String) globalProperties.get(GlobalValidatedProperties.SPRING_PROFILES_ACTIVE))
                 .build();
             if (propertyResolver.containsProperty("validated.locale-param-name")) {
                 validatedProperties.setLocaleParamName(propertyResolver.getProperty("validated.locale-param-name"));
             }
-            validatedProperties.setSpringProfilesActive(propertyResolver.getProperty("spring.profiles.active","default"));
+            if (propertyResolver.containsProperty("spring.profiles.active")){
+                validatedProperties.setSpringProfilesActive(propertyResolver.getProperty("spring.profiles.active","default"));
+            }
             BeanUtil.registerSingleton(registry, beanName, validatedProperties);
         } else {
             GlobalValidatedProperties validatedProperties = GlobalValidatedProperties.builder().build();

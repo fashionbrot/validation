@@ -14,6 +14,7 @@ public class GlobalValidatedProperties {
 
     public static final String BEAN_NAME = "defaultGlobalValidatedProperties";
     public static final String LOCALE_PARAM_NAME="localeParamName";
+    public static final String SPRING_PROFILES_ACTIVE="springProfilesActive";
 
     private String localeParamName;
 

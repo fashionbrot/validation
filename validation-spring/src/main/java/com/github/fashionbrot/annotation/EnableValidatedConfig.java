@@ -17,4 +17,10 @@ public @interface EnableValidatedConfig {
      */
     String localeParamName() default "";
 
+    /**
+     * springboot ${spring.profiles.active}
+     * @return String
+     */
+    String springProfilesActive() default "";
+
 }
