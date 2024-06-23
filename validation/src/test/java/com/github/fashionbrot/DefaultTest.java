@@ -10,8 +10,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.junit.Assert;
 import org.junit.Test;
-
-import java.lang.reflect.Method;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.Arrays;
@@ -23,7 +21,7 @@ public class DefaultTest {
     public class TestController{
 
         @Validated
-        private void test1(@Default(value = "abc") String string,
+        private void test(@Default(value = "abc") String string,
                            @Default(value = "abc") CharSequence charSequence,
                            @Default(value = "11.11") BigDecimal bigDecimal,
                            @Default(value = "12") BigInteger bigInteger,
@@ -37,16 +35,13 @@ public class DefaultTest {
 
     @Test
     public void test1(){
-        Method[] methods = DefaultTest.TestController.class.getDeclaredMethods();
-        Method method  = Arrays.stream(methods).filter(m -> m.getName().equals("test1")).findFirst().get();
 
         String result="[\"abc\",\"abc\",11.11,12,2,3,4,5.5,6.5]";
-        String returnResult="";
-
         Object[] param=new Object[]{null,null,null,null,null,null,null,null,null};
 
-        ValidationConfiguration configuration=new ValidationConfiguration(method,"");
-        configuration.validParameter(param);
+        String returnResult ="" ;
+
+        MethodUtil.getMsg(DefaultTest.TestController.class,"test",param);
 
         returnResult=JSON.toJSONString(param);
         System.out.println(returnResult);
@@ -64,15 +59,12 @@ public class DefaultTest {
     }
     public class TestController2{
         @Validated
-        private void test2( Test2Req req){
+        private void test( Test2Req req){
         }
     }
 
     @Test
     public void test2(){
-        Method[] methods = DefaultTest.TestController2.class.getDeclaredMethods();
-        Method method  = Arrays.stream(methods).filter(m -> m.getName().equals("test2")).findFirst().get();
-
         String result="[{\"abc\":\"abc\"}]";
         String returnResult="";
 
@@ -80,11 +72,8 @@ public class DefaultTest {
         test2Req.setAbc(null);
         Object[] params = {test2Req};
 
-        ValidationConfiguration configuration=new ValidationConfiguration(method,"");
-        configuration.validParameter(params);
+        MethodUtil.getMsg(DefaultTest.TestController2.class,"test",params);
 
-//        Validator marsValidator = new ValidatorImpl();
-//        marsValidator.validParameter(method,params,null);
         returnResult = JSON.toJSONString(params);
         System.out.println(returnResult);
         Assert.assertEquals(result,returnResult);
@@ -93,16 +82,13 @@ public class DefaultTest {
 
     public class TestController3{
         @Validated
-        private void test3(@Valid List<Test2Req> req){
+        private void test(@Valid List<Test2Req> req){
 
         }
     }
 
     @Test
     public void test3(){
-        Method[] methods = DefaultTest.TestController3.class.getDeclaredMethods();
-        Method method  = Arrays.stream(methods).filter(m -> m.getName().equals("test3")).findFirst().get();
-
         String result="[[{\"abc\":\"abc1\"},{\"abc\":\"abc\"}]]";
         String returnResult="";
 
@@ -113,10 +99,8 @@ public class DefaultTest {
         test22Req.setAbc(null);
         Object[] params = {Arrays.asList(test2Req, test22Req)};
 
-//        Validator marsValidator = new ValidatorImpl();
-//        marsValidator.validParameter(method,params,null);
-        ValidationConfiguration configuration=new ValidationConfiguration(method,"");
-        configuration.validParameter(params);
+        MethodUtil.getMsg(DefaultTest.TestController3.class,"test",params);
+
 
         returnResult = JSON.toJSONString(params);
         System.out.println(JSON.toJSONString(params));
@@ -125,16 +109,13 @@ public class DefaultTest {
 
     public class TestController4{
         @Validated
-        private void test4(@Valid Test2Req[] req){
+        private void test(@Valid Test2Req[] req){
 
         }
     }
 
     @Test
     public void test4(){
-        Method[] methods = DefaultTest.TestController4.class.getDeclaredMethods();
-        Method method  = Arrays.stream(methods).filter(m -> m.getName().equals("test4")).findFirst().get();
-
         String result="[[{\"abc\":\"abc1\"},{\"abc\":\"abc\"}]]";
         String returnResult="";
 
@@ -145,11 +126,8 @@ public class DefaultTest {
         test22Req.setAbc(null);
         Object[] params = {new Object[]{test2Req, test22Req}};
 
-        ValidationConfiguration configuration=new ValidationConfiguration(method,"");
-        configuration.validParameter(params);
+        MethodUtil.getMsg(DefaultTest.TestController4.class,"test",params);
 
-//        Validator marsValidator = new ValidatorImpl();
-//        marsValidator.validParameter(method,params,null);
         returnResult = JSON.toJSONString(params);
         System.out.println(JSON.toJSONString(params));
         Assert.assertEquals(result,returnResult);
@@ -170,16 +148,13 @@ public class DefaultTest {
     }
     public class TestController5{
         @Validated
-        private void test5(TestReq5 testReq5){
+        private void test(TestReq5 testReq5){
 
         }
     }
 
     @Test
     public void test5(){
-        Method[] methods = DefaultTest.TestController5.class.getDeclaredMethods();
-        Method method  = Arrays.stream(methods).filter(m -> m.getName().equals("test5")).findFirst().get();
-
         String result="[{\"testReq55s\":[{\"abc\":\"abc\"},{\"abc\":\"abc\"}]}]";
         String returnResult="";
 
@@ -193,10 +168,8 @@ public class DefaultTest {
         testReq5.setTestReq55s(Arrays.asList(r1,r2));
         Object[] params =new Object[] {testReq5};
 
-        ValidationConfiguration configuration=new ValidationConfiguration(method,"");
-        configuration.validParameter(params);
-//        Validator marsValidator = new ValidatorImpl();
-//        marsValidator.validParameter(method,params,null);
+
+        MethodUtil.getMsg(DefaultTest.TestController5.class,"test",params);
 
         returnResult=JSON.toJSONString(params);
         System.out.println(returnResult);

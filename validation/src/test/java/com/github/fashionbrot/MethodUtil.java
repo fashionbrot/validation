@@ -1,5 +1,6 @@
 package com.github.fashionbrot;
 
+import com.github.fashionbrot.annotation.Validated;
 import com.github.fashionbrot.exception.ValidatedException;
 
 import java.lang.reflect.Method;
@@ -13,30 +14,23 @@ public class MethodUtil {
         return method;
     }
 
+
     public static String getMsg(Class clazz,String methodName,Object[] values){
-
-        Method method = getMethod( clazz,  methodName);
-
-        String returnResult="";
-        try {
-            ValidationConfiguration configuration=new ValidationConfiguration(method,"");
-            configuration.validParameter(values);
-//            Validator marsValidator = new ValidatorImpl();
-//            marsValidator.validParameter(method,values,null);
-        }catch (ValidatedException e){
-            returnResult = e.toString();
+        ValidatedException validatedException = getException(clazz, methodName, values);
+        if (validatedException!=null){
+            return validatedException.toString();
         }
-        return returnResult;
+        return "";
     }
 
     public static ValidatedException getException(Class clazz,String methodName,Object[] values){
-
         Method method = getMethod( clazz,  methodName);
         try {
-            ValidationConfiguration configuration=new ValidationConfiguration(method,"");
-            configuration.validParameter(values);
-//            Validator marsValidator = new ValidatorImpl();
-//            marsValidator.validParameter(method,values,null);
+            Validated validated = method.getDeclaredAnnotation(Validated.class);
+            if (validated!=null){
+                ValidationConfiguration configuration=new ValidationConfiguration(validated.groups(),validated.failFast(),"","default");
+                configuration.validParameter(method.getParameters(),values);
+            }
         }catch (ValidatedException e){
             return e;
         }
@@ -44,30 +38,8 @@ public class MethodUtil {
     }
 
     public static ValidatedException getNewException(Class clazz,String methodName,Object[] values){
-
-        Method method = getMethod( clazz,  methodName);
-        try {
-            ValidationConfiguration configuration=new ValidationConfiguration(method,"");
-            configuration.validParameter(values);
-        }catch (ValidatedException e){
-            return e;
-        }
-        return null;
+        return getException(clazz,methodName,values);
     }
 
-    public static Object getValue(Class clazz,String methodName,Object[] values){
-
-        Method method = getMethod( clazz,  methodName);
-        try {
-//            Validator marsValidator = new ValidatorImpl();
-//            marsValidator.validParameter(method,values,null);
-            ValidationConfiguration configuration=new ValidationConfiguration(method,"");
-            configuration.validParameter(values);
-
-            return values;
-        }catch (ValidatedException e){
-            return null;
-        }
-    }
 
 }

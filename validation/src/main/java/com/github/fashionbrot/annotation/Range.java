@@ -34,4 +34,10 @@ public @interface Range {//issue#1
      * @return groups
      */
     Class<?>[] groups() default  {};
+
+    /**
+     * ognl expression
+     * @return String
+     */
+    String expression() default "";
 }

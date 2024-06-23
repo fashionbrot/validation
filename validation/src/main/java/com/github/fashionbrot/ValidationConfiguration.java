@@ -35,37 +35,55 @@ import java.util.Map;
 @Slf4j
 public class ValidationConfiguration  {
 
-    private Validated validated;
-    private Method method;
+    private Class[] validatedGroups;
+    private boolean failFast;
     private String language;
-    private List<Violation> violationList=new ArrayList<>();
+    private String springProfilesActive;
+
+    private List<Violation> violationList=null;
 
     private ValidationConfiguration() {
     }
 
-    public ValidationConfiguration(Method method, String language) {
-        this.method = method;
-        this.validated = method.getDeclaredAnnotation(Validated.class);
+    public ValidationConfiguration(Class[] validatedGroups,boolean failFast, String language,String springProfilesActive) {
+        this.validatedGroups = validatedGroups;
+        this.failFast = failFast;
         this.language = language;
+        this.springProfilesActive = springProfilesActive;
+        if (!failFast){
+            violationList=new ArrayList<>();
+        }
     }
 
-    public void validParameter(Object[] arguments) {
-        Parameter[] parameters = method.getParameters();
+    public void validParameter(Parameter[] parameters,Object[] arguments) {
         validationParameters(parameters,arguments);
     }
 
-    private void validationParameters(Parameter[] parameters,Object[] params) {
-        if (validated == null) {
+    public void validReturnValue(Object returnValue) {
+        Class<?> returnValueClass = returnValue.getClass();
+        if (ObjectUtil.equals(returnValueClass, Void.class)) {
             return;
         }
+        if (JavaUtil.isPrimitive(returnValueClass)) {
+            return;
+        }
+        try {
+            entityFieldsAnnotationValid( returnValueClass, new Object[]{returnValue}, 0);
+        }finally {
+            throwException(this.violationList);
+        }
+    }
+
+    private void validationParameters(Parameter[] parameters,Object[] params) {
         if (ObjectUtil.isEmpty(parameters)) {
             return;
         }
-        for (int parameterIndex = 0; parameterIndex < parameters.length; parameterIndex++) {
-            validationParameter(parameters,params,parameterIndex);
-        }
-        if (ObjectUtil.isFalse(validated.failFast())) {
-            ExceptionUtil.throwException(violationList);
+        try {
+            for (int parameterIndex = 0; parameterIndex < parameters.length; parameterIndex++) {
+                validationParameter(parameters,params,parameterIndex);
+            }
+        }finally {
+            throwException(this.violationList);
         }
     }
 
@@ -89,7 +107,7 @@ public class ValidationConfiguration  {
                 }
             }else{
                 if (JavaUtil.isNotPrimitive(parameter.getType())){
-                    entityFieldsAnnotationValid( parameters,parameterType, params, parameterIndex );
+                    entityFieldsAnnotationValid(parameterType, params, parameterIndex );
                 }
             }
         }
@@ -102,19 +120,19 @@ public class ValidationConfiguration  {
             Object[] array = (Object[]) params[parameterIndex];
             if (ObjectUtil.isNotEmpty(array)) {
                 for (int objIndex = 0; objIndex < array.length; objIndex++) {
-                    entityFieldsAnnotationValid(parameters,convertClass, array , objIndex);
+                    entityFieldsAnnotationValid(convertClass, array , objIndex);
                 }
             }
         }
     }
 
-    private void validArrayObject(Parameter[] parameters,Field field,Object[] params,Integer parameterIndex) {
+    private void validArrayObject(Field field,Object[] params,Integer parameterIndex) {
         Class convertClass = field.getType().getComponentType();
         if (JavaUtil.isNotPrimitive(convertClass.getTypeName())) {
             Object[] array = (Object[]) MethodUtil.getFieldValue(field, params[parameterIndex]);
             if (ObjectUtil.isNotEmpty(array)) {
                 for (int objIndex = 0; objIndex < array.length; objIndex++) {
-                    entityFieldsAnnotationValid(parameters,convertClass, array , objIndex);
+                    entityFieldsAnnotationValid(convertClass, array , objIndex);
                 }
             }
         }
@@ -133,14 +151,14 @@ public class ValidationConfiguration  {
                 if (ObjectUtil.isNotEmpty(param)) {
                     for (int listIndex = 0; listIndex < param.size(); listIndex++) {
 
-                        entityFieldsAnnotationValid( parameters,typeConvertClass, param.toArray(),listIndex );
+                        entityFieldsAnnotationValid(typeConvertClass, param.toArray(),listIndex );
                     }
                 }
             }
         }
     }
 
-    public void validListObject(Parameter[] parameters,Field field,Object[] params,Integer parameterIndex){
+    private void validListObject(Field field,Object[] params,Integer parameterIndex){
         Type[] actualTypeArguments = TypeUtil.getActualTypeArguments(field);
         if (ObjectUtil.isNotEmpty(actualTypeArguments) &&
             actualTypeArguments[0] instanceof Class &&
@@ -152,16 +170,16 @@ public class ValidationConfiguration  {
                 if (ObjectUtil.isNotEmpty(param)) {
                     for (int listIndex = 0; listIndex < param.size(); listIndex++) {
 
-                        entityFieldsAnnotationValid(parameters,typeConvertClass, param.toArray(),listIndex);
+                        entityFieldsAnnotationValid(typeConvertClass, param.toArray(),listIndex);
                     }
                 }
             }
         }
     }
 
-    private void entityFieldsAnnotationValid(Parameter[] parameters,Class entityClass,Object[] params,Integer parameterIndex) {
+    private void entityFieldsAnnotationValid(Class entityClass,Object[] params,Integer parameterIndex) {
         // 判断是否 有继承类
-        checkClassSuper(parameters,entityClass,params,parameterIndex);
+        checkClassSuper(entityClass,params,parameterIndex);
 
         Field[] fields = entityClass.getDeclaredFields();
         if (ObjectUtil.isEmpty(fields)) {
@@ -177,7 +195,7 @@ public class ValidationConfiguration  {
             if (ObjectUtil.isNotEmpty(constraintAnnotationList)) {
 
                 for (Annotation annotation : constraintAnnotationList) {
-                    validationFieldAnnotation(parameters,params,parameterIndex,field,annotation);
+                    validationFieldAnnotation(params,parameterIndex,field,annotation);
                 }
 
             }else{
@@ -185,13 +203,13 @@ public class ValidationConfiguration  {
                 Valid valid = field.getDeclaredAnnotation(Valid.class);
                 if (valid!=null){
                     if (JavaUtil.isArray(fieldClassType)) {
-                        validArrayObject(parameters,field,params,parameterIndex);
+                        validArrayObject(field,params,parameterIndex);
                     } else if (JavaUtil.isCollection(fieldClassType)) {
-                        validListObject(parameters,field,params,parameterIndex);
+                        validListObject(field,params,parameterIndex);
                     }
                 }else{
                     if (JavaUtil.isNotPrimitive(field.getType())){
-                        entityFieldsAnnotationValid(parameters,fieldClassType, params, parameterIndex );
+                        entityFieldsAnnotationValid(fieldClassType, params, parameterIndex );
                     }
                 }
             }
@@ -199,14 +217,14 @@ public class ValidationConfiguration  {
     }
 
 
-    private void checkClassSuper(Parameter[] parameters,Class entityClass,Object[] params, Integer parameterIndex) {
+    private void checkClassSuper(Class entityClass,Object[] params, Integer parameterIndex) {
         if (JavaUtil.isPrimitive(entityClass)){//#issue5 修复
             return;
         }
         Class superclass = entityClass.getSuperclass();
         if (superclass != null && JavaUtil.isNotObject(superclass)) {
             //如果不是定义的类型，则把 class 当做bean 进行校验 field
-            entityFieldsAnnotationValid(parameters,superclass,params,parameterIndex);
+            entityFieldsAnnotationValid(superclass,params,parameterIndex);
         }
     }
 
@@ -224,7 +242,7 @@ public class ValidationConfiguration  {
         }
     }
 
-    private void validationFieldAnnotation(Parameter[] parameters,Object[] params,int parameterIndex,Field field,Annotation annotation){
+    private void validationFieldAnnotation(Object[] params,int parameterIndex,Field field,Annotation annotation){
         if (!checkAnnotationGroups(annotation)) {
             return;
         }
@@ -232,13 +250,12 @@ public class ValidationConfiguration  {
         if (ObjectUtil.isNotEmpty(constraintValidatorList)) {
             for (int constraintIndex = 0; constraintIndex < constraintValidatorList.size(); constraintIndex++) {
                 ConstraintValidator constraintValidator = constraintValidatorList.get(constraintIndex);
-                constraintValidatorField(parameters,field,annotation,constraintValidator,params, parameterIndex);
+                constraintValidatorField(field,annotation,constraintValidator,params, parameterIndex);
             }
         }
     }
 
-    private void constraintValidatorField(Parameter[] parameters,
-                                          Field field,
+    private void constraintValidatorField(Field field,
                                           Annotation annotation,
                                           ConstraintValidator constraintValidator,
                                           Object[] params,
@@ -252,25 +269,27 @@ public class ValidationConfiguration  {
         Class<?> fieldType = field.getType();
 
         Class validConstraintClass = constraintValidator.getClass();
-        Boolean expression = checkExpressionField(parameters,params,field,annotation,annotationMethods);
+        Boolean expression = checkExpressionField(params,field,annotation,annotationMethods);
+
         if (ObjectUtil.isTrue(expression)){
             boolean isValid = constraintValidator.isValid(annotation, fieldValue, fieldType);
             if (!isValid) {
                 String msg  = getAnnotationMsg(annotation,language);
                 addViolations(fieldValue, fieldName, annotation, msg, parameterIndex);
             }
+
+            if (MethodUtil.checkDeclaredMethod(validConstraintClass, ValidatedConst.METHOD_NAME_MODIFY)) {
+                Object reValue = constraintValidator.modify(annotation, fieldValue, fieldType);
+                if (reValue==null){
+                    return;
+                }
+                if (reValue.getClass()!= fieldType){
+                    log.warn("default value reValue class!=valueType");
+                }
+                MethodUtil.setField(field,params[parameterIndex],reValue);
+            }
         }
 
-        if (MethodUtil.checkDeclaredMethod(validConstraintClass, ValidatedConst.METHOD_NAME_MODIFY)) {
-            Object reValue = constraintValidator.modify(annotation, fieldValue, fieldType);
-            if (reValue==null){
-                return;
-            }
-            if (reValue.getClass()!= fieldType){
-                log.warn("default value reValue class!=valueType");
-            }
-            MethodUtil.setField(field,params[parameterIndex],reValue);
-        }
     }
 
 
@@ -321,17 +340,18 @@ public class ValidationConfiguration  {
         if (ObjectUtil.isEmpty(expression)) {
             return true;
         }
-        int initialCapacity = (int) (parameters.length / 0.75) + 1;
+        int initialCapacity = (int) (parameters.length+1 / 0.75) + 1;
         Map<String,Object> rootMap = new HashMap<>(initialCapacity);
         for (int j = 0; j < parameters.length; j++) {
             Parameter parameter = parameters[j];
             Object argument = params[j];
             rootMap.put(parameter.getName(),argument);
         }
+        rootMap.put(ValidatedConst.SPRING_PROFILES_ACTIVE,this.springProfilesActive);
         return OgnlCache.executeExpression(expression, rootMap);
     }
 
-    private Boolean checkExpressionField(Parameter[] parameters,Object[] params,Field field,Annotation annotation,Method[] annotationMethods){
+    private Boolean checkExpressionField(Object[] params,Field field,Annotation annotation,Method[] annotationMethods){
         Method expressionMethod = MethodUtil.filterMethodName(annotationMethods, ValidatedConst.EXPRESSION);
         if (expressionMethod == null) {
             return true;
@@ -340,25 +360,23 @@ public class ValidationConfiguration  {
         if (ObjectUtil.isEmpty(expression)) {
             return true;
         }
-        Map<String, Object> rootMap = createRootMap(parameters, params, field);
+        Map<String, Object> rootMap = createRootMap(params, field);
         return OgnlCache.executeExpression(expression, rootMap);
     }
 
-    private Map<String, Object> createRootMap(Parameter[] parameters, Object[] params, Field field) {
-        int initialCapacity = (int) (parameters.length / 0.75) + 1;
+    private Map<String, Object> createRootMap( Object[] params, Field field) {
+        int initialCapacity = (int) (params.length+1 / 0.75) + 1;
         Map<String, Object> rootMap = new HashMap<>(initialCapacity);
-        for (int i = 0; i < parameters.length; i++) {
-            String name = getClassParamName(parameters[i], field);
+        for (int i = 0; i < params.length; i++) {
+            String name = getClassParamName(field);
             rootMap.put(name, params[i]);
         }
+        rootMap.put(ValidatedConst.SPRING_PROFILES_ACTIVE,this.springProfilesActive);
         return rootMap;
     }
 
-    private String getClassParamName(Parameter parameter, Field field) {
-        ValidatedParam validatedParam = parameter.getDeclaredAnnotation(ValidatedParam.class);
-        if (validatedParam == null) {
-            validatedParam = field.getDeclaringClass().getDeclaredAnnotation(ValidatedParam.class);
-        }
+    private String getClassParamName(Field field) {
+        ValidatedParam validatedParam = field.getDeclaringClass().getDeclaredAnnotation(ValidatedParam.class);
         return validatedParam != null ? validatedParam.value() : captureName(field.getDeclaringClass().getSimpleName());
     }
 
@@ -373,7 +391,7 @@ public class ValidationConfiguration  {
     }
 
     private void addViolations(Object value, String paramName, Annotation annotation, String msg,Integer valueIndex) {
-        if (validated.failFast()) {
+        if (failFast) {
             ValidatedException.throwMsg(paramName, msg, annotation.annotationType().getSimpleName(), value, valueIndex);
         } else {
             violationList.add(Violation.builder()
@@ -387,7 +405,7 @@ public class ValidationConfiguration  {
     }
 
     private boolean checkAnnotationGroups(Annotation annotation) {
-        Class<?>[] validatedGroups = validated.groups();
+        Class<?>[] validatedGroups = this.validatedGroups;
         if (ObjectUtil.isEmpty(validatedGroups)) {
             return true;
         }
@@ -450,5 +468,12 @@ public class ValidationConfiguration  {
         cs[0] = Character.toLowerCase(cs[0]);
         return new String(cs);
     }
+
+    public  void throwException(List<Violation> ViolationList){
+        if (ObjectUtil.isFalse(this.failFast) && ObjectUtil.isNotEmpty(ViolationList)) {
+            throw new ValidatedException(ViolationList);
+        }
+    }
+
 
 }

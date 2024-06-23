@@ -22,4 +22,10 @@ public @interface Validated {
      * @return boolean
      */
     boolean failFast() default true;
+
+    /**
+     * 验证返回值 默认false
+     * @return boolean
+     */
+    boolean validReturnValue() default false;
 }

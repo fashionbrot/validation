@@ -21,4 +21,10 @@ public @interface NotNull {
      * @return groups
      */
     Class<?>[] groups() default  {};
+
+    /**
+     * ognl expression
+     * @return String
+     */
+    String expression() default "";
 }

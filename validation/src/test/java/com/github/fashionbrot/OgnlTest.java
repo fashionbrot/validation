@@ -38,7 +38,7 @@ public class OgnlTest {
 //        Map defaultContext = Ognl.createDefaultContext(root, memberAccess);
         // 创建一个 OgnlContext 对象
         OgnlContext context = new OgnlContext(classResolver,typeConverter,memberAccess);
-//        context.put("ObjectUtil",new ObjectUtil());
+        context.put("ObjectUtil",new ObjectUtil());
         // 定义要执行的表达式
         String expression = "p.name != null && p.age != null";
 
@@ -48,15 +48,15 @@ public class OgnlTest {
 //            boolean result = (boolean) Ognl.getValue(expression, context, root);
 //            System.out.println("Expression result: " + result);
 
-            System.out.println(Ognl.getValue("p.name",context,root));
+            System.out.println(Ognl.getValue("ObjectUtil.isNotEmpty(p.name)",context,root));
 
 
         } catch (OgnlException e) {
             e.printStackTrace();
         }
 
-        boolean b = OgnlCache.executeExpression("name!=null", person);
-        System.out.println(b);
+//        boolean b = OgnlCache.executeExpression("name!=null", person);
+//        System.out.println(b);
     }
 
 }

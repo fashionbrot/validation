@@ -18,11 +18,11 @@ public class ModifyTest {
 
     @Test
     public void test1(){
-        String returnResult="[{\"id\":1,\"name\":\"张三\"}]";
+        String result="[{\"id\":1,\"name\":\"张三\"}]";
         Object[] objects = {null};
-        Object object = MethodUtil.getValue(Controller1.class, "test",objects );
-        String test = JSON.toJSONString(object);
-        System.out.println(JSON.toJSONString(object));
-        Assert.assertEquals(test,returnResult);
+        MethodUtil.getMsg(Controller1.class, "test",objects );
+        String returnResult = JSON.toJSONString(objects);
+        System.out.println(returnResult);
+        Assert.assertEquals(result,returnResult);
     }
 }

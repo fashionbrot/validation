@@ -7,7 +7,7 @@ import java.lang.annotation.*;
 
 
 @Documented
-@Target({ElementType.TYPE,ElementType.PARAMETER,ElementType.FIELD})
+@Target({ElementType.TYPE})
 @Retention(RetentionPolicy.RUNTIME)
 public @interface ValidatedParam {
     String value();

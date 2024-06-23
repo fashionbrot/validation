@@ -27,7 +27,6 @@ public class ValidatedMethodIntercept implements MethodInterceptor, BeanFactoryA
     public static final String BEAN_NAME = "defaultValidatedMethodIntercept";
 
     private BeanFactory beanFactory;
-//    private Validator validator;
     private GlobalValidatedProperties globalValidatedProperties;
 
     @Override
@@ -36,21 +35,25 @@ public class ValidatedMethodIntercept implements MethodInterceptor, BeanFactoryA
         Object[] params=methodInvocation.getArguments();
         Method method=methodInvocation.getMethod();
         Validated validated=method.getDeclaredAnnotation(Validated.class);
-        if (validated!=null) {
+        if (validated==null){
+            return methodInvocation.proceed();
+        }else{
             String language = getLanguage();
-            ValidationConfiguration configuration = new ValidationConfiguration(method,language);
+            String springProfilesActive = globalValidatedProperties.getSpringProfilesActive();
+            ValidationConfiguration configuration = new ValidationConfiguration(validated.groups(),validated.failFast(),language,springProfilesActive);
+            configuration.validParameter(method.getParameters(),params);
 
-            configuration.validParameter(params);
+            Object proceed = methodInvocation.proceed();
+            if (validated.validReturnValue()){
+                configuration.validReturnValue(proceed);
+            }
+            return proceed;
         }
-        return   methodInvocation.proceed();
     }
 
     @Override
     public void setBeanFactory(BeanFactory beanFactory) throws BeansException {
         this.beanFactory  = beanFactory;
-//        if (beanFactory!=null){
-//            this.validator = (ValidatorImpl) beanFactory.getBean(ValidatorImpl.BEAN_NAME);
-//        }
     }
 
 

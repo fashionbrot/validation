@@ -33,8 +33,6 @@ public class ValidatedConfigBeanDefinitionRegistrar implements ImportBeanDefinit
 
         registerGlobalValidatedProperties(attributes,registry,environment, GlobalValidatedProperties.BEAN_NAME);
 
-        registerValidated(registry);
-
         registerValidatedMethodInterceptor(registry);
 
         registerValidatedMethodPostProcessor(registry);
@@ -58,12 +56,14 @@ public class ValidatedConfigBeanDefinitionRegistrar implements ImportBeanDefinit
             if (propertyResolver.containsProperty("validated.locale-param-name")) {
                 validatedProperties.setLocaleParamName(propertyResolver.getProperty("validated.locale-param-name"));
             }
+            validatedProperties.setSpringProfilesActive(propertyResolver.getProperty("spring.profiles.active","default"));
             BeanUtil.registerSingleton(registry, beanName, validatedProperties);
         } else {
             GlobalValidatedProperties validatedProperties = GlobalValidatedProperties.builder().build();
             if (propertyResolver.containsProperty("validated.locale-param-name")) {
                 validatedProperties.setLocaleParamName(propertyResolver.getProperty("validated.locale-param-name"));
             }
+            validatedProperties.setSpringProfilesActive(propertyResolver.getProperty("spring.profiles.active","default"));
             BeanUtil.registerSingleton(registry, beanName, validatedProperties);
         }
 
@@ -80,11 +80,6 @@ public class ValidatedConfigBeanDefinitionRegistrar implements ImportBeanDefinit
         BeanUtil.registerInfrastructureBeanIfAbsent(registry, ValidatedMethodIntercept.BEAN_NAME, ValidatedMethodIntercept.class);
     }
 
-    public static void registerValidated(BeanDefinitionRegistry registry) {
-
-//        BeanUtil.registerInfrastructureBeanIfAbsent(registry, ValidatorImpl.BEAN_NAME, ValidatorImpl.class);
-
-    }
 
 
 
