@@ -23,10 +23,10 @@ public class ExpressionController {
         return "ok";
     }
 
-        @GetMapping("/test2")
-        @ResponseBody
-        @Validated(failFast = false)
-        public String test2( ExpressionEntity expression){
+    @GetMapping("/test2")
+    @ResponseBody
+    @Validated(failFast = false)
+    public String test2( ExpressionEntity expression){
         return expression.toString();
     }
 
