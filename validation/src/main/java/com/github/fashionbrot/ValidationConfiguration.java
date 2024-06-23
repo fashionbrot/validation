@@ -1,7 +1,6 @@
 package com.github.fashionbrot;
 
 import com.github.fashionbrot.annotation.Valid;
-import com.github.fashionbrot.annotation.Validated;
 import com.github.fashionbrot.annotation.ValidatedParam;
 import com.github.fashionbrot.common.util.GenericTokenUtil;
 import com.github.fashionbrot.common.util.JavaUtil;
@@ -15,7 +14,6 @@ import com.github.fashionbrot.consts.ValidatedConst;
 import com.github.fashionbrot.exception.ValidatedException;
 import com.github.fashionbrot.groups.DefaultGroup;
 import com.github.fashionbrot.ognl.OgnlCache;
-import com.github.fashionbrot.util.ExceptionUtil;
 import com.github.fashionbrot.util.MethodUtil;
 import com.github.fashionbrot.util.ValidatorUtil;
 import lombok.extern.slf4j.Slf4j;
@@ -54,6 +52,7 @@ public class ValidationConfiguration  {
             violationList=new ArrayList<>();
         }
     }
+
 
     public void validParameter(Parameter[] parameters,Object[] arguments) {
         validationParameters(parameters,arguments);
