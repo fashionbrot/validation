@@ -13,16 +13,22 @@ import com.github.fashionbrot.constraint.ConstraintValidator;
  */
 public class AssertTrueConstraint implements ConstraintValidator<AssertTrue, Object> {
 
-	@Override
-	public boolean isValid(AssertTrue annotation, Object value, Class<?> valueType) {
-        String strValue = ObjectUtil.formatString(value);
-        if (ObjectUtil.isEmpty(strValue)){
-            return annotation.skipEmpty();
-        }
+    @Override
+    public boolean isValid(AssertTrue annotation, Object value, Class<?> valueType) {
 
-        if(valueType == String.class || valueType== boolean.class || valueType == Boolean.class){
+        if (value instanceof CharSequence) {
+            String strValue = (String) value;
+            if (ObjectUtil.isEmpty(strValue) && annotation.skipEmpty()) {
+                return true;
+            }
             return ObjectUtil.isTrue(strValue);
+        } else if (value instanceof Boolean) {
+            Boolean b = (Boolean) value;
+            if (b == null && annotation.skipEmpty()) {
+                return true;
+            }
+            return ObjectUtil.isTrue(b);
         }
         return true;
-	}
+    }
 }

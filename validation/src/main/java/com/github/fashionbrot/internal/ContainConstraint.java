@@ -11,48 +11,44 @@ public class ContainConstraint implements ConstraintValidator<Contain, Object> {
 
     @Override
     public boolean isValid(Contain contain, Object value, Class<?> valueType) {
-        if (value == null ) {
-            return contain.skipEmpty();
+        String strValue = ObjectUtil.formatString(value);
+        if (ObjectUtil.isEmpty(strValue) && contain.skipEmpty()) {
+            return true;
         }
 
         String[] values = contain.value();
         boolean ignoreCase = contain.ignoreCase();
 
-        if (valueType == BigDecimal.class) {
+        if (value instanceof BigDecimal) {
             BigDecimal bigDecimal = (BigDecimal) value;
-            return checkContain(values,bigDecimal.toPlainString(),contain,ignoreCase);
-        } else if (valueType ==  BigInteger.class) {
+            return checkContain(values,bigDecimal.toPlainString(),ignoreCase);
+        } else if (value instanceof   BigInteger) {
             BigInteger bigInteger = (BigInteger) value;
-            return checkContain(values,bigInteger.toString(),contain,ignoreCase);
-        } else if (valueType==Short.class || valueType==short.class) {
+            return checkContain(values,bigInteger.toString(),ignoreCase);
+        } else if (value instanceof Short) {
             Short aShort = (Short) value;
-            return checkContain(values,aShort.toString(),contain,ignoreCase);
-        } else if (valueType==Integer.class || valueType==int.class) {
+            return checkContain(values,aShort.toString(),ignoreCase);
+        } else if (value instanceof Integer) {
             Integer integer = (Integer) value;
-            return checkContain(values,integer.toString(),contain,ignoreCase);
-        } else if (valueType==Long.class || valueType==long.class) {
+            return checkContain(values,integer.toString(),ignoreCase);
+        } else if (value instanceof Long) {
             Long aLong = (Long) value;
-            return checkContain(values,aLong.toString(),contain,ignoreCase);
-        } else if (valueType==Float.class || valueType==float.class) {
+            return checkContain(values,aLong.toString(),ignoreCase);
+        } else if (value instanceof Float) {
             Float aFloat = (Float) value;
-            return checkContain(values,aFloat.toString(),contain,ignoreCase);
-        } else if (valueType==Double.class || valueType==double.class) {
+            return checkContain(values,aFloat.toString(),ignoreCase);
+        } else if (value instanceof Double) {
             Double aDouble = (Double) value;
-            return checkContain(values,aDouble.toString(),contain,ignoreCase);
-        }else if (valueType==String.class ){
-            return checkContain(values,(String) value,contain,ignoreCase);
-        }else if (valueType==CharSequence.class){
-            CharSequence charSequence = (CharSequence)value;
-            return checkContain(values,charSequence.toString(),contain,ignoreCase);
+            return checkContain(values,aDouble.toString(),ignoreCase);
+        }else if (value instanceof CharSequence){
+            return checkContain(values,(String) value,ignoreCase);
         }
 
         return true;
     }
 
-    public boolean checkContain(String[] values,String value,Contain contain,boolean ignoreCase){
-        if (ObjectUtil.isEmpty(value)){
-            return contain.skipEmpty();
-        }
+    public boolean checkContain(String[] values,String value,boolean ignoreCase){
+
         for (int i = 0; i < values.length; i++) {
             if (ignoreCase && values[i].equalsIgnoreCase(value)){
                 return true;
@@ -61,6 +57,11 @@ public class ContainConstraint implements ConstraintValidator<Contain, Object> {
             }
         }
         return false;
+    }
+
+    public static void main(String[] args) {
+        BigDecimal b=null;
+        System.out.println(b instanceof BigDecimal);
     }
 
 

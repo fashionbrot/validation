@@ -10,29 +10,24 @@ import java.util.regex.Pattern;
 
 public class EmailConstraint implements ConstraintValidator<Email, Object> {
 
-	@Override
-	public boolean isValid(Email email, Object object, Class<?> valueType) {
+    @Override
+    public boolean isValid(Email email, Object object, Class<?> valueType) {
 
-		String value = ObjectUtil.formatString(object);
-		if (ObjectUtil.isEmpty(value)) {
-			return email.skipEmpty();
-		}
-        if (valueType == String.class || valueType == CharSequence.class){
+        if (object instanceof CharSequence) {
+            String value = ObjectUtil.formatString(object);
+            if (ObjectUtil.isEmpty(value) && email.skipEmpty()) {
+                return true;
+            }
+
             String regexp = email.regexp();
-            if (PatternSts.EMAIL_PATTERN.pattern().equals(regexp)) {
+            if (ObjectUtil.isEmpty(regexp) || PatternSts.EMAIL_PATTERN.pattern().equals(regexp)) {
                 return PatternSts.EMAIL_PATTERN.matcher(value).matches();
             } else {
-                Pattern pattern ;
-                if (ObjectUtil.isEmpty(regexp)) {
-                    pattern = PatternSts.EMAIL_PATTERN;
-                } else {
-                    pattern = Pattern.compile(regexp);
-                }
-                return pattern.matcher(value).matches();
+                return Pattern.compile(regexp).matcher(value).matches();
             }
         }
 
         return true;
-	}
+    }
 
 }

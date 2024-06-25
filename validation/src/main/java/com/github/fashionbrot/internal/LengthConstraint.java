@@ -8,20 +8,20 @@ import com.github.fashionbrot.constraint.ConstraintValidator;
 
 public class LengthConstraint implements ConstraintValidator<Length, Object> {
 
-	@Override
-	public boolean isValid(Length annotation, Object objectValue, Class<?> valueType) {
-        String value = ObjectUtil.formatString(objectValue);
-        if (ObjectUtil.isEmpty(value)) {
-            return annotation.skipEmpty();
-        }
-
-        if (valueType == String.class || valueType==CharSequence.class){
+    @Override
+    public boolean isValid(Length annotation, Object objectValue, Class<?> valueType) {
+        if (objectValue instanceof CharSequence) {
+            String value = ObjectUtil.formatString(objectValue);
+            if (ObjectUtil.isEmpty(value) && annotation.skipEmpty()) {
+                return true;
+            }
             int length = value.length();
             int min = annotation.min();
             int max = annotation.max();
             return length >= min && length <= max;
         }
-		return true;
-	}
+        return true;
+    }
+
 
 }

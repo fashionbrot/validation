@@ -8,45 +8,44 @@ import com.github.fashionbrot.constraint.ConstraintValidator;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 
-public class DefaultConstraint implements ConstraintValidator<Default,Object> {
+public class DefaultConstraint implements ConstraintValidator<Default, Object> {
 
     @Override
-    public boolean isValid(Default annotation, Object var1,Class<?> valueType) {
+    public boolean isValid(Default annotation, Object var1, Class<?> valueType) {
         return true;
     }
 
 
     @Override
     public Object modify(Default annotation, Object value, Class<?> valueType) {
-        if (ObjectUtil.isEmpty(annotation.value())){
+        if (ObjectUtil.isEmpty(annotation.value())) {
             return value;
         }
-
 
         String strValue = (String) value;
-        if (ObjectUtil.isNotEmpty(strValue)){
+        if (ObjectUtil.isNotEmpty(strValue)) {
             return value;
         }
 
-        if (valueType == BigDecimal.class){
-                return new BigDecimal(annotation.value());
-        }else if (valueType == BigInteger.class) {
-                return new BigInteger(annotation.value());
-        }else if (valueType== Short.class){
-                return ObjectUtil.parseShort(annotation.value());
-        }else if (valueType == Long.class){
-                return ObjectUtil.parseLong(annotation.value());
-        }else if (valueType == Integer.class){
+        if (value instanceof BigDecimal) {
+            return new BigDecimal(annotation.value());
+        } else if (value instanceof BigInteger) {
+            return new BigInteger(annotation.value());
+        } else if (value instanceof Short) {
+            return ObjectUtil.parseShort(annotation.value());
+        } else if (value instanceof Long) {
+            return ObjectUtil.parseLong(annotation.value());
+        } else if (value instanceof Integer) {
             return ObjectUtil.parseInteger(annotation.value());
-        }else if (valueType == Float.class){
+        } else if (value instanceof Float) {
             return ObjectUtil.parseFloat(annotation.value());
-        }else if (valueType == Double.class){
+        } else if (value instanceof Double) {
             return ObjectUtil.parseDouble(annotation.value());
-        }else if (valueType==String.class || valueType == CharSequence.class){
+        } else if (value instanceof CharSequence) {
             return annotation.value();
         }
 
-        return value;
+        return null;
     }
 
 }

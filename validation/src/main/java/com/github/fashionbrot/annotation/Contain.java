@@ -32,7 +32,8 @@ public @interface Contain { //issue#2
      * 是否跳过空值
      * @return boolean
      */
-    boolean skipEmpty() default true;
+    boolean skipEmpty() default false;
+
 
     String msg() default "${validated.Contain.msg}";
 

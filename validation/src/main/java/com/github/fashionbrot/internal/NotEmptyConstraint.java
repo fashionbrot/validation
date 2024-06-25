@@ -32,7 +32,7 @@ public class NotEmptyConstraint implements ConstraintValidator<NotEmpty, Object>
             return ObjectUtil.isNotEmpty((Map<?, ?>) value);
         }else if (JavaUtil.isCollection(valueType)){
             return ObjectUtil.isNotEmpty((Collection<?>) value);
-        }else if (JavaUtil.isArray(valueType.getTypeName())){
+        }else if (valueType.isArray()){
             return ObjectUtil.isNotEmpty((Object[])value);
         }
 

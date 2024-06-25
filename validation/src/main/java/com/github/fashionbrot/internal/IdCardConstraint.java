@@ -11,25 +11,20 @@ public class IdCardConstraint implements ConstraintValidator<IdCard, Object> {
 
 	@Override
 	public boolean isValid(IdCard idCard, Object objectValue, Class<?> valueType) {
-        String value = ObjectUtil.formatString(objectValue);
-        if (ObjectUtil.isEmpty(value)) {
-            return idCard.skipEmpty();
-        }
 
-		String regexp = idCard.regexp();
 
-        if (valueType==String.class || valueType == CharSequence.class){
-            if (PatternSts.ID_CARD_PATTERN.pattern().equals(regexp)) {
+
+        if (objectValue instanceof CharSequence){
+            String value = (String) objectValue;
+
+            if (ObjectUtil.isEmpty(value) && idCard.skipEmpty()) {
+                return true;
+            }
+            String regexp = idCard.regexp();
+            if (ObjectUtil.isEmpty(regexp) || PatternSts.ID_CARD_PATTERN.pattern().equals(regexp)){
                 return PatternSts.ID_CARD_PATTERN.matcher(value).matches();
-            } else {
-                Pattern pattern;
-                if (ObjectUtil.isEmpty(regexp)) {
-                    pattern = PatternSts.ID_CARD_PATTERN;
-                } else {
-                    pattern = Pattern.compile(regexp);
-                }
-
-                return pattern.matcher(value).matches();
+            }else{
+                return Pattern.compile(regexp).matcher(value).matches();
             }
         }
 

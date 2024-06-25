@@ -10,22 +10,18 @@ import java.util.regex.Pattern;
 
 public class DigitsConstraint implements ConstraintValidator<Digits, Object> {
 
-    private static final String REGEX="^(\\-|\\+)?\\d+(\\.\\d+)?$";
-    private static final Pattern PATTERN = Pattern.compile(REGEX);
 
-	@Override
-	public boolean isValid(Digits annotation, Object value, Class<?> valueType) {
+    @Override
+    public boolean isValid(Digits annotation, Object value, Class<?> valueType) {
         String strValue = ObjectUtil.formatString(value);
-        if (ObjectUtil.isEmpty(strValue)){
-            return annotation.skipEmpty();
+        if (ObjectUtil.isEmpty(strValue) && annotation.skipEmpty()) {
+            return true;
         }
-        if (valueType == String.class || valueType==CharSequence.class){
-            return  PATTERN.matcher(strValue).matches();
+        if (value instanceof CharSequence) {
+            return strValue.matches("-?\\d+(\\.\\d+)?");
         }
-
         return true;
-	}
-
+    }
 
 
 }
