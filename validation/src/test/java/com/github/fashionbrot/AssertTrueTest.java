@@ -22,7 +22,7 @@ public class AssertTrueTest {
 
     @Test
     public void test1(){
-        String returnResult="";
+        String returnResult="ValidatedException(fieldName=arg0, msg=参数错误, annotationName=AssertTrue, value=null, valueIndex=0, violations=null)";
         String test = MethodUtil.getMsg(Controller1.class, "test", new Object[]{null,null});
         System.out.println(test);
         Assert.assertEquals(test,returnResult);
@@ -31,7 +31,7 @@ public class AssertTrueTest {
     public class Controller2{
 
         @Validated
-        public void test(@AssertTrue(msg = "参数错误1",skipEmpty = false)Boolean b1,
+        public void test(@AssertTrue(msg = "参数错误1")Boolean b1,
                          @AssertTrue(msg = "参数错误2")Boolean b2){
 
         }
@@ -39,8 +39,8 @@ public class AssertTrueTest {
 
     @Test
     public void test2(){
-        String returnResult="ValidatedException(fieldName=arg0, msg=参数错误1, annotationName=AssertTrue, value=null, valueIndex=0, violations=null)";
-        String test = MethodUtil.getMsg(Controller2.class, "test", new Object[]{null,null});
+        String returnResult="ValidatedException(fieldName=arg0, msg=参数错误1, annotationName=AssertTrue, value=false, valueIndex=0, violations=null)";
+        String test = MethodUtil.getMsg(Controller2.class, "test", new Object[]{false,null});
         System.out.println(test);
         Assert.assertEquals(test,returnResult);
     }
@@ -55,7 +55,7 @@ public class AssertTrueTest {
 
     @Test
     public void test3(){
-        String returnResult="ValidatedException(fieldName=null, msg=null, annotationName=null, value=null, valueIndex=null, violations=[Violation(fieldName=arg0, msg=参数错误1, annotationName=AssertTrue, value=null, valueIndex=0)])";
+        String returnResult="ValidatedException(fieldName=null, msg=null, annotationName=null, value=null, valueIndex=null, violations=[Violation(fieldName=arg0, msg=参数错误1, annotationName=AssertTrue, value=null, valueIndex=0), Violation(fieldName=arg1, msg=参数错误2, annotationName=AssertTrue, value=null, valueIndex=1)])";
         String test = MethodUtil.getMsg(Controller3.class, "test", new Object[]{null,null});
         System.out.println(test);
         Assert.assertEquals(test,returnResult);

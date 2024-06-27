@@ -13,8 +13,8 @@ public class AssertFalseConstraint implements ConstraintValidator<AssertFalse, O
 
     @Override
     public boolean isValid(AssertFalse annotation, Object value, Class<?> valueType) {
-        if (value==null && annotation.skipEmpty()){
-            return true;
+        if (value==null){
+            return annotation.skipEmpty();
         }
         if (valueType == String.class || valueType==CharSequence.class){
             String str = (String) value;
@@ -23,11 +23,7 @@ public class AssertFalseConstraint implements ConstraintValidator<AssertFalse, O
             }
             return "false".equals(str);
         }else if (valueType== boolean.class || valueType == Boolean.class){
-            Boolean bool = (Boolean) value;
-            if (bool!=null && !bool){
-                return true;
-            }
-            return false;
+            return Boolean.FALSE.equals(value);
         }
         return true;
     }
