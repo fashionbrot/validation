@@ -53,6 +53,11 @@ public class ValidationConfiguration  {
         }
     }
 
+    public ValidationConfiguration(String language,String springProfilesActive){
+        this.language = language;
+        this.springProfilesActive = springProfilesActive;
+    }
+
 
     public void validParameter(Parameter[] parameters,Object[] arguments) {
         validationParameters(parameters,arguments);
@@ -273,7 +278,7 @@ public class ValidationConfiguration  {
         if (ObjectUtil.isTrue(expression)){
             boolean isValid = constraintValidator.isValid(annotation, fieldValue, fieldType);
             if (!isValid) {
-                String msg  = getAnnotationMsg(annotation,language);
+                String msg  = getAnnotationMsg(annotation,annotationMethods);
                 addViolations(fieldValue, fieldName, annotation, msg, parameterIndex);
             }
 
@@ -312,7 +317,7 @@ public class ValidationConfiguration  {
         if (ObjectUtil.isTrue(expression)){
             boolean isValid = constraintValidator.isValid(annotation, parameterValue, parameterType);
             if (!isValid) {
-                String msg  = getAnnotationMsg(annotation,language);
+                String msg  = getAnnotationMsg(annotation,annotationMethods);
                 addViolations(parameterValue, parameterName, annotation, msg, parameterIndex);
             }
         }
@@ -379,22 +384,27 @@ public class ValidationConfiguration  {
         return validatedParam != null ? validatedParam.value() : captureName(field.getDeclaringClass().getSimpleName());
     }
 
-    private String getAnnotationMsg(Annotation annotation, String language) {
-        String annotationMsg = MethodUtil.getAnnotationMsg(annotation);
+    private String getAnnotationMsg(Annotation annotation,Method[] annotationMethods) {
+        Method method = MethodUtil.filterMethodName(annotationMethods, ValidatedConst.MSG);
+        if (method==null){
+            return null;
+        }
+        String annotationMsg = (String) MethodUtil.getReturnValue(method,annotation);
         String filterMsg = ValidatorUtil.filterMessage(annotationMsg, language);
         if (GenericTokenUtil.isOpenToken(filterMsg, ValidatedConst.OPEN_TOKEN)) {
-            Map<String, Object> annotationAttributes = MethodUtil.getAnnotationMapExcludeMsgAndGroups(annotation);
+            Map<String, Object> annotationAttributes = getAnnotationMap(annotation,annotationMethods);
             return GenericTokenUtil.parse(filterMsg, annotationAttributes);
         }
         return filterMsg;
     }
 
     private void addViolations(Object value, String paramName, Annotation annotation, String msg,Integer valueIndex) {
+        String annotationName = getAnnotationName(annotation);
         if (failFast) {
-            ValidatedException.throwMsg(paramName, msg, annotation.annotationType().getSimpleName(), value, valueIndex);
+            ValidatedException.throwMsg(paramName, msg, annotationName, value, valueIndex);
         } else {
             violationList.add(Violation.builder()
-                .annotationName(annotation.annotationType().getSimpleName())
+                .annotationName(annotationName)
                 .fieldName(paramName)
                 .msg(msg)
                 .value(value)
@@ -472,6 +482,27 @@ public class ValidationConfiguration  {
         if (ObjectUtil.isFalse(this.failFast) && ObjectUtil.isNotEmpty(ViolationList)) {
             throw new ValidatedException(ViolationList);
         }
+    }
+
+    public String getAnnotationName(Annotation annotation){
+        return annotation!=null?annotation.annotationType().getSimpleName():"";
+    }
+
+    public static Map<String,Object> getAnnotationMap(Annotation annotation,Method[] annotationMethod){
+        int initialCapacity = (int) (annotationMethod.length+1 / 0.75);
+        Map<String,Object> methodMap = new HashMap<>(initialCapacity);
+        for (int i = 0; i < annotationMethod.length; i++) {
+            Method method = annotationMethod[i];
+            if (ValidatedConst.MSG.equals(method.getName())
+                || ValidatedConst.GROUPS.equals(method.getName())
+                || ValidatedConst.EXPRESSION.equals(method.getName())){
+                continue;
+            }
+            if (method.getParameterTypes().length == 0 && method.getReturnType() != void.class) {
+                methodMap.put(method.getName(),MethodUtil.getReturnValue(method,annotation));
+            }
+        }
+        return methodMap;
     }
 
 

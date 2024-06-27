@@ -96,6 +96,7 @@ public class MethodUtil {
             Method method = methods[i];
             if (ValidatedConst.GROUPS.equals(method.getName())){
                 groups = (Class[]) getReturnValue(method,annotation);
+                break;
             }
         }
         return groups;
@@ -114,6 +115,7 @@ public class MethodUtil {
             Method method = methods[i];
             if (ValidatedConst.MSG.equals(method.getName())){
                 msg = (String) getReturnValue(method,annotation);
+                break;
             }
         }
         return msg;

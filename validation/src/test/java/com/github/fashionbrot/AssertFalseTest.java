@@ -23,7 +23,7 @@ public class AssertFalseTest {
 
     @Test
     public void test1(){
-        String returnResult="";
+        String returnResult="ValidatedException(fieldName=arg0, msg=参数错误, annotationName=AssertFalse, value=null, valueIndex=0, violations=null)";
         String test = MethodUtil.getMsg(Controller1.class, "test", new Object[]{null,null});
         System.out.println(test);
         Assert.assertEquals(test,returnResult);
@@ -31,7 +31,7 @@ public class AssertFalseTest {
 
     public class Controller2{
         @Validated
-        public void test(@AssertFalse(msg = "参数错误1",skipEmpty = false)Boolean b1,
+        public void test(@AssertFalse(msg = "参数错误1")Boolean b1,
                          @AssertFalse(msg = "参数错误2")Boolean b2){
 
         }
@@ -39,8 +39,8 @@ public class AssertFalseTest {
 
     @Test
     public void test2(){
-        String returnResult="ValidatedException(fieldName=arg0, msg=参数错误1, annotationName=AssertFalse, value=null, valueIndex=0, violations=null)";
-        String test = MethodUtil.getMsg(Controller2.class, "test", new Object[]{null,null});
+        String returnResult="ValidatedException(fieldName=arg0, msg=参数错误1, annotationName=AssertFalse, value=true, valueIndex=0, violations=null)";
+        String test = MethodUtil.getMsg(Controller2.class, "test", new Object[]{true,null});
         System.out.println(test);
         Assert.assertEquals(test,returnResult);
     }
@@ -48,14 +48,14 @@ public class AssertFalseTest {
 
     public class Controller3{
         @Validated(failFast = false)
-        public void test(@AssertFalse(msg = "参数错误1",skipEmpty = false)Boolean b1,
+        public void test(@AssertFalse(msg = "参数错误1")Boolean b1,
                          @AssertFalse(msg = "参数错误2")Boolean b2){
         }
     }
 
     @Test
     public void test3(){
-        String returnResult="ValidatedException(fieldName=null, msg=null, annotationName=null, value=null, valueIndex=null, violations=[Violation(fieldName=arg0, msg=参数错误1, annotationName=AssertFalse, value=null, valueIndex=0)])";
+        String returnResult="ValidatedException(fieldName=null, msg=null, annotationName=null, value=null, valueIndex=null, violations=[Violation(fieldName=arg0, msg=参数错误1, annotationName=AssertFalse, value=null, valueIndex=0), Violation(fieldName=arg1, msg=参数错误2, annotationName=AssertFalse, value=null, valueIndex=1)])";
         String test = MethodUtil.getMsg(Controller3.class, "test", new Object[]{null,null});
         System.out.println(test);
         Assert.assertEquals(test,returnResult);
@@ -64,15 +64,15 @@ public class AssertFalseTest {
 
     public class Controller4{
         @Validated(failFast = false)
-        public void test(@AssertFalse(msg = "参数错误1",skipEmpty = false)Boolean b1,
-                         @AssertFalse(msg = "参数错误2")Boolean b2){
+        public void test(@AssertFalse(msg = "参数错误1",skipEmpty = false)String b1,
+                         @AssertFalse(msg = "参数错误2")String b2){
         }
     }
 
     @Test
     public void test4(){
         String returnResult="ValidatedException(fieldName=null, msg=null, annotationName=null, value=null, valueIndex=null, violations=[Violation(fieldName=arg0, msg=参数错误1, annotationName=AssertFalse, value=true, valueIndex=0)])";
-        String test = MethodUtil.getMsg(Controller4.class, "test", new Object[]{true,"false"});
+        String test = MethodUtil.getMsg(Controller4.class, "test", new Object[]{"true","false"});
         System.out.println(test);
         Assert.assertEquals(test,returnResult);
     }
