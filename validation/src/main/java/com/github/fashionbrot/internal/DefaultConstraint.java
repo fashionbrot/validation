@@ -24,21 +24,45 @@ public class DefaultConstraint implements ConstraintValidator<Default, Object> {
         }
 
         if (ClassUtil.isBigDecimal(valueType)) {
-            return new BigDecimal(annotation.value());
+            BigDecimal val = (BigDecimal) value;
+            if (val == null) {
+                return new BigDecimal(annotation.value());
+            }
         } else if (ClassUtil.isBigInteger(valueType)) {
-            return new BigInteger(annotation.value());
+            BigInteger var = (BigInteger) value;
+            if (var == null) {
+                return new BigInteger(annotation.value());
+            }
         } else if (ClassUtil.isShort(valueType)) {
-            return ObjectUtil.parseShort(annotation.value());
+            Short var = (Short) value;
+            if (var == null) {
+                return ObjectUtil.parseShort(annotation.value());
+            }
         } else if (ClassUtil.isLong(valueType)) {
-            return ObjectUtil.parseLong(annotation.value());
+            Long var = (Long) value;
+            if (var == null) {
+                return ObjectUtil.parseLong(annotation.value());
+            }
         } else if (ClassUtil.isInt(valueType)) {
-            return ObjectUtil.parseInteger(annotation.value());
+            Integer var = (Integer) value;
+            if (var == null) {
+                return ObjectUtil.parseInteger(annotation.value());
+            }
         } else if (ClassUtil.isFloat(valueType)) {
-            return ObjectUtil.parseFloat(annotation.value());
+            Float var = (Float) value;
+            if (var == null) {
+                return ObjectUtil.parseFloat(annotation.value());
+            }
         } else if (ClassUtil.isDouble(valueType)) {
-            return ObjectUtil.parseDouble(annotation.value());
+            Double var = (Double) value;
+            if (var == null) {
+                return ObjectUtil.parseDouble(annotation.value());
+            }
         } else if (ClassUtil.isString(valueType)) {
-            return annotation.value();
+            String str = (String) value;
+            if (ObjectUtil.isEmpty(str)) {
+                return annotation.value();
+            }
         }
 
         return value;

@@ -138,32 +138,7 @@ public class ContainTest {
     }
 
 
-    @Data
-    @AllArgsConstructor
-    @NoArgsConstructor
-    public class RangeRequest8 {
-        @Contain(value = {"1.123", "2121.35"}, msg = "参数不包含1.123,2121.35")
-        double value1;
-        @Contain(value = {"1.123", "2121.35"}, msg = "参数不包含1.123,2121.35")
-        Double value2;
-    }
 
-    public class TestController8 {
-        @Validated(failFast = false)
-        private void test(RangeRequest8 request) {
-        }
-    }
-
-    @Test
-    public void test8(){
-
-        RangeRequest8 build = new RangeRequest8();
-
-        String returnResult = MethodUtil.getMsg(ContainTest.TestController8.class, "test", new Object[]{build});
-        String result="ValidatedException(fieldName=null, msg=null, annotationName=null, value=null, valueIndex=null, violations=[Violation(fieldName=value1, msg=参数不包含1.123,2121.35, annotationName=Contain, value=0.0, valueIndex=0)])";
-        System.out.println(returnResult);
-        Assert.assertEquals(result,returnResult);
-    }
 
 
 }

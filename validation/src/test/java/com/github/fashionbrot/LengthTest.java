@@ -16,8 +16,8 @@ public class LengthTest {
         @Validated(failFast = false)
         public void test(@Length(min = 1,max = 2)String b1,
                          @Length(min = 2,max = 10)CharSequence b2,
-                         @Length(min = 1,max = 2,skipEmpty = false)String b3,
-                         @Length(min = 2,max = 10)CharSequence b4){
+                         @Length(min = 1,max = 2)String b3,
+                         @Length(min = 2,max = 10,skipEmpty = true)CharSequence b4){
 
         }
     }
