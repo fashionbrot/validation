@@ -3,6 +3,7 @@ package com.github.fashionbrot.internal;
 import com.github.fashionbrot.annotation.Default;
 import com.github.fashionbrot.common.util.ObjectUtil;
 import com.github.fashionbrot.constraint.ConstraintValidator;
+import com.github.fashionbrot.util.ClassUtil;
 
 
 import java.math.BigDecimal;
@@ -22,30 +23,25 @@ public class DefaultConstraint implements ConstraintValidator<Default, Object> {
             return value;
         }
 
-        String strValue = (String) value;
-        if (ObjectUtil.isNotEmpty(strValue)) {
-            return value;
-        }
-
-        if (value instanceof BigDecimal) {
+        if (ClassUtil.isBigDecimal(valueType)) {
             return new BigDecimal(annotation.value());
-        } else if (value instanceof BigInteger) {
+        } else if (ClassUtil.isBigInteger(valueType)) {
             return new BigInteger(annotation.value());
-        } else if (value instanceof Short) {
+        } else if (ClassUtil.isShort(valueType)) {
             return ObjectUtil.parseShort(annotation.value());
-        } else if (value instanceof Long) {
+        } else if (ClassUtil.isLong(valueType)) {
             return ObjectUtil.parseLong(annotation.value());
-        } else if (value instanceof Integer) {
+        } else if (ClassUtil.isInt(valueType)) {
             return ObjectUtil.parseInteger(annotation.value());
-        } else if (value instanceof Float) {
+        } else if (ClassUtil.isFloat(valueType)) {
             return ObjectUtil.parseFloat(annotation.value());
-        } else if (value instanceof Double) {
+        } else if (ClassUtil.isDouble(valueType)) {
             return ObjectUtil.parseDouble(annotation.value());
-        } else if (value instanceof CharSequence) {
+        } else if (ClassUtil.isString(valueType)) {
             return annotation.value();
         }
 
-        return null;
+        return value;
     }
 
 }

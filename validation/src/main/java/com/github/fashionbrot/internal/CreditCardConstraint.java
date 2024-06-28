@@ -2,6 +2,7 @@ package com.github.fashionbrot.internal;
 
 import com.github.fashionbrot.annotation.CreditCard;
 import com.github.fashionbrot.common.util.ObjectUtil;
+import com.github.fashionbrot.util.ClassUtil;
 import com.github.fashionbrot.util.PatternSts;
 import com.github.fashionbrot.constraint.ConstraintValidator;
 
@@ -12,11 +13,13 @@ public class CreditCardConstraint implements ConstraintValidator<CreditCard, Obj
 
     @Override
     public boolean isValid(CreditCard creditCard, Object value, Class<?> valueType) {
-
-        if (value instanceof CharSequence) {
-            String strValue = ObjectUtil.formatString(value);
-            if (ObjectUtil.isEmpty(strValue) && creditCard.skipEmpty()) {
-                return true;
+        if (value == null) {
+            return creditCard.skipEmpty();
+        }
+        if (ClassUtil.isString(valueType)) {
+            String strValue = (String) value;
+            if (ObjectUtil.isEmpty(strValue)) {
+                return creditCard.skipEmpty();
             }
 
             String regexp = creditCard.regexp();

@@ -3,6 +3,7 @@ package com.github.fashionbrot.internal;
 import com.github.fashionbrot.annotation.Min;
 import com.github.fashionbrot.common.util.ObjectUtil;
 import com.github.fashionbrot.constraint.ConstraintValidator;
+import com.github.fashionbrot.util.ClassUtil;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
@@ -20,25 +21,26 @@ public class MimConstraint implements ConstraintValidator<Min, Object> {
         if (ObjectUtil.isEmpty(annotation.value())) {
             return true;
         }
+
         BigDecimal max = new BigDecimal(annotation.value());
-        if (valueType == BigDecimal.class) {
+        if (ClassUtil.isBigDecimal(valueType)) {
             return max.compareTo((BigDecimal) value) < 1;
-        } else if (valueType == BigInteger.class) {
+        } else if (ClassUtil.isBigInteger(valueType)) {
             BigInteger bigInteger = (BigInteger) value;
             return max.toBigInteger().longValue() <= bigInteger.longValue();
-        } else if (valueType == Short.class || valueType == short.class) {
+        } else if (ClassUtil.isShort(valueType)) {
             Short obj = (Short) value;
             return max.shortValue() <= obj.shortValue();
-        } else if (valueType == Integer.class || valueType == int.class) {
+        } else if (ClassUtil.isInt(valueType)) {
             Integer obj = (Integer) value;
             return max.intValue() <= obj.intValue();
-        } else if (valueType == Long.class || valueType == long.class) {
+        } else if (ClassUtil.isLong(valueType)) {
             Long obj = (Long) value;
             return max.longValue() <= obj.longValue();
-        } else if (valueType == Float.class || valueType == float.class) {
+        } else if (ClassUtil.isFloat(valueType)) {
             Float obj = (Float) value;
             return max.floatValue() <= obj.floatValue();
-        } else if (valueType == Double.class || valueType == double.class) {
+        } else if (ClassUtil.isDouble(valueType)) {
             Double obj = (Double) value;
             return max.doubleValue() <= obj.doubleValue();
         }

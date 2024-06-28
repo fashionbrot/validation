@@ -3,6 +3,7 @@ package com.github.fashionbrot.internal;
 import com.github.fashionbrot.annotation.Size;
 import com.github.fashionbrot.common.util.JavaUtil;
 import com.github.fashionbrot.constraint.ConstraintValidator;
+import com.github.fashionbrot.util.ClassUtil;
 
 import java.util.Collection;
 import java.util.Map;
@@ -15,24 +16,24 @@ public class SizeConstraint implements ConstraintValidator<Size, Object> {
         if (value == null) {
             return annotation.skipEmpty();
         }
+
         long min = annotation.min();
         long max = annotation.max();
 
-        if (JavaUtil.isMap(valueType)) {
+        if (ClassUtil.isMap(valueType)) {
             Map map = (Map<?, ?>) value;
             int size = map.size();
 
             return checkSize(size, annotation, min, max);
 
-        } else if (JavaUtil.isCollection(valueType)) {
+        } else if (ClassUtil.isCollection(valueType)) {
             Collection collection = (Collection) value;
             int size = collection.size();
 
             return checkSize(size, annotation, min, max);
-        } else if (JavaUtil.isArray(valueType.getTypeName())) {
+        } else if (ClassUtil.isArray(valueType)) {
             Object[] array = (Object[]) value;
             int size = array.length;
-
             return checkSize(size, annotation, min, max);
         }
 

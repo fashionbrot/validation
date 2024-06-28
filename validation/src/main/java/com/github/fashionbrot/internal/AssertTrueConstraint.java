@@ -5,6 +5,7 @@ package com.github.fashionbrot.internal;
 import com.github.fashionbrot.annotation.AssertTrue;
 import com.github.fashionbrot.common.util.ObjectUtil;
 import com.github.fashionbrot.constraint.ConstraintValidator;
+import com.github.fashionbrot.util.ClassUtil;
 
 /**
  * Validates that the value passed is true
@@ -15,16 +16,16 @@ public class AssertTrueConstraint implements ConstraintValidator<AssertTrue, Obj
 
     @Override
     public boolean isValid(AssertTrue annotation, Object value, Class<?> valueType) {
-        if (value==null){
+        if (value == null) {
             return annotation.skipEmpty();
         }
-        if (valueType == String.class || valueType==CharSequence.class){
+        if (ClassUtil.isString(valueType)) {
             String str = (String) value;
-            if (ObjectUtil.isEmpty(str) && annotation.skipEmpty()){
-                return true;
+            if (ObjectUtil.isEmpty(str)) {
+                return annotation.skipEmpty();
             }
-            return "true".equals(str);
-        }else if (valueType== boolean.class || valueType == Boolean.class){
+            return "true".equalsIgnoreCase(str);
+        } else if (ClassUtil.isBoolean(valueType)) {
             return Boolean.TRUE.equals(value);
         }
         return true;
