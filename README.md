@@ -36,11 +36,11 @@
 <dependency>
     <groupId>com.github.fashionbrot</groupId>
     <artifactId>validation-spring</artifactId>
-    <version>3.0.0</version>
+    <version>3.0.1</version>
 </dependency>
 ```
 ```gradle
-implementation 'com.github.fashionbrot:validation-spring:3.0.0'
+implementation 'com.github.fashionbrot:validation-spring:3.0.1'
 ```
 ### 3.2  springmvc 配置方式
 ```java
@@ -148,12 +148,12 @@ public class ExpressionController {
 <dependency>
     <groupId>com.github.fashionbrot</groupId>
     <artifactId>spring-boot-starter-validation</artifactId>
-    <version>3.0.0</version>
+    <version>3.0.1</version>
 </dependency>
 ```
 ```bash
  #springboot 依赖
-implementation 'com.github.fashionbrot:spring-boot-starter-validation:3.0.0'
+implementation 'com.github.fashionbrot:spring-boot-starter-validation:3.0.1'
 ```
 
 ### 4.2 配置方式
