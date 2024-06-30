@@ -56,6 +56,23 @@ public class MethodUtil {
         return null;
     }
 
+    public static Object getFieldValue(String fieldName,Class clazz,Object object){
+        try {
+            // 获取指定名称的字段
+            Field field = clazz.getDeclaredField(fieldName);
+
+            // 确保字段是可访问的
+            field.setAccessible(true);
+
+            // 返回字段的值
+            return field.get(object);
+        } catch (NoSuchFieldException | IllegalAccessException e) {
+            e.printStackTrace();
+            // 根据需要处理异常，或者重新抛出异常
+            return null;
+        }
+    }
+
 
     public static ConstraintValidator newInstance(Class<? extends ConstraintValidator> constraint){
         try {

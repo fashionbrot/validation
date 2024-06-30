@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.Collection;
 import java.util.Date;
+import java.util.LinkedList;
 import java.util.Map;
 
 public class ClassUtil {
@@ -19,6 +20,7 @@ public class ClassUtil {
 
 
 
+
     public static boolean isMap(Class type) {
         return type!=null && Map.class.isAssignableFrom(type);
     }
@@ -29,9 +31,10 @@ public class ClassUtil {
 
 
 
-    public static boolean isObject(Class type){
-        return type!=null && type == Object.class;
+    public static boolean isObject(Class type) {
+        return type!=null && type.isAssignableFrom(Object.class);
     }
+
 
 
     public static boolean isNotObject(Class type){
