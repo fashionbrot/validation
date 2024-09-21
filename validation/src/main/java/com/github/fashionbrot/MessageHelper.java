@@ -1,4 +1,4 @@
-package com.github.fashionbrot.util;
+package com.github.fashionbrot;
 
 import com.github.fashionbrot.common.util.ObjectUtil;
 import com.github.fashionbrot.consts.ValidatedConst;
@@ -10,7 +10,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 
 @Slf4j
-public class ValidatorUtil{
+public class MessageHelper {
 
 
     private static final Map<String, ResourceBundle> RESOURCE_BUNDLE_CACHE = new ConcurrentHashMap<>();
@@ -19,6 +19,7 @@ public class ValidatorUtil{
         if (ObjectUtil.isEmpty(message)) {
             return "";
         }
+
         boolean isDefaultMessage = message.startsWith(ValidatedConst.OPEN_TOKEN) && message.endsWith(ValidatedConst.CLOSE_TOKEN);
         if (isDefaultMessage) {
             message = resolveMessage(message, language);
@@ -34,7 +35,7 @@ public class ValidatorUtil{
         }
         ResourceBundle resourceBundle = getResourceBundle(ValidatedConst.FILE_NAME_PREFIX + currentLanguage);
         if (resourceBundle == null || !resourceBundle.containsKey(key)) {
-            throw new MissingResourceException("Message for key '" + key + "' not found in " + ValidatedConst.FILE_NAME_PREFIX + currentLanguage, ValidatorUtil.class.getName(), messageKey);
+            throw new MissingResourceException("Message for key '" + key + "' not found in " + ValidatedConst.FILE_NAME_PREFIX + currentLanguage, MessageHelper.class.getName(), messageKey);
         }
         return resourceBundle.getString(key);
     }

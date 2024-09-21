@@ -11,34 +11,30 @@ public class ClassUtil {
 
 
     public static boolean isCollection(Class type) {
-        return type!=null && Collection.class.isAssignableFrom(type);
+        return type != null && Collection.class.isAssignableFrom(type);
     }
 
-    public static boolean isNotCollection(Class type){
+    public static boolean isNotCollection(Class type) {
         return !isCollection(type);
     }
 
 
-
-
     public static boolean isMap(Class type) {
-        return type!=null && Map.class.isAssignableFrom(type);
+        return type != null && Map.class.isAssignableFrom(type);
     }
 
-    public static boolean isNotMap(Class type){
+    public static boolean isNotMap(Class type) {
         return !isMap(type);
     }
 
 
-
     public static boolean isObject(Class type) {
-        return type!=null && type.isAssignableFrom(Object.class);
+        return type != null && type.isAssignableFrom(Object.class);
     }
 
 
-
-    public static boolean isNotObject(Class type){
-        if (type==null){
+    public static boolean isNotObject(Class type) {
+        if (type == null) {
             return false;
         }
         return !isObject(type);
@@ -46,44 +42,43 @@ public class ClassUtil {
 
 
     public static boolean isArray(Class type) {
-        return type!=null && type.isArray();
+        return type != null && type.isArray();
     }
 
-    public static boolean isNotArray(Class type){
+    public static boolean isNotArray(Class type) {
         return !isArray(type);
     }
 
 
-
-    public static boolean isBoolean(Class type){
-        return type!=null && (type == boolean.class ||type == Boolean.class);
+    public static boolean isBoolean(Class type) {
+        return type != null && (type == boolean.class || type == Boolean.class);
     }
 
-    public static boolean isNotBoolean(Class type){
+    public static boolean isNotBoolean(Class type) {
         return !isBoolean(type);
     }
 
-    public static boolean isByte(Class type){
-        return type!=null && (type == byte.class ||type == Byte.class);
+    public static boolean isByte(Class type) {
+        return type != null && (type == byte.class || type == Byte.class);
     }
 
-    public static boolean isNotByte(Class type){
+    public static boolean isNotByte(Class type) {
         return !isByte(type);
     }
 
-    public static boolean isChar(Class type){
-        return type!=null && (type == char.class ||type == Character.class);
+    public static boolean isChar(Class type) {
+        return type != null && (type == char.class || type == Character.class);
     }
 
-    public static boolean isNotChar(Class type){
+    public static boolean isNotChar(Class type) {
         return !isChar(type);
     }
 
-    public static boolean isString(Class type){
-        return type!=null && (type == String.class ||type == CharSequence.class);
+    public static boolean isString(Class type) {
+        return type != null && (type == String.class || type == CharSequence.class);
     }
 
-    public static boolean isNotString(Class type){
+    public static boolean isNotString(Class type) {
         return !isString(type);
     }
 
@@ -91,7 +86,7 @@ public class ClassUtil {
         return type != null && (type == float.class || type == Float.class);
     }
 
-    public static boolean isNotFloat(Class type){
+    public static boolean isNotFloat(Class type) {
         return !isFloat(type);
     }
 
@@ -99,7 +94,7 @@ public class ClassUtil {
         return type != null && (type == int.class || type == Integer.class);
     }
 
-    public static boolean isNotInt(Class type){
+    public static boolean isNotInt(Class type) {
         return !isInt(type);
     }
 
@@ -107,7 +102,7 @@ public class ClassUtil {
         return type != null && (type == long.class || type == Long.class);
     }
 
-    public static boolean isNotLong(Class type){
+    public static boolean isNotLong(Class type) {
         return !isLong(type);
     }
 
@@ -115,7 +110,7 @@ public class ClassUtil {
         return type != null && (type == short.class || type == Short.class);
     }
 
-    public static boolean isNotShort(Class type){
+    public static boolean isNotShort(Class type) {
         return !isShort(type);
     }
 
@@ -123,7 +118,7 @@ public class ClassUtil {
         return type != null && (type == double.class || type == Double.class);
     }
 
-    public static boolean isNotDouble(Class type){
+    public static boolean isNotDouble(Class type) {
         return !isDouble(type);
     }
 
@@ -131,7 +126,7 @@ public class ClassUtil {
         return type != null && type == BigDecimal.class;
     }
 
-    public static boolean isNotBigDecimal(Class type){
+    public static boolean isNotBigDecimal(Class type) {
         return !isBigDecimal(type);
     }
 
@@ -139,19 +134,17 @@ public class ClassUtil {
         return type != null && type == BigInteger.class;
     }
 
-    public static boolean isNotBigInteger(Class type){
+    public static boolean isNotBigInteger(Class type) {
         return !isBigInteger(type);
     }
 
-    public static boolean isDate(Class type){
-        return type!=null && type == Date.class;
+    public static boolean isDate(Class type) {
+        return type != null && type == Date.class;
     }
 
-    public static boolean isNotDate(Class type){
+    public static boolean isNotDate(Class type) {
         return !isDate(type);
     }
-
-
 
 
 }

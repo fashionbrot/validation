@@ -15,7 +15,6 @@ import com.github.fashionbrot.exception.ValidatedException;
 import com.github.fashionbrot.groups.DefaultGroup;
 import com.github.fashionbrot.ognl.OgnlCache;
 import com.github.fashionbrot.util.MethodUtil;
-import com.github.fashionbrot.util.ValidatorUtil;
 import lombok.extern.slf4j.Slf4j;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
@@ -390,7 +389,7 @@ public class ValidationConfiguration  {
             return null;
         }
         String annotationMsg = (String) MethodUtil.getReturnValue(method,annotation);
-        String filterMsg = ValidatorUtil.filterMessage(annotationMsg, language);
+        String filterMsg = MessageHelper.filterMessage(annotationMsg, language);
         if (GenericTokenUtil.isOpenToken(filterMsg, ValidatedConst.OPEN_TOKEN)) {
             Map<String, Object> annotationAttributes = getAnnotationMap(annotation,annotationMethods);
             return GenericTokenUtil.parse(filterMsg, annotationAttributes);
