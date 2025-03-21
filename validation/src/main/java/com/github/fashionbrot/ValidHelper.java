@@ -36,16 +36,16 @@ public class ValidHelper {
         SPRING_PROFILES_ACTIVE = springProfilesActive;
     }
 
-    public static void validParameter(String language, Method method,Object[] arguments){
+    public static void validParameter(String language, Method method, Object[] arguments) {
         Validated validated = method.getAnnotation(Validated.class);
-        if (validated==null){
+        if (validated == null) {
             return;
         }
         Class<?>[] validatedGroups = validated.groups();
         boolean failFast = validated.failFast();
 
         Parameter[] parameters = method.getParameters();
-        if (ObjectUtil.isEmpty(parameters)){
+        if (ObjectUtil.isEmpty(parameters)) {
             return;
         }
 
@@ -62,20 +62,20 @@ public class ValidHelper {
                     Class<?> parameterType = parameter.getType();
 
                     Valid valid = parameter.getDeclaredAnnotation(Valid.class);
-                    if (valid!=null){
+                    if (valid != null) {
                         if (JavaUtil.isArray(parameterType)) {
-                            validArrayObject(language,validatedGroups,failFast, parameters, arguments,  parameterIndex,violationList);
+                            validArrayObject(language, validatedGroups, failFast, parameters, arguments, parameterIndex, violationList);
                         } else if (JavaUtil.isCollection(parameterType)) {
-                            validListObject(language,validatedGroups,failFast,parameters, arguments, parameterIndex,violationList );
+                            validListObject(language, validatedGroups, failFast, parameters, arguments, parameterIndex, violationList);
                         }
                     }
 
-                    if (JavaUtil.isNotPrimitive(parameterType)){
-                        entityFieldsAnnotationValid(language,parameterType,validatedGroups,failFast,arguments,parameterIndex,violationList);
+                    if (JavaUtil.isNotPrimitive(parameterType)) {
+                        entityFieldsAnnotationValid(language, parameterType, validatedGroups, failFast, arguments, parameterIndex, violationList);
                     }
 
 
-                }else{
+                } else {
 
                     for (int annotationIndex = 0; annotationIndex < constraintAnnotationList.size(); annotationIndex++) {
                         Annotation annotation = constraintAnnotationList.get(annotationIndex);
@@ -85,7 +85,7 @@ public class ValidHelper {
                             continue;
                         }
 
-                        if (!checkAnnotationGroups(annotation,validatedGroups)) {
+                        if (!checkAnnotationGroups(annotation, validatedGroups)) {
                             continue;
                         }
 
@@ -100,21 +100,21 @@ public class ValidHelper {
                                 String parameterName = parameter.getName();
                                 Class<?> parameterType = parameter.getType();
 
-                                if (ObjectUtil.isTrue(checkExpressionParameter(parameters,arguments,annotation,annotationMethods))){
+                                if (ObjectUtil.isTrue(checkExpressionParameter(parameters, arguments, annotation, annotationMethods))) {
                                     if (!constraintValidator.isValid(annotation, parameterValue, parameterType)) {
 
                                         String annotationName = getAnnotationName(annotation);
                                         Violation violation = Violation.builder()
                                             .annotationName(annotationName)
                                             .fieldName(parameterName)
-                                            .message( getAnnotationMsg(annotation,annotationMethods,language))
+                                            .message(getAnnotationMsg(annotation, annotationMethods, language))
                                             .value(parameterValue)
                                             .valueIndex(parameterIndex)
                                             .build();
 
                                         violationList.add(violation);
 
-                                        if (failFast){
+                                        if (failFast) {
                                             throw new ValidatedException(violationList);
                                         }
                                     }
@@ -124,7 +124,7 @@ public class ValidHelper {
                                 Class validConstraintClass = constraintValidator.getClass();
                                 if (MethodUtil.checkDeclaredMethod(validConstraintClass, ValidatedConst.METHOD_NAME_MODIFY)) {
                                     Object reValue = constraintValidator.modify(annotation, parameterValue, parameterType);
-                                    if (reValue==null){
+                                    if (reValue == null) {
                                         return;
                                     }
                                     arguments[parameterIndex] = reValue;
@@ -138,16 +138,14 @@ public class ValidHelper {
 
                 }
             }
-        }finally {
-            if (ObjectUtil.isNotEmpty(violationList)){
+        } finally {
+            if (ObjectUtil.isNotEmpty(violationList)) {
                 throw new ValidatedException(violationList);
             }
         }
 
 
     }
-
-
 
 
     private static void validArrayObject(
@@ -165,13 +163,11 @@ public class ValidHelper {
             Object[] array = (Object[]) arguments[parameterIndex];
             if (ObjectUtil.isNotEmpty(array)) {
                 for (int arrayIndex = 0; arrayIndex < array.length; arrayIndex++) {
-                    entityFieldsAnnotationValid(language,parameterClass,validatedGroups,failFast, array, arrayIndex,violationList);
+                    entityFieldsAnnotationValid(language, parameterClass, validatedGroups, failFast, array, arrayIndex, violationList);
                 }
             }
         }
     }
-
-
 
 
     private static void validListObject(
@@ -202,28 +198,28 @@ public class ValidHelper {
         }
     }
 
-    public static void validated(Object object){
-        validated("",true,null,object);
+    public static void validated(Object object) {
+        validated("", true, null, object);
     }
 
 
     public static void validated(String language,
                                  boolean failFast,
                                  Class[] groups,
-                                 Object object){
-        if (object==null){
+                                 Object object) {
+        if (object == null) {
             return;
         }
         Class<?> clazz = object.getClass();
-        if (JavaUtil.isArray(clazz) || JavaUtil.isCollection(clazz) || JavaUtil.isPrimitive(clazz)){
+        if (JavaUtil.isArray(clazz) || JavaUtil.isCollection(clazz) || JavaUtil.isPrimitive(clazz)) {
             return;
         }
 
         List<Violation> violationList = failFast ? new ArrayList<>(1) : new ArrayList<>();
         try {
             entityFieldsAnnotationValid(language, clazz, groups, failFast, new Object[]{object}, 0, violationList);
-        }finally {
-            if (ObjectUtil.isNotEmpty(violationList)){
+        } finally {
+            if (ObjectUtil.isNotEmpty(violationList)) {
                 throw new ValidatedException(violationList);
             }
         }
@@ -231,14 +227,14 @@ public class ValidHelper {
 
 
     private static void entityFieldsAnnotationValid(String language,
-                                             Class entityClass,
-                                             Class[] validatedGroups,
-                                             boolean failFast,
-                                             Object[] arguments,
-                                             Integer parameterIndex,
-                                             List<Violation> violationList ) {
+                                                    Class entityClass,
+                                                    Class[] validatedGroups,
+                                                    boolean failFast,
+                                                    Object[] arguments,
+                                                    Integer parameterIndex,
+                                                    List<Violation> violationList) {
         // 判断是否 有继承类
-        checkClassSuper(language,entityClass,validatedGroups,failFast,arguments,parameterIndex,violationList);
+        checkClassSuper(language, entityClass, validatedGroups, failFast, arguments, parameterIndex, violationList);
 
         Field[] fields = entityClass.getDeclaredFields();
         if (ObjectUtil.isEmpty(fields)) {
@@ -258,11 +254,11 @@ public class ValidHelper {
 
 
                 Valid valid = field.getDeclaredAnnotation(Valid.class);
-                if (valid!=null){
+                if (valid != null) {
                     if (JavaUtil.isArray(fieldType)) {
-                        validArrayObject(language,validatedGroups,failFast,field,arguments,parameterIndex,violationList);
+                        validArrayObject(language, validatedGroups, failFast, field, arguments, parameterIndex, violationList);
                     } else if (JavaUtil.isCollection(fieldType)) {
-                        validListObject(language,validatedGroups,failFast,field,arguments,parameterIndex,violationList);
+                        validListObject(language, validatedGroups, failFast, field, arguments, parameterIndex, violationList);
                     }
                 }
 
@@ -270,7 +266,7 @@ public class ValidHelper {
                     entityFieldsAnnotationValid(language, fieldType, validatedGroups, failFast, arguments, parameterIndex, violationList);
                 }
 
-            }else{
+            } else {
 
 
                 for (int annotationIndex = 0; annotationIndex < constraintAnnotationList.size(); annotationIndex++) {
@@ -281,7 +277,7 @@ public class ValidHelper {
                         continue;
                     }
 
-                    if (!checkAnnotationGroups(annotation,validatedGroups)) {
+                    if (!checkAnnotationGroups(annotation, validatedGroups)) {
                         continue;
                     }
 
@@ -293,20 +289,20 @@ public class ValidHelper {
 
                             Object fieldValue = MethodUtil.getFieldValue(field, arguments[parameterIndex]);
 
-                            if (ObjectUtil.isTrue(checkExpressionField(arguments,field,annotation,annotationMethods))){
+                            if (ObjectUtil.isTrue(checkExpressionField(arguments, field, annotation, annotationMethods))) {
                                 if (!constraintValidator.isValid(annotation, fieldValue, fieldType)) {
 
                                     String annotationName = getAnnotationName(annotation);
                                     Violation violation = Violation.builder()
                                         .annotationName(annotationName)
                                         .fieldName(fieldName)
-                                        .message( getAnnotationMsg(annotation,annotationMethods,language))
+                                        .message(getAnnotationMsg(annotation, annotationMethods, language))
                                         .value(fieldValue)
                                         .valueIndex(parameterIndex)
                                         .build();
                                     violationList.add(violation);
 
-                                    if (failFast){
+                                    if (failFast) {
                                         throw new ValidatedException(violationList);
                                     }
                                 }
@@ -316,10 +312,10 @@ public class ValidHelper {
                             Class validConstraintClass = constraintValidator.getClass();
                             if (MethodUtil.checkDeclaredMethod(validConstraintClass, ValidatedConst.METHOD_NAME_MODIFY)) {
                                 Object reValue = constraintValidator.modify(annotation, fieldValue, fieldType);
-                                if (reValue==null){
+                                if (reValue == null) {
                                     return;
                                 }
-                                MethodUtil.setField(field,arguments[parameterIndex],reValue);
+                                MethodUtil.setField(field, arguments[parameterIndex], reValue);
                             }
 
                         }
@@ -328,13 +324,9 @@ public class ValidHelper {
                 }
 
 
-
             }
         }
     }
-
-
-
 
 
     private static void validArrayObject(
@@ -350,7 +342,7 @@ public class ValidHelper {
             Object[] array = (Object[]) MethodUtil.getFieldValue(field, arguments[parameterIndex]);
             if (ObjectUtil.isNotEmpty(array)) {
                 for (int arrayIndex = 0; arrayIndex < array.length; arrayIndex++) {
-                    entityFieldsAnnotationValid(language,convertClass,validatedGroups,failFast, array , arrayIndex,violationList);
+                    entityFieldsAnnotationValid(language, convertClass, validatedGroups, failFast, array, arrayIndex, violationList);
                 }
             }
         }
@@ -363,7 +355,7 @@ public class ValidHelper {
         Field field,
         Object[] arguments,
         Integer parameterIndex,
-        List<Violation> violationList){
+        List<Violation> violationList) {
 
         Type[] actualTypeArguments = TypeUtil.getActualTypeArguments(field);
         if (ObjectUtil.isNotEmpty(actualTypeArguments) &&
@@ -371,12 +363,12 @@ public class ValidHelper {
             JavaUtil.isNotPrimitive(actualTypeArguments[0].getTypeName())) {
 
             Class typeConvertClass = TypeUtil.convertTypeToClass(actualTypeArguments[0]);
-            if (typeConvertClass != null ) {
-                List list = (List)MethodUtil.getFieldValue(field, arguments[parameterIndex]);
+            if (typeConvertClass != null) {
+                List list = (List) MethodUtil.getFieldValue(field, arguments[parameterIndex]);
                 if (ObjectUtil.isNotEmpty(list)) {
                     for (int listIndex = 0; listIndex < list.size(); listIndex++) {
 
-                        entityFieldsAnnotationValid(language,typeConvertClass,validatedGroups,failFast, list.toArray(),listIndex,violationList);
+                        entityFieldsAnnotationValid(language, typeConvertClass, validatedGroups, failFast, list.toArray(), listIndex, violationList);
                     }
                 }
             }
@@ -385,29 +377,28 @@ public class ValidHelper {
 
 
     private static void checkClassSuper(String language,
-                                 Class entityClass,
-                                 Class[] validatedGroups,
-                                 boolean failFast,
-                                 Object[] arguments,
-                                 Integer parameterIndex,
-                                 List<Violation> violationList) {
-        if (JavaUtil.isPrimitive(entityClass)){
+                                        Class entityClass,
+                                        Class[] validatedGroups,
+                                        boolean failFast,
+                                        Object[] arguments,
+                                        Integer parameterIndex,
+                                        List<Violation> violationList) {
+        if (JavaUtil.isPrimitive(entityClass)) {
             return;
         }
         Class superclass = entityClass.getSuperclass();
         if (superclass != null && JavaUtil.isNotObject(superclass)) {
             //如果不是定义的类型，则把 class 当做bean 进行校验 field
-            entityFieldsAnnotationValid(language,superclass,validatedGroups,failFast,arguments,parameterIndex,violationList);
+            entityFieldsAnnotationValid(language, superclass, validatedGroups, failFast, arguments, parameterIndex, violationList);
         }
     }
 
 
-
-    public static String getAnnotationName(Annotation annotation){
-        return annotation!=null?annotation.annotationType().getSimpleName():"";
+    public static String getAnnotationName(Annotation annotation) {
+        return annotation != null ? annotation.annotationType().getSimpleName() : "";
     }
 
-    private static Boolean checkExpressionField(Object[] params,Field field,Annotation annotation,Method[] annotationMethods){
+    private static Boolean checkExpressionField(Object[] params, Field field, Annotation annotation, Method[] annotationMethods) {
         Method expressionMethod = MethodUtil.filterMethodName(annotationMethods, ValidatedConst.EXPRESSION);
         if (expressionMethod == null) {
             return true;
@@ -420,14 +411,14 @@ public class ValidHelper {
         return OgnlCache.executeExpression(expression, rootMap);
     }
 
-    private static Map<String, Object> createRootMap( Object[] params, Field field) {
-        int initialCapacity = (int) (params.length+1 / 0.75) + 1;
+    private static Map<String, Object> createRootMap(Object[] params, Field field) {
+        int initialCapacity = (int) (params.length + 1 / 0.75) + 1;
         Map<String, Object> rootMap = new HashMap<>(initialCapacity);
         for (int i = 0; i < params.length; i++) {
             String name = getClassParamName(field);
             rootMap.put(name, params[i]);
         }
-        rootMap.put(ValidatedConst.SPRING_PROFILES_ACTIVE,SPRING_PROFILES_ACTIVE);
+        rootMap.put(ValidatedConst.SPRING_PROFILES_ACTIVE, SPRING_PROFILES_ACTIVE);
         return rootMap;
     }
 
@@ -446,7 +437,7 @@ public class ValidHelper {
         return new String(cs);
     }
 
-    private static Boolean checkExpressionParameter(Parameter[] parameters,Object[] params,Annotation annotation,Method[] annotationMethods){
+    private static Boolean checkExpressionParameter(Parameter[] parameters, Object[] params, Annotation annotation, Method[] annotationMethods) {
         Method expressionMethod = MethodUtil.filterMethodName(annotationMethods, ValidatedConst.EXPRESSION);
         if (expressionMethod == null) {
             return true;
@@ -455,43 +446,43 @@ public class ValidHelper {
         if (ObjectUtil.isEmpty(expression)) {
             return true;
         }
-        int initialCapacity = (int) (parameters.length+1 / 0.75) + 1;
-        Map<String,Object> rootMap = new HashMap<>(initialCapacity);
+        int initialCapacity = (int) (parameters.length + 1 / 0.75) + 1;
+        Map<String, Object> rootMap = new HashMap<>(initialCapacity);
         for (int j = 0; j < parameters.length; j++) {
             Parameter parameter = parameters[j];
             Object argument = params[j];
-            rootMap.put(parameter.getName(),argument);
+            rootMap.put(parameter.getName(), argument);
         }
-        rootMap.put(ValidatedConst.SPRING_PROFILES_ACTIVE,SPRING_PROFILES_ACTIVE);
+        rootMap.put(ValidatedConst.SPRING_PROFILES_ACTIVE, SPRING_PROFILES_ACTIVE);
         return OgnlCache.executeExpression(expression, rootMap);
     }
 
-    private static String getAnnotationMsg(Annotation annotation,Method[] annotationMethods,String language) {
+    private static String getAnnotationMsg(Annotation annotation, Method[] annotationMethods, String language) {
         Method method = MethodUtil.filterMethodName(annotationMethods, ValidatedConst.MESSAGE);
-        if (method==null){
+        if (method == null) {
             return null;
         }
-        String annotationMsg = (String) MethodUtil.getReturnValue(method,annotation);
+        String annotationMsg = (String) MethodUtil.getReturnValue(method, annotation);
         String filterMsg = MessageHelper.filterMessage(annotationMsg, language);
         if (GenericTokenUtil.isOpenToken(filterMsg, ValidatedConst.OPEN_TOKEN)) {
-            Map<String, Object> annotationAttributes = getAnnotationMap(annotation,annotationMethods);
+            Map<String, Object> annotationAttributes = getAnnotationMap(annotation, annotationMethods);
             return GenericTokenUtil.parse(filterMsg, annotationAttributes);
         }
         return filterMsg;
     }
 
-    public static Map<String,Object> getAnnotationMap(Annotation annotation,Method[] annotationMethod){
-        int initialCapacity = (int) (annotationMethod.length+1 / 0.75);
-        Map<String,Object> methodMap = new HashMap<>(initialCapacity);
+    public static Map<String, Object> getAnnotationMap(Annotation annotation, Method[] annotationMethod) {
+        int initialCapacity = (int) (annotationMethod.length + 1 / 0.75);
+        Map<String, Object> methodMap = new HashMap<>(initialCapacity);
         for (int i = 0; i < annotationMethod.length; i++) {
             Method method = annotationMethod[i];
             if (ValidatedConst.MESSAGE.equals(method.getName())
                 || ValidatedConst.GROUPS.equals(method.getName())
-                || ValidatedConst.EXPRESSION.equals(method.getName())){
+                || ValidatedConst.EXPRESSION.equals(method.getName())) {
                 continue;
             }
             if (method.getParameterTypes().length == 0 && method.getReturnType() != void.class) {
-                methodMap.put(method.getName(),MethodUtil.getReturnValue(method,annotation));
+                methodMap.put(method.getName(), MethodUtil.getReturnValue(method, annotation));
             }
         }
         return methodMap;
@@ -517,7 +508,7 @@ public class ValidHelper {
     }
 
 
-    private static boolean checkAnnotationGroups(Annotation annotation,Class<?>[] validatedGroups) {
+    private static boolean checkAnnotationGroups(Annotation annotation, Class<?>[] validatedGroups) {
         if (ObjectUtil.isEmpty(validatedGroups)) {
             return true;
         }

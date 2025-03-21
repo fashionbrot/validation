@@ -10,8 +10,6 @@ import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
-import java.util.HashMap;
-import java.util.Map;
 
 @Slf4j
 public class MethodUtil {
@@ -119,24 +117,7 @@ public class MethodUtil {
         return groups;
     }
 
-    public static String getAnnotationMsg(Annotation annotation){
-        if (annotation==null){
-            return null;
-        }
-        Method[] methods = annotation.annotationType().getDeclaredMethods();
-        if (ObjectUtil.isEmpty(methods)){
-            return null;
-        }
-        String msg = null;
-        for (int i = 0; i < methods.length; i++) {
-            Method method = methods[i];
-            if (ValidatedConst.MESSAGE.equals(method.getName())){
-                msg = (String) getReturnValue(method,annotation);
-                break;
-            }
-        }
-        return msg;
-    }
+
 
     public static Method filterMethodName(Method[] methods,String methodName){
         if (ObjectUtil.isNotEmpty(methods)){
@@ -151,44 +132,7 @@ public class MethodUtil {
     }
 
 
-    public static Map<String,Object> getAnnotationAttributes(Annotation annotation){
-        if (annotation==null){
-            return null;
-        }
-        Method[] methods = annotation.annotationType().getDeclaredMethods();
-        if (ObjectUtil.isEmpty(methods)){
-            return null;
-        }
-        Map<String,Object> methodMap = new HashMap<>(methods.length);
-        for (int i = 0; i < methods.length; i++) {
-            Method method = methods[i];
-            if (method.getParameterTypes().length == 0 && method.getReturnType() != void.class) {
-                methodMap.put(method.getName(),getReturnValue(method,annotation));
-            }
-        }
-        return methodMap;
-    }
 
-    public static Map<String,Object> getAnnotationMapExcludeMsgAndGroups(Annotation annotation){
-        if (annotation==null){
-            return null;
-        }
-        Method[] methods = annotation.annotationType().getDeclaredMethods();
-        if (ObjectUtil.isEmpty(methods)){
-            return null;
-        }
-        Map<String,Object> methodMap = new HashMap<>(methods.length);
-        for (int i = 0; i < methods.length; i++) {
-            Method method = methods[i];
-            if (ValidatedConst.MESSAGE.equals(method.getName()) || ValidatedConst.GROUPS.equals(method.getName())){
-                continue;
-            }
-            if (method.getParameterTypes().length == 0 && method.getReturnType() != void.class) {
-                methodMap.put(method.getName(),getReturnValue(method,annotation));
-            }
-        }
-        return methodMap;
-    }
 
     public static Object getReturnValue(Method method,Annotation annotation){
         if (method!=null){
@@ -211,6 +155,7 @@ public class MethodUtil {
             e.printStackTrace();
         }
     }
+
 
 
 }
