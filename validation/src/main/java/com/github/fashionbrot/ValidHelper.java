@@ -29,7 +29,7 @@ import java.util.*;
  */
 public class ValidHelper {
 
-    public static String SPRING_PROFILES_ACTIVE = System.getProperty("validation.spring.profiles.active");
+    public static String SPRING_PROFILES_ACTIVE = System.getProperty(ValidatedConst.SPRING_PROFILES_ACTIVE);
 
 
     public static void setSpringProfilesActive(String springProfilesActive) {
