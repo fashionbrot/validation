@@ -36,11 +36,11 @@
 <dependency>
     <groupId>com.github.fashionbrot</groupId>
     <artifactId>validation-spring</artifactId>
-    <version>3.0.1</version>
+    <version>4.0.0</version>
 </dependency>
 ```
 ```gradle
-implementation 'com.github.fashionbrot:validation-spring:3.0.1'
+implementation 'com.github.fashionbrot:validation-spring:4.0.0'
 ```
 ### 3.2  springmvc 配置方式
 ```java
@@ -81,11 +81,8 @@ public class GlobalExceptionHandler {
     @ResponseStatus(HttpStatus.OK)
     public Object ValidatedException(ValidatedException e) {
         List<Violation> violations = e.getViolations();
-        if (ObjectUtil.isEmpty(violations)){// 快速失败抛出异常信息
-            return e.getMsg();
-        }else {
-            return violations.stream().map(m -> m.getMsg()).collect(Collectors.joining(","));// 慢速失败抛出异常信息
-        }
+
+        return violations.stream().map(m -> m.getMessage()).collect(Collectors.joining(","));// 慢速失败抛出异常信息
     }
 }
 
@@ -101,8 +98,8 @@ public class ExpressionController {
     @ResponseBody
     @Validated(failFast = false) //开启参数验证
     public String test1(Integer type,
-                        @NotEmpty(expression = "type!=null and type==1 and springProfilesActive=='prod'",msg = "验证码不能为空") String smsCode,
-                        @NotEmpty(expression = "type!=null and type==2 and springProfilesActive=='default'",msg = "密码不能为空") String password){
+                        @NotEmpty(expression = "type!=null and type==1 and springProfilesActive=='prod'",message = "验证码不能为空") String smsCode,
+                        @NotEmpty(expression = "type!=null and type==2 and springProfilesActive=='default'",message = "密码不能为空") String password){
         return "ok";
     }
 
@@ -126,10 +123,10 @@ public class ExpressionController {
 
         private Integer type;
         //如果expression 条件=true,则进行@NotEmpty的验证
-        @NotEmpty(expression = "expressionEntity.type!=null and expressionEntity.type==1 and springProfilesActive=='prod'" ,msg = "验证码不能为空")
+        @NotEmpty(expression = "expressionEntity.type!=null and expressionEntity.type==1 and springProfilesActive=='prod'" ,message = "验证码不能为空")
         private String smsCode;
         //如果expression 条件=true,则进行@NotEmpty的验证
-        @NotEmpty(expression = "expressionEntity.type!=null and expressionEntity.type==2 and springProfilesActive=='default'",msg = "密码不能为空")
+        @NotEmpty(expression = "expressionEntity.type!=null and expressionEntity.type==2 and springProfilesActive=='default'",message = "密码不能为空")
         private String password;
 
     }
@@ -148,12 +145,12 @@ public class ExpressionController {
 <dependency>
     <groupId>com.github.fashionbrot</groupId>
     <artifactId>spring-boot-starter-validation</artifactId>
-    <version>3.0.1</version>
+    <version>4.0.0</version>
 </dependency>
 ```
 ```bash
  #springboot 依赖
-implementation 'com.github.fashionbrot:spring-boot-starter-validation:3.0.1'
+implementation 'com.github.fashionbrot:spring-boot-starter-validation:4.0.0'
 ```
 
 ### 4.2 配置方式
@@ -188,11 +185,7 @@ public class GlobalExceptionHandler {
     @ResponseStatus(HttpStatus.OK)
     public Object ValidatedException(ValidatedException e) {
         List<Violation> violations = e.getViolations();
-        if (ObjectUtil.isEmpty(violations)){// 快速失败抛出异常信息
-            return e.getMsg();
-        }else {
-            return violations.stream().map(m -> m.getMsg()).collect(Collectors.joining(","));// 慢速失败抛出异常信息
-        }
+        return violations.stream().map(m -> m.getMessage()).collect(Collectors.joining(","));
     }
 }
 ```
@@ -259,11 +252,11 @@ public class ValidReturnValueController {
 
 ### 固定注解内的方法
 
-| 方法名                                             | 示例                                                                                                        | 方法说明                                                                                      |
-|-----------------------------------------------------|-------------------------------------------------------------------------------------------------------------|-------------------------------------------------------------------------------------------|
-| `Class<?>[] groups() default  {}`                   | `@NotNull(msg = "不能为空", groups = {InsertGroup.class})`                                                  | 用于分组校验，指定注解适用的校验组，例如 `InsertGroup.class`，以便在特定场景下执行相应的校验逻辑                                |
-| `String msg() default "${validated.Length.msg}";`   | `@NotNull(msg = "不能为空")`                                                                                | 指定在验证失败时显示的错误消息内容                                                                         |
-| `String expression() default ""`                    | `@NotEmpty(expression = "type!=null and type==1 and springProfilesActive=='prod'", msg = "验证码不能为空") String smsCode` | 当 `expression` 条件为 `true` 时，执行 `@NotEmpty` 验证，适用于基于表达式的条件校验;表达式语法和mybatis xml if 中表达式语法一样 |
+| 方法名                                                   | 示例                                                                                                        | 方法说明                                                                                      |
+|-------------------------------------------------------|-------------------------------------------------------------------------------------------------------------|-------------------------------------------------------------------------------------------|
+| `Class<?>[] groups() default  {}`                     | `@NotNull(message = "不能为空", groups = {InsertGroup.class})`                                                  | 用于分组校验，指定注解适用的校验组，例如 `InsertGroup.class`，以便在特定场景下执行相应的校验逻辑                                |
+| `String message() default "${validated.Length.message}";` | `@NotNull(message = "不能为空")`                                                                                | 指定在验证失败时显示的错误消息内容                                                                         |
+| `String expression() default ""`                      | `@NotEmpty(expression = "type!=null and type==1 and springProfilesActive=='prod'", message = "验证码不能为空") String smsCode` | 当 `expression` 条件为 `true` 时，执行 `@NotEmpty` 验证，适用于基于表达式的条件校验;表达式语法和mybatis xml if 中表达式语法一样 |
 
 
 # 6、自定义注解介绍
@@ -335,7 +328,7 @@ public @interface CustomAnnotation {
      * 固定方法  验证失败返回的错误信息
      * @return
      */
-    String msg() default "validated.AssertTrue.msg";
+    String message() default "validated.AssertTrue.message";
     /**
      * 固定方法  验证组
      * default @see com.github.fashionbrot.groups.DefaultGroup
@@ -411,13 +404,13 @@ validated.locale-param-name=lang
 ##### valid_ru_RU.properties
 ```properties
 #valid_ru_RU.properties
-validated.NotEmpty.msg= `не должно быть пустым
+validated.NotEmpty.message= `не должно быть пустым
 ```
-#####在我们header 中可以配置参数  lang=ru_RU  并且msg等于默认的${validated.NotEmpty.msg}
+#####在我们header 中可以配置参数  lang=ru_RU  并且message等于默认的${validated.NotEmpty.message}
 ```shell
-lang=ru_RU  msg=${validated.NotEmpty.msg}   则会提示：`не должно быть пустым`
-lang=zh_CN  msg=${validated.NotEmpty.msg}   则会提示：`不能为空`
-lang=en_US  msg=${validated.NotEmpty.msg}   则会提示：`must not be empty`
+lang=ru_RU  message=${validated.NotEmpty.message}   则会提示：`не должно быть пустым`
+lang=zh_CN  message=${validated.NotEmpty.message}   则会提示：`不能为空`
+lang=en_US  message=${validated.NotEmpty.message}   则会提示：`must not be empty`
 ```
 
 

@@ -16,7 +16,7 @@ allprojects {
     [compileJava, compileTestJava]*.options*.encoding = 'UTF-8'
 
     group 'com.github.fashionbrot'
-    version '3.0.1'
+    version '4.0.0'
 
     javadoc {
         afterEvaluate {
