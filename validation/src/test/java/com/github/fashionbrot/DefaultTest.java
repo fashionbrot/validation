@@ -41,7 +41,7 @@ public class DefaultTest {
 
         String returnResult ="" ;
 
-        MethodUtil.getMsg(DefaultTest.TestController.class,"test",param);
+        MethodUtil.getMessage(DefaultTest.TestController.class,"test",param);
 
         returnResult=JSON.toJSONString(param);
         System.out.println(returnResult);
@@ -72,7 +72,7 @@ public class DefaultTest {
         test2Req.setAbc(null);
         Object[] params = {test2Req};
 
-        MethodUtil.getMsg(DefaultTest.TestController2.class,"test",params);
+        MethodUtil.getMessage(DefaultTest.TestController2.class,"test",params);
 
         returnResult = JSON.toJSONString(params);
         System.out.println(returnResult);
@@ -99,7 +99,7 @@ public class DefaultTest {
         test22Req.setAbc(null);
         Object[] params = {Arrays.asList(test2Req, test22Req)};
 
-        MethodUtil.getMsg(DefaultTest.TestController3.class,"test",params);
+        MethodUtil.getMessage(DefaultTest.TestController3.class,"test",params);
 
 
         returnResult = JSON.toJSONString(params);
@@ -126,7 +126,7 @@ public class DefaultTest {
         test22Req.setAbc(null);
         Object[] params = {new Object[]{test2Req, test22Req}};
 
-        MethodUtil.getMsg(DefaultTest.TestController4.class,"test",params);
+        MethodUtil.getMessage(DefaultTest.TestController4.class,"test",params);
 
         returnResult = JSON.toJSONString(params);
         System.out.println(JSON.toJSONString(params));
@@ -169,7 +169,7 @@ public class DefaultTest {
         Object[] params =new Object[] {testReq5};
 
 
-        MethodUtil.getMsg(DefaultTest.TestController5.class,"test",params);
+        MethodUtil.getMessage(DefaultTest.TestController5.class,"test",params);
 
         returnResult=JSON.toJSONString(params);
         System.out.println(returnResult);

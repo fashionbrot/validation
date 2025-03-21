@@ -16,16 +16,16 @@ public class BankCardTest {
     public class Controller1{
 
         @Validated(failFast = false)
-        public void test(@BankCard(msg = "参数错误1")String b1,
-                         @BankCard(msg = "参数错误2",regexp = REGEXP)CharSequence b2){
+        public void test(@BankCard(message =  "参数错误1")String b1,
+                         @BankCard(message =  "参数错误2",regexp = REGEXP)CharSequence b2){
 
         }
     }
 
     @Test
     public void test1(){
-        String returnResult="ValidatedException(fieldName=null, msg=null, annotationName=null, value=null, valueIndex=null, violations=[Violation(fieldName=arg1, msg=参数错误2, annotationName=BankCard, value=93215061700012345681, valueIndex=1)])";
-        String test = MethodUtil.getMsg(Controller1.class, "test", new Object[]{"6221506170001234568","93215061700012345681"});
+        String returnResult="参数错误2";
+        String test = MethodUtil.getMessage(Controller1.class, "test", new Object[]{"6221506170001234568","93215061700012345681"});
         System.out.println(test);
         Assert.assertEquals(test,returnResult);
     }

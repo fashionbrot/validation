@@ -9,7 +9,7 @@ import lombok.Data;
 @Data
 public class TestModeSuper {
 
-    @NotNull(msg = "pageNum 不能为空")
+    @NotNull(message =  "pageNum 不能为空")
     private Integer pageNum;
 
     private Integer pageSize;

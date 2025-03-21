@@ -40,7 +40,7 @@ public class CompanyPostEntity implements Serializable {
 
 	private Long postClassificationId;
 
-	@NotNull(msg ="请选择工作经验")
+	@NotNull(message = "请选择工作经验")
 	private Long workExperienceId;
 
 

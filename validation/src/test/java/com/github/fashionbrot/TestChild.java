@@ -9,6 +9,6 @@ import lombok.Data;
 @Data
 public class TestChild {
 
-    @NotEmpty(msg = "name 不能为空")
+    @NotEmpty(message =  "name 不能为空")
     private String name;
 }

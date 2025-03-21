@@ -17,11 +17,23 @@ import java.lang.annotation.*;
 @Retention(RetentionPolicy.RUNTIME)
 public @interface Range {//issue#1
 
+    /**
+     * 最小值
+     * @return long
+     */
     long min() default 0L;
 
+    /**
+     * 最大值
+     * @return long
+     */
     long max() default Integer.MIN_VALUE;
 
-    String msg() default "${validated.Range.msg}";
+    /**
+     * 验证失败返回信息
+     * @return String
+     */
+    String message() default "${validated.Range.message}";
 
     /**
      * 是否跳过空值

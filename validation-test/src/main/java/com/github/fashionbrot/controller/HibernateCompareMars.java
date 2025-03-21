@@ -26,7 +26,7 @@ public class HibernateCompareMars {
 //    @RequestMapping("/demo2")
 //    @ResponseBody
 //    @com.github.fashionbrot.annotation.Validated
-//    public String demo2(@com.github.fashionbrot.annotation.NotNull( msg = "验证码长度应该在4-6位之间") String abc){
+//    public String demo2(@com.github.fashionbrot.annotation.NotNull( message =  "验证码长度应该在4-6位之间") String abc){
 //        return abc;
 //    }
 //
@@ -82,9 +82,6 @@ public class HibernateCompareMars {
 //            System.out.println(s.getBody());
         }
         long end = System.currentTimeMillis();
-        if ("/compare/mars".equals(method)){
-            method = "mars";
-        }
         String msg = (method+": 一共耗时："+(end-start)+" 毫秒 执行次数:"+count +" 系统："+ EnvUtil.getKey("os.name"));
         log.info("compare:"+msg);
         return msg;

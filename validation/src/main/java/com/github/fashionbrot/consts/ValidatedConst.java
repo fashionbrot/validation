@@ -10,7 +10,7 @@ public class ValidatedConst {
     public static final String DEFAULT_LANGUAGE = "zh_CN";
 
     public static final String METHOD_NAME_MODIFY = "modify";
-    public static final String MSG = "msg";
+    public static final String MESSAGE = "message";
     public static final String GROUPS = "groups";
     public static final String EXPRESSION = "expression";
 

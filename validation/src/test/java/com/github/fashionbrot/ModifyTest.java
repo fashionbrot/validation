@@ -20,7 +20,7 @@ public class ModifyTest {
     public void test1(){
         String result="[{\"id\":1,\"name\":\"张三\"}]";
         Object[] objects = {null};
-        MethodUtil.getMsg(Controller1.class, "test",objects );
+        MethodUtil.getMessage(Controller1.class, "test",objects );
         String returnResult = JSON.toJSONString(objects);
         System.out.println(returnResult);
         Assert.assertEquals(result,returnResult);

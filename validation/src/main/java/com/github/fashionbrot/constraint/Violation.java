@@ -13,7 +13,7 @@ public class Violation {
     /**
      * 错误信息
      */
-    private String msg;
+    private String message;
     /**
      * 注解名
      */

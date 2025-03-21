@@ -14,8 +14,11 @@ import java.lang.annotation.*;
 @Retention(RetentionPolicy.RUNTIME)
 public @interface Digits {
 
-
-    String msg() default "${validated.Digits.msg}";
+    /**
+     * 验证失败返回信息
+     * @return String
+     */
+    String message() default "${validated.Digits.message}";
 
     /**
      * 是否跳过空值

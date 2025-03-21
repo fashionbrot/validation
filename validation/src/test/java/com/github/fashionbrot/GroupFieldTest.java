@@ -25,10 +25,10 @@ public class GroupFieldTest {
 
     @Data
     public class GroupRequest{
-        @Length(msg = "a1不是对应的长度",min = 2,max = 2,groups = {InsertGroup.class})
+        @Length(message =  "a1不是对应的长度",min = 2,max = 2,groups = {InsertGroup.class})
         private String a1;
 
-        @Length(msg = "a2不是对应的长度",min = 2,max = 2,groups = {})
+        @Length(message =  "a2不是对应的长度",min = 2,max = 2,groups = {})
         private String a2;
     }
 
@@ -40,22 +40,13 @@ public class GroupFieldTest {
 
     @Test
     public void test1(){
-        Method[] methods = GroupFieldTest.GroupController1.class.getDeclaredMethods();
-        Method method  = Arrays.stream(methods).filter(m -> m.getName().equals("test")).findFirst().get();
-
-        String result="ValidatedException(fieldName=null, msg=null, annotationName=null, value=null, valueIndex=null, violations=[Violation(fieldName=a1, msg=a1不是对应的长度, annotationName=Length, value=1, valueIndex=0)])";
+        String result="a1不是对应的长度";
 
         GroupRequest groupRequest = new GroupRequest();
         groupRequest.setA1("1");
         groupRequest.setA2("2");
         Object[] params = new Object[]{groupRequest};
-        String returnResult=MethodUtil.getMsg(GroupFieldTest.GroupController1.class,"test",params);
-//        try {
-//            Validator marsValidator = new ValidatorImpl();
-//            marsValidator.validParameter(method,params,null);
-//        }catch (ValidatedException e){
-//            returnResult = e.toString();
-//        }
+        String returnResult=MethodUtil.getMessage(GroupFieldTest.GroupController1.class,"test",params);
         System.out.println(returnResult);
         Assert.assertEquals(result,returnResult);
     }
@@ -73,23 +64,13 @@ public class GroupFieldTest {
 
     @Test
     public void test2(){
-        Method[] methods = GroupFieldTest.TestController2.class.getDeclaredMethods();
-        Method method  = Arrays.stream(methods).filter(m -> m.getName().equals("test")).findFirst().get();
 
-        String result="ValidatedException(fieldName=null, msg=null, annotationName=null, value=null, valueIndex=null, violations=[Violation(fieldName=a1, msg=a1不是对应的长度, annotationName=Length, value=1, valueIndex=0), Violation(fieldName=a2, msg=a2不是对应的长度, annotationName=Length, value=2, valueIndex=0)])";
-//        String returnResult="";
+        String result="a1不是对应的长度,a2不是对应的长度";
         GroupRequest groupRequest = new GroupRequest();
         groupRequest.setA1("1");
         groupRequest.setA2("2");
         Object[] params = new Object[]{groupRequest};
-        String returnResult=MethodUtil.getMsg(GroupFieldTest.TestController2.class,"test",params);
-
-//        try {
-//            Validator marsValidator = new ValidatorImpl();
-//            marsValidator.validParameter(method,params,null);
-//        }catch (ValidatedException e){
-//            returnResult = e.toString();
-//        }
+        String returnResult=MethodUtil.getMessage(GroupFieldTest.TestController2.class,"test",params);
         System.out.println(returnResult);
         Assert.assertEquals(result,returnResult);
     }
@@ -104,22 +85,13 @@ public class GroupFieldTest {
     }
     @Test
     public void test3(){
-        Method[] methods = GroupFieldTest.TestController3.class.getDeclaredMethods();
-        Method method  = Arrays.stream(methods).filter(m -> m.getName().equals("test")).findFirst().get();
-
-        String result="ValidatedException(fieldName=null, msg=null, annotationName=null, value=null, valueIndex=null, violations=[Violation(fieldName=a1, msg=a1不是对应的长度, annotationName=Length, value=1, valueIndex=0), Violation(fieldName=a2, msg=a2不是对应的长度, annotationName=Length, value=2, valueIndex=0)])";
-//        String returnResult="";
+        String result="a1不是对应的长度,a2不是对应的长度";
         GroupRequest groupRequest = new GroupRequest();
         groupRequest.setA1("1");
         groupRequest.setA2("2");
         Object[] params = new Object[]{groupRequest};
-        String returnResult=MethodUtil.getMsg(GroupFieldTest.TestController3.class,"test",params);
-//        try {
-//            Validator marsValidator = new ValidatorImpl();
-//            marsValidator.validParameter(method,params,null);
-//        }catch (ValidatedException e){
-//            returnResult = e.toString();
-//        }
+        String returnResult=MethodUtil.getMessage(GroupFieldTest.TestController3.class,"test",params);
+
         System.out.println(returnResult);
         Assert.assertEquals(result,returnResult);
     }
@@ -133,24 +105,14 @@ public class GroupFieldTest {
     }
     @Test
     public void test4(){
-        Method[] methods = GroupFieldTest.TestController4.class.getDeclaredMethods();
-        Method method  = Arrays.stream(methods).filter(m -> m.getName().equals("test")).findFirst().get();
 
-        String result="ValidatedException(fieldName=null, msg=null, annotationName=null, value=null, valueIndex=null, violations=[Violation(fieldName=a2, msg=a2不是对应的长度, annotationName=Length, value=2, valueIndex=0)])";
-//        String returnResult="";
+        String result="a2不是对应的长度";
         GroupRequest groupRequest = new GroupRequest();
         groupRequest.setA1("1");
         groupRequest.setA2("2");
         Object[] params = new Object[]{groupRequest};
 
-        String returnResult=MethodUtil.getMsg(GroupFieldTest.TestController4.class,"test",params);
-
-//        try {
-//            Validator marsValidator = new ValidatorImpl();
-//            marsValidator.validParameter(method,params,null);
-//        }catch (ValidatedException e){
-//            returnResult = e.toString();
-//        }
+        String returnResult=MethodUtil.getMessage(GroupFieldTest.TestController4.class,"test",params);
         System.out.println(returnResult);
         Assert.assertEquals(result,returnResult);
     }

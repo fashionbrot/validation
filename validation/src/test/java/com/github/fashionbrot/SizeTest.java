@@ -17,8 +17,8 @@ public class SizeTest {
 
     public class TestController2 {
         @Validated(failFast = false)
-        private void test(@Valid @Size(min = 2, max = 3, msg = "abc1 必须2~3") Integer[] abc1,
-                           @Valid @Size(min = 2, max = 3, msg = "abc2 必须2~3") List<Integer> abc2) {
+        private void test(@Valid @Size(min = 2, max = 3, message = "abc1 必须2~3") Integer[] abc1,
+                          @Valid @Size(min = 2, max = 3, message = "abc2 必须2~3") List<Integer> abc2) {
         }
     }
 
@@ -61,7 +61,7 @@ public class SizeTest {
             long count = violations.stream().filter(m -> m.getFieldName().equals("arg3")).count();
             Assert.assertEquals(count, 1);
             System.out.println(JSON.toJSONString(validatedException.getViolations()));
-        }else{
+        } else {
             Assert.assertEquals(validatedException != null, true);
         }
 

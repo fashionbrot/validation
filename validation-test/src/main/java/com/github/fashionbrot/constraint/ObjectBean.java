@@ -9,5 +9,5 @@ import java.lang.annotation.*;
 public @interface ObjectBean {
 
     //没有任何参数
-    String msg() default "~";
+    String message() default "~";
 }

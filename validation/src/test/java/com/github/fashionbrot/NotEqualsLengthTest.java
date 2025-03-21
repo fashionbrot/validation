@@ -27,7 +27,7 @@ public class NotEqualsLengthTest {
 
     @Test
     public void test1(){
-        String returnResult="ValidatedException(fieldName=null, msg=null, annotationName=null, value=null, valueIndex=null, violations=[Violation(fieldName=arg3, msg=长度不等于 1, annotationName=NotEqualLength, value=[Ljava.lang.Integer;@eefb7d1, valueIndex=3)])";
+        String returnResult="长度不等于 1";
         List collection= new ArrayList();
         collection.add("string");
         HashMap map=new HashMap();

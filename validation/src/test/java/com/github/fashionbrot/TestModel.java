@@ -11,12 +11,12 @@ import java.util.List;
 @Data
 public class TestModel extends TestModeSuper{
 
-    @NotEmpty(msg = "test1 error")
+    @NotEmpty(message =  "test1 error")
     private String test1;
 
     private String test2;
 
-    @NotNull(msg = "test3 error")
+    @NotNull(message =  "test3 error")
     private String test3;
 
     private String test4;

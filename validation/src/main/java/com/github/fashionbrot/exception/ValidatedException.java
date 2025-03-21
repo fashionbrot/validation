@@ -4,44 +4,29 @@ import com.github.fashionbrot.constraint.Violation;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @EqualsAndHashCode(callSuper=false)
 @Data
 public class ValidatedException extends RuntimeException  {
 
-    private String fieldName;
-
-    private String msg;
-
-    private String annotationName;
-
-    private Object value;
-
-    /**
-     * Array or List
-     * value index
-     */
-    private Integer valueIndex;
-
     private List<Violation> violations;
+
 
     public ValidatedException(List<Violation> violations) {
         super();
         this.violations = violations;
     }
 
-    public ValidatedException(String fieldName,String msg,String annotationName,Object value,Integer valueIndex){
+    public ValidatedException(String fieldName, String message, String annotationName, Object value, Integer valueIndex) {
         super();
-        this.fieldName = fieldName;
-        this.msg = msg;
-        this.annotationName = annotationName;
-        this.value = value;
-        this.valueIndex = valueIndex;
+        this.violations = new ArrayList<>(1);
+        this.violations.add(Violation.builder().fieldName(fieldName).message(message).annotationName(annotationName).value(value).valueIndex(valueIndex).build());
     }
 
 
-    public static void throwMsg(String fieldName,String msg,String annotationName,Object value,Integer valueIndex){
-        throw new ValidatedException(fieldName,msg,annotationName,value,valueIndex);
+    public static void throwMessage(String fieldName,String message,String annotationName,Object value,Integer valueIndex){
+        throw new ValidatedException(fieldName,message,annotationName,value,valueIndex);
     }
 }

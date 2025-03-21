@@ -17,7 +17,11 @@ public @interface Pattern {
 
     String regexp();
 
-    String msg();
+    /**
+     * 验证失败返回信息
+     * @return String
+     */
+    String message();
 
     /**
      * 是否跳过空值

@@ -1,14 +1,14 @@
 package com.github.fashionbrot.entity;
 
 import com.github.fashionbrot.annotation.Default;
-import com.github.fashionbrot.annotation.ValidatedParam;
+import com.github.fashionbrot.annotation.ValidatedName;
 import lombok.Data;
 
 /**
  * @author fashionbrot
  */
 @Data
-@ValidatedParam("v")
+@ValidatedName("v")
 public class Default1Entity {
 
     private Integer type;

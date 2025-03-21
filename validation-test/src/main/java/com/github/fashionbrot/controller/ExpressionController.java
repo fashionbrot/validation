@@ -18,8 +18,8 @@ public class ExpressionController {
     @ResponseBody
     @Validated(failFast = false)
     public String test1(Integer type,
-                       @NotEmpty(expression = "type!=null and type==1 and springProfilesActive=='prod'",msg = "验证码不能为空") String smsCode,
-                       @NotEmpty(expression = "type!=null and type==2 and springProfilesActive=='default'",msg = "密码不能为空") String password){
+                       @NotEmpty(expression = "type!=null and type==1 and springProfilesActive=='prod'",message = "验证码不能为空") String smsCode,
+                       @NotEmpty(expression = "type!=null and type==2 and springProfilesActive=='default'",message = "密码不能为空") String password){
         return "ok";
     }
 

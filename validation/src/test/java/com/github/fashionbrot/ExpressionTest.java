@@ -3,7 +3,7 @@ package com.github.fashionbrot;
 import com.github.fashionbrot.annotation.NotEmpty;
 import com.github.fashionbrot.annotation.NotNull;
 import com.github.fashionbrot.annotation.Validated;
-import com.github.fashionbrot.annotation.ValidatedParam;
+import com.github.fashionbrot.annotation.ValidatedName;
 import com.github.fashionbrot.constraint.Violation;
 import com.github.fashionbrot.exception.ValidatedException;
 import lombok.Data;
@@ -36,7 +36,7 @@ public class ExpressionTest {
 
 
     @Data
-    @ValidatedParam("arg0")
+    @ValidatedName("arg0")
     public class ExpressionEntity{
         //type==1 验证码登录  type==2 密码登录
         private Integer type;

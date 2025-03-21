@@ -130,7 +130,7 @@ public class MethodUtil {
         String msg = null;
         for (int i = 0; i < methods.length; i++) {
             Method method = methods[i];
-            if (ValidatedConst.MSG.equals(method.getName())){
+            if (ValidatedConst.MESSAGE.equals(method.getName())){
                 msg = (String) getReturnValue(method,annotation);
                 break;
             }
@@ -180,7 +180,7 @@ public class MethodUtil {
         Map<String,Object> methodMap = new HashMap<>(methods.length);
         for (int i = 0; i < methods.length; i++) {
             Method method = methods[i];
-            if (ValidatedConst.MSG.equals(method.getName()) || ValidatedConst.GROUPS.equals(method.getName())){
+            if (ValidatedConst.MESSAGE.equals(method.getName()) || ValidatedConst.GROUPS.equals(method.getName())){
                 continue;
             }
             if (method.getParameterTypes().length == 0 && method.getReturnType() != void.class) {

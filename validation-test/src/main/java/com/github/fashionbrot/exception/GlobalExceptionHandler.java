@@ -33,8 +33,8 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(BindException.class)
     @ResponseStatus(HttpStatus.OK)
     public Object exception(BindException e) {
-        String msg = String.join(",",  e.getBindingResult().getAllErrors().stream().map(m-> m.getDefaultMessage()).collect(Collectors.toList()));
-        return msg;
+        String message =  String.join(",",  e.getBindingResult().getAllErrors().stream().map(m-> m.getDefaultMessage()).collect(Collectors.toList()));
+        return message;
     }
 
     @ExceptionHandler(ConstraintViolationException.class)
@@ -42,8 +42,8 @@ public class GlobalExceptionHandler {
     public Object exception(ConstraintViolationException e) {
         if (ObjectUtil.isNotEmpty(e.getConstraintViolations())) {
             Set<ConstraintViolation<?>> constraintViolations = e.getConstraintViolations();
-            String msg = String.join(",", constraintViolations.stream().map(m -> m.getMessage()).collect(Collectors.toList()));
-            return msg;
+            String message =  String.join(",", constraintViolations.stream().map(m -> m.getMessage()).collect(Collectors.toList()));
+            return message;
         }
         return e.getMessage();
     }
@@ -53,9 +53,9 @@ public class GlobalExceptionHandler {
     public Object ValidatedException(ValidatedException e) {
         List<Violation> violations = e.getViolations();
         if (ObjectUtil.isEmpty(violations)){
-            return e.getMsg();
+            return e.getMessage();
         }else {
-            return violations.stream().map(m -> m.getMsg()).collect(Collectors.joining(","));
+            return violations.stream().map(m -> m.getMessage()).collect(Collectors.joining(","));
         }
     }
 

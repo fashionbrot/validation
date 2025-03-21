@@ -1,10 +1,11 @@
 package com.github.fashionbrot.intercept;
 
 
-import com.github.fashionbrot.ValidationConfiguration;
+import com.github.fashionbrot.ValidHelper;
 import com.github.fashionbrot.annotation.Validated;
 import com.github.fashionbrot.common.util.ObjectUtil;
 import com.github.fashionbrot.config.GlobalValidatedProperties;
+import com.github.fashionbrot.consts.ValidatedConst;
 import lombok.extern.slf4j.Slf4j;
 import org.aopalliance.intercept.MethodInterceptor;
 import org.aopalliance.intercept.MethodInvocation;
@@ -38,14 +39,13 @@ public class ValidatedMethodIntercept implements MethodInterceptor, BeanFactoryA
         if (validated==null){
             return methodInvocation.proceed();
         }else{
+
             String language = getLanguage();
-            String springProfilesActive = globalValidatedProperties.getSpringProfilesActive();
-            ValidationConfiguration configuration = new ValidationConfiguration(validated.groups(),validated.failFast(),language,springProfilesActive);
-            configuration.validParameter(method.getParameters(),params);
+            ValidHelper.validParameter(language,method,params);
 
             Object proceed = methodInvocation.proceed();
             if (validated.validReturnValue()){
-                configuration.validReturnValue(proceed);
+                ValidHelper.validated(language,validated.failFast(),validated.groups(),proceed);
             }
             return proceed;
         }
@@ -93,6 +93,7 @@ public class ValidatedMethodIntercept implements MethodInterceptor, BeanFactoryA
             GlobalValidatedProperties properties = (GlobalValidatedProperties) beanRegistry.getSingleton(GlobalValidatedProperties.BEAN_NAME);
             if (properties != null) {
                 globalValidatedProperties = properties;
+                System.setProperty(ValidatedConst.SPRING_PROFILES_ACTIVE,properties.getSpringProfilesActive());
             }
         }
     }

@@ -18,7 +18,11 @@ import java.lang.annotation.*;
 @Retention(RetentionPolicy.RUNTIME)
 public @interface NotEmpty {
 
-    String msg() default  "${validated.NotEmpty.msg}";
+    /**
+     * 验证失败返回信息
+     * @return String
+     */
+    String message() default  "${validated.NotEmpty.message}";
 
     /**
      * default @see com.github.fashionbrot.groups.DefaultGroup

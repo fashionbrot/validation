@@ -21,7 +21,11 @@ public @interface NotEqualLength {
     int length();
 
 
-    String msg() default "${validated.NotEqualLength.msg}";
+    /**
+     * 验证失败返回信息
+     * @return String
+     */
+    String message() default "${validated.NotEqualLength.message}";
     /**
      * 是否跳过空值
      * @return boolean

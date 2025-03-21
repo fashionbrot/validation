@@ -35,7 +35,11 @@ public @interface Contain { //issue#2
     boolean skipEmpty() default false;
 
 
-    String msg() default "${validated.Contain.msg}";
+    /**
+     * 验证失败返回信息
+     * @return String
+     */
+    String message() default "${validated.Contain.message}";
 
     /**
      * default @see com.github.fashionbrot.groups.DefaultGroup

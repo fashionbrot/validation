@@ -18,7 +18,11 @@ public @interface Email {
 
     String regexp() default "^[A-Za-z0-9\\u4e00-\\u9fa5]+@[a-zA-Z0-9_-]+(\\.[a-zA-Z0-9_-]+)+$";
 
-    String msg() default "${validated.Email.msg}";
+    /**
+     * 验证失败返回信息
+     * @return String
+     */
+    String message() default "${validated.Email.message}";
 
     /**
      * 是否跳过空值

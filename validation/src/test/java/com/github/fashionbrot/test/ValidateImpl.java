@@ -1,7 +1,7 @@
 package com.github.fashionbrot.test;
 
 import com.github.fashionbrot.annotation.Valid;
-import com.github.fashionbrot.annotation.ValidatedParam;
+import com.github.fashionbrot.annotation.ValidatedName;
 import com.github.fashionbrot.common.util.GenericTokenUtil;
 import com.github.fashionbrot.common.util.JavaUtil;
 import com.github.fashionbrot.common.util.ObjectUtil;
@@ -211,7 +211,7 @@ public class ValidateImpl {
 
                 boolean valid = constraintValidator.isValid(metaConstraint.getAnnotation(), fieldValue, metaConstraint.getFieldType());
                 if (!valid){
-                    String msg = (String) metaConstraint.getAnnotationMap().get(ValidatedConst.MSG);
+                    String msg = (String) metaConstraint.getAnnotationMap().get(ValidatedConst.MESSAGE);
                     addViolations(fieldValue,fieldName,metaConstraint.getAnnotation(),msg,parameterIndex);
                 }
             }
@@ -434,17 +434,17 @@ public class ValidateImpl {
     }
 
     private String getClassParamName(Field field) {
-        ValidatedParam validatedParam = field.getDeclaringClass().getDeclaredAnnotation(ValidatedParam.class);
+        ValidatedName validatedParam = field.getDeclaringClass().getDeclaredAnnotation(ValidatedName.class);
         return validatedParam != null ? validatedParam.value() : captureName(field.getDeclaringClass().getSimpleName());
     }
 
     private static String getClassParamName(Class clazz) {
-        ValidatedParam validatedParam = (ValidatedParam) clazz.getDeclaredAnnotation(ValidatedParam.class);
+        ValidatedName validatedParam = (ValidatedName) clazz.getDeclaredAnnotation(ValidatedName.class);
         return validatedParam != null ? validatedParam.value() : captureName(clazz.getSimpleName());
     }
 
     private String getAnnotationMsg(Annotation annotation,Method[] annotationMethods) {
-        Method method = MethodUtil.filterMethodName(annotationMethods, ValidatedConst.MSG);
+        Method method = MethodUtil.filterMethodName(annotationMethods, ValidatedConst.MESSAGE);
         if (method==null){
             return null;
         }
@@ -539,7 +539,7 @@ public class ValidateImpl {
         Map<String,Object> methodMap = new HashMap<>(initialCapacity);
         for (int i = 0; i < annotationMethod.length; i++) {
             Method method = annotationMethod[i];
-            if (ValidatedConst.MSG.equals(method.getName())
+            if (ValidatedConst.MESSAGE.equals(method.getName())
                 || ValidatedConst.GROUPS.equals(method.getName())
                 || ValidatedConst.EXPRESSION.equals(method.getName())){
                 continue;
@@ -551,7 +551,7 @@ public class ValidateImpl {
         return methodMap;
     }
 
-    private void addViolations(Object value, String paramName, Annotation annotation, String msg,Integer valueIndex) {
+    private void addViolations(Object value, String paramName, Annotation annotation, String message,Integer valueIndex) {
         String annotationName = getAnnotationName(annotation);
         if (violationList==null){
             violationList = new ArrayList<>();
@@ -559,7 +559,7 @@ public class ValidateImpl {
         violationList.add(Violation.builder()
             .annotationName(annotationName)
             .fieldName(paramName)
-            .msg(msg)
+            .message(message)
             .value(value)
             .valueIndex(valueIndex)
             .build());

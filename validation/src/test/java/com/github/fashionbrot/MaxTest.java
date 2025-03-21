@@ -32,7 +32,7 @@ public class MaxTest {
 
     @Test
     public void test1() {
-        String returnResult = "ValidatedException(fieldName=null, msg=null, annotationName=null, value=null, valueIndex=null, violations=[Violation(fieldName=arg5, msg=最大不能超过5, annotationName=Max, value=5.0001, valueIndex=5)])";
+        String returnResult = "最大不能超过5";
         Object[] objects = {new BigDecimal("10"),
             BigInteger.valueOf(9),
             Long.valueOf(8),
@@ -40,7 +40,7 @@ public class MaxTest {
             Short.valueOf((short) 6),
             Float.valueOf("5.0001"),
             Double.valueOf(4)};
-        String test = MethodUtil.getMsg(Controller1.class, "test", objects);
+        String test = MethodUtil.getMessage(Controller1.class, "test", objects);
         System.out.println(test);
         Assert.assertEquals(test, returnResult);
     }
@@ -63,7 +63,7 @@ public class MaxTest {
     public void test2() {
         String returnResult = "";
         Object[] objects = {8L,7,(short)6,(float)5,(double)4};
-        String test = MethodUtil.getMsg(Controller2.class, "test", objects);
+        String test = MethodUtil.getMessage(Controller2.class, "test", objects);
         System.out.println(test);
         Assert.assertEquals(test, returnResult);
     }
@@ -79,9 +79,9 @@ public class MaxTest {
 
     @Test
     public void test3() {
-        String returnResult = "ValidatedException(fieldName=null, msg=null, annotationName=null, value=null, valueIndex=null, violations=[Violation(fieldName=arg1, msg=最大不能超过9, annotationName=Max, value=null, valueIndex=1)])";
+        String returnResult = "最大不能超过9";
         Object[] objects = {null,null};
-        String test = MethodUtil.getMsg(Controller3.class, "test", objects);
+        String test = MethodUtil.getMessage(Controller3.class, "test", objects);
         System.out.println(test);
         Assert.assertEquals(test, returnResult);
     }

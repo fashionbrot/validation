@@ -12,7 +12,7 @@ public class NotEmptyController {
     @RequestMapping("/notEmpty")
     @ResponseBody
     @Validated
-    public String  test(@NotEmpty(msg = "入参 abc is null") String abc){
+    public String  test(@NotEmpty(message = "入参 abc is null") String abc){
         return "ok";
     }
 

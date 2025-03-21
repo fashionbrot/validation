@@ -1,12 +1,10 @@
 package com.github.fashionbrot.controller;
 
 import com.alibaba.fastjson2.JSON;
-import com.github.fashionbrot.ValidationConfiguration;
-import com.github.fashionbrot.consts.ValidatedConst;
+import com.github.fashionbrot.ValidHelper;
 import com.github.fashionbrot.entity.DemoModel;
 import com.github.fashionbrot.exception.ValidatedException;
 import com.github.fashionbrot.util.ValidatorUtils;
-import org.springframework.boot.autoconfigure.data.couchbase.CouchbaseDataAutoConfiguration;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -14,6 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.validation.ConstraintViolation;
 import javax.validation.ValidationException;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * @author fashionbrot
@@ -29,7 +28,7 @@ public class CompareController {
         DemoModel demoModel=new DemoModel();
         for (int i = 0; i < count; i++) {
             Set<ConstraintViolation<DemoModel>> constraintViolations = ValidatorUtils.validateAll(demoModel);
-//            System.out.println(JSON.toJSONString(constraintViolations));
+            System.out.println(constraintViolations.stream().map(m-> m.getMessage()).collect(Collectors.joining(",")));
         }
         return System.currentTimeMillis()-l+"毫秒";
     }
@@ -40,10 +39,10 @@ public class CompareController {
         DemoModel demoModel=new DemoModel();
         for (int i = 0; i < count; i++) {
             try {
-                ValidationConfiguration valid=new ValidationConfiguration(null,false,"","");
-                valid.validReturnValue(demoModel);
+
+                ValidHelper.validated("",false,null,demoModel);
             }catch (ValidatedException e){
-//                System.out.println(JSON.toJSONString(e));
+                System.out.println(e.getViolations().stream().map(m-> m.getMessage()).collect(Collectors.joining(",")));
             }
 
         }

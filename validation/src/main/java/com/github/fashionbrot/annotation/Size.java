@@ -15,8 +15,15 @@ import java.lang.annotation.*;
 @Retention(RetentionPolicy.RUNTIME)
 public @interface Size {
 
+    /**
+     * 最小数量
+     * @return long
+     */
     long min() default 0;
-
+    /**
+     * 最大数量
+     * @return long
+     */
     long max() default Long.MAX_VALUE;
 
     /**
@@ -25,7 +32,11 @@ public @interface Size {
      */
     boolean skipEmpty() default true;
 
-    String msg() default "${validated.Size.msg}";
+    /**
+     * 验证失败返回信息
+     * @return String
+     */
+    String message() default "${validated.Size.message}";
 
     /**
      * default @see com.github.fashionbrot.groups.DefaultGroup

@@ -22,17 +22,16 @@ public class NotEmptyTest {
 
     public class TestController{
         @Validated
-        private void test1(@NotEmpty(msg = "string 不能为空") String string){
+        private void test1(@NotEmpty(message =  "string 不能为空") String string){
 
         }
     }
 
     @Test
     public void test1(){
-        Method[] methods = NotEmptyTest.TestController.class.getDeclaredMethods();
 
-        String result="ValidatedException(fieldName=arg0, msg=string 不能为空, annotationName=NotEmpty, value=null, valueIndex=0, violations=null)";
-        String returnResult=MethodUtil.getMsg( NotEmptyTest.TestController.class,"test1",new Object[1]);
+        String result="string 不能为空";
+        String returnResult=MethodUtil.getMessage( NotEmptyTest.TestController.class,"test1",new Object[1]);
         System.out.println(returnResult);
         Assert.assertEquals(result,returnResult);
     }
@@ -42,7 +41,7 @@ public class NotEmptyTest {
     @AllArgsConstructor
     @NoArgsConstructor
     public class Test2Req{
-        @NotEmpty(msg = "abc不能为null")
+        @NotEmpty(message =  "abc不能为null")
         private String abc;
     }
     public class TestController2{
@@ -56,8 +55,8 @@ public class NotEmptyTest {
         Test2Req test2Req =new Test2Req();
         test2Req.setAbc(null);
 
-        String result="ValidatedException(fieldName=abc, msg=abc不能为null, annotationName=NotEmpty, value=null, valueIndex=0, violations=null)";
-        String returnResult=MethodUtil.getMsg(NotEmptyTest.TestController2.class,"test2",new Object[]{test2Req});
+        String result="abc不能为null";
+        String returnResult=MethodUtil.getMessage(NotEmptyTest.TestController2.class,"test2",new Object[]{test2Req});
 
         System.out.println(returnResult);
         Assert.assertEquals(result,returnResult);
@@ -79,8 +78,8 @@ public class NotEmptyTest {
         Test2Req test22Req =new Test2Req();
         test22Req.setAbc(null);
 
-        String result="ValidatedException(fieldName=abc, msg=abc不能为null, annotationName=NotEmpty, value=null, valueIndex=1, violations=null)";
-        String returnResult=MethodUtil.getMsg(NotEmptyTest.TestController3.class,"test3",new Object[]{Arrays.asList(test2Req,test22Req)});
+        String result="abc不能为null";
+        String returnResult=MethodUtil.getMessage(NotEmptyTest.TestController3.class,"test3",new Object[]{Arrays.asList(test2Req,test22Req)});
 
         System.out.println(returnResult);
         Assert.assertEquals(result,returnResult);
@@ -102,8 +101,8 @@ public class NotEmptyTest {
         Test2Req test22Req =new Test2Req();
         test22Req.setAbc(null);
 
-        String result="ValidatedException(fieldName=abc, msg=abc不能为null, annotationName=NotEmpty, value=null, valueIndex=1, violations=null)";
-        String returnResult=MethodUtil.getMsg(NotEmptyTest.TestController4.class,"test4",new Object[]{new Object[]{test2Req,test22Req}});
+        String result="abc不能为null";
+        String returnResult=MethodUtil.getMessage(NotEmptyTest.TestController4.class,"test4",new Object[]{new Object[]{test2Req,test22Req}});
 
 
         System.out.println(returnResult);

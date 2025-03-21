@@ -26,7 +26,11 @@ public @interface Min {
      */
     boolean skipEmpty() default true;
 
-    String  msg() default "${validated.Min.msg}";
+    /**
+     * 验证失败返回信息
+     * @return String
+     */
+    String  message() default "${validated.Min.message}";
 
     /**
      * default @see com.github.fashionbrot.groups.DefaultGroup

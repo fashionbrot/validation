@@ -14,11 +14,23 @@ import java.lang.annotation.*;
 @Retention(RetentionPolicy.RUNTIME)
 public @interface Length {
 
+    /**
+     * 最小长度
+     * @return int
+     */
     int min() default 0;
 
+    /**
+     * 最大长度
+     * @return int
+     */
     int max() default Integer.MAX_VALUE;
 
-    String msg() default "${validated.Length.msg}";
+    /**
+     * 验证失败返回信息
+     * @return String
+     */
+    String message() default "${validated.Length.message}";
 
     /**
      * 是否跳过空值
@@ -26,7 +38,7 @@ public @interface Length {
      */
     boolean skipEmpty() default false;
     /**
-     * default @see com.github.fashionbrot.groups.DefaultGroup
+     * @see com.github.fashionbrot.groups.DefaultGroup default
      * @return groups
      */
     Class<?>[] groups() default  {};

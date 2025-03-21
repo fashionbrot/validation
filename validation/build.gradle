@@ -115,20 +115,12 @@ signing {
 }
 
 
-
-ext{
-
-}
-configurations {
-//    all*.exclude group:"ch.qos.logback", module:""
-}
-
 dependencies {
 
     compileOnly 'org.projectlombok:lombok:1.18.20'
     annotationProcessor 'org.projectlombok:lombok:1.18.20'
     implementation 'org.slf4j:slf4j-api:1.7.10'
-    implementation 'com.github.fashionbrot:common-util:0.1.3'
+    implementation 'com.github.fashionbrot:common-util:0.1.5'
     implementation 'ognl:ognl:3.2.6'
 
 

@@ -20,9 +20,9 @@ public class PhoneTest {
 
     @Test
     public void test1(){
-        String returnResult="ValidatedException(fieldName=null, msg=null, annotationName=null, value=null, valueIndex=null, violations=[Violation(fieldName=arg1, msg=无效手机号码, annotationName=Phone, value=1760039211, valueIndex=1)])";
+        String returnResult="无效手机号码";
         Object[] objects = {"17600382911", "1760039211", "", "19912341234"};
-        String test = MethodUtil.getMsg(Controller1.class, "test",objects );
+        String test = MethodUtil.getMessage(Controller1.class, "test",objects );
         System.out.println(test);
         Assert.assertEquals(test,returnResult);
     }

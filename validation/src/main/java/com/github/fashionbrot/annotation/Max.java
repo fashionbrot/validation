@@ -26,7 +26,11 @@ public @interface Max {
      */
     boolean skipEmpty() default true;
 
-    String  msg() default "${validated.Max.msg}";
+    /**
+     * 验证失败返回信息
+     * @return String
+     */
+    String  message() default "${validated.Max.message}";
 
     /**
      * default @see com.github.fashionbrot.groups.DefaultGroup
