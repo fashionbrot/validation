@@ -17,7 +17,7 @@ public class ValidatedConst {
     public static final String OPEN_TOKEN="${";
     public static final String CLOSE_TOKEN="}";
 
-    public static final String SPRING_PROFILES_ACTIVE="validation.spring.profiles.active";
+    public static final String SPRING_PROFILES_ACTIVE="springProfilesActive";
 
 
 }
